@@ -1,0 +1,6 @@
+name: PopUpTowers
+author: MetallicGoat
+version: 1.0
+main: me.metallicgoat.specialItems.Main
+depend: [MBedwars]
+api-version: 1.13
