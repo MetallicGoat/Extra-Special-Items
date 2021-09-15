@@ -1,6 +1,8 @@
 package me.metallicgoat.specialItems.items.eggbridge;
 
 import de.marcely.bedwars.api.arena.Arena;
+import me.metallicgoat.specialItems.utils.XBlock;
+import me.metallicgoat.specialItems.utils.XMaterial;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -12,7 +14,7 @@ public class EggBridgeBlockPlacer {
         if (b.getType().equals(Material.AIR)) {
 
             //Is block inside region
-            if (arena != null && arena.isInside(b.getLocation())) {
+            if (arena != null && arena.canPlaceBlockAt(b.getLocation())) {
                 PlaceBlock(arena, b, color);
             }
         }
@@ -20,9 +22,10 @@ public class EggBridgeBlockPlacer {
 
     private void PlaceBlock(Arena arena, Block b, DyeColor color){
 
-        Material woolMat = Material.valueOf(color.name() + "_WOOL");
-        b.setType(woolMat);
-
-        arena.setBlockPlayerPlaced(b, true);
+        if (XMaterial.matchXMaterial(color.name() + "_WOOL").isPresent()) {
+            XMaterial woolMat = XMaterial.matchXMaterial(color.name() + "_WOOL").get();
+            XBlock.setType(b, woolMat);
+            arena.setBlockPlayerPlaced(b, true);
+        }
     }
 }

@@ -2,6 +2,8 @@ package me.metallicgoat.specialItems.items.popuptower;
 
 import de.marcely.bedwars.api.BedwarsAPI;
 import de.marcely.bedwars.api.arena.Arena;
+import me.metallicgoat.specialItems.utils.XBlock;
+import me.metallicgoat.specialItems.utils.XMaterial;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -21,7 +23,7 @@ public class TowerBlockPlacer {
         if (b.getType().equals(Material.AIR)) {
 
             //Is block inside region
-            if (arena != null && arena.isInside(b.getLocation())) {
+            if (arena != null && arena.canPlaceBlockAt(b.getLocation())) {
                 PlaceBlock(arena, ladder, b, ladderdata, color);
             }
         }
@@ -30,15 +32,15 @@ public class TowerBlockPlacer {
     private void PlaceBlock(Arena arena, boolean ladder, Block b, String ladderdata, DyeColor color){
         //Block block = b.getRelative(x, y, z);
         //BlockPlacer blockPlacer = plugin.blockPlacer;
-
-        if (!ladder) {
-            Material woolMat = Material.valueOf(color.name() + "_WOOL");
-            b.setType(woolMat);
+        assert XMaterial.LADDER.parseMaterial() != null;
+        if (!ladder && XMaterial.matchXMaterial(color.name() + "_WOOL").isPresent()) {
+            XMaterial woolMat = XMaterial.matchXMaterial(color.name() + "_WOOL").get();
+            XBlock.setType(b, woolMat);
         } else {
-            b.setType(Material.LADDER);
+            b.setType(XMaterial.LADDER.parseMaterial());
 
             //Make this better (Error if ladder is not successfully placed from above. Ex. on a slab)
-            if (b.getType() == Material.LADDER) {
+            if (b.getType() == XMaterial.LADDER.parseMaterial()) {
                 BlockState state = b.getState();
                 Ladder lad = new Ladder();
                 lad.setFacingDirection(BlockFace.valueOf(ladderdata));

@@ -78,7 +78,7 @@ public class IceBridgeUse {
 
     }
     private void setIce(Arena arena, Block block){
-        if(arena.isInside(block.getLocation()) && block.getType() == Material.AIR){
+        if(arena.canPlaceBlockAt(block.getLocation()) && block.getType() == Material.AIR){
             assert XMaterial.ICE.parseMaterial() != null;
             block.setType(XMaterial.ICE.parseMaterial());
             BukkitScheduler scheduler = plugin().getServer().getScheduler();
