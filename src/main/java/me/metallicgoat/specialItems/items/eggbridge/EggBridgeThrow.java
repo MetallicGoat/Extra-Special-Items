@@ -5,6 +5,7 @@ import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.event.player.PlayerUseSpecialItemEvent;
 import de.marcely.bedwars.api.game.specialitem.SpecialItemUseSession;
 import me.metallicgoat.specialItems.Main;
+import me.metallicgoat.specialItems.utils.XSound;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Egg;
@@ -60,7 +61,7 @@ public class EggBridgeThrow {
                         Block block3 = eggLocation.clone().subtract(0.0D, 3.0D, 1.0D).getBlock();
                         new EggBridgeBlockPlacer(block3, color, arena);
 
-                        //TODO: Play sound
+                        XSound.ENTITY_CHICKEN_EGG.play(eggLocation);
 
                     }, 2L);
                 }

@@ -3,6 +3,7 @@ package me.metallicgoat.specialItems.items.popuptower.towers;
 import de.marcely.bedwars.api.game.specialitem.SpecialItemUseSession;
 import me.metallicgoat.specialItems.Main;
 import me.metallicgoat.specialItems.items.popuptower.TowerBlockPlacer;
+import me.metallicgoat.specialItems.utils.XSound;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Sound;
@@ -148,11 +149,7 @@ public class North {
             for (int i = 0; i < 2; i++) {
                 if (!towerBlock.isEmpty()) {
                     Block block = towerBlock.entrySet().stream().findFirst().get().getKey();
-                    if (Bukkit.getServer().getClass().getPackage().getName().contains("v1_8")) {
-                        chest.getWorld().playSound(chest.getLocation(), Sound.valueOf("CHICKEN_EGG_POP"), 1.0F, 0.5F);
-                    } else {
-                        chest.getWorld().playSound(chest.getLocation(), Sound.valueOf("ENTITY_CHICKEN_EGG"), 1.0F, 0.5F);
-                    }
+                    XSound.ENTITY_CHICKEN_EGG.play(chest.getLocation());
 
                     new TowerBlockPlacer(block, color, p, towerBlock.get(block), "SOUTH");
                     towerBlock.remove(block);

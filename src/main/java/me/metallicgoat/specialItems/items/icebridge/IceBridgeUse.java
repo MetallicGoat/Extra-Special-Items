@@ -7,6 +7,7 @@ import de.marcely.bedwars.api.event.player.PlayerUseSpecialItemEvent;
 import de.marcely.bedwars.api.game.specialitem.SpecialItemUseSession;
 import me.metallicgoat.specialItems.Main;
 import me.metallicgoat.specialItems.utils.XMaterial;
+import me.metallicgoat.specialItems.utils.XSound;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -45,7 +46,7 @@ public class IceBridgeUse {
 
                     setIce(arena, block);
 
-
+                    XSound.BLOCK_SNOW_BREAK.play(player);
 
                     if ((yaw < 45 || yaw >= 135) && (yaw < -135 || yaw >= -45)) {
                         setIce(arena, world.getBlockAt(blockLoc.add(1, 0, 0)));
