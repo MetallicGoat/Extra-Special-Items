@@ -23,6 +23,10 @@ public class IceBridgeUse {
     private BukkitTask task;
 
     public void createIceBridge(PlayerUseSpecialItemEvent e, SpecialItemUseSession session){
+
+        e.setTakingItem(true);
+        session.takeItem();
+
         Player player = e.getPlayer();
         Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(e.getPlayer());
         BukkitScheduler scheduler = plugin().getServer().getScheduler();

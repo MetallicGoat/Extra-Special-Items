@@ -1,5 +1,6 @@
 package me.metallicgoat.specialItems;
 
+import de.marcely.bedwars.api.BedwarsAPI;
 import me.metallicgoat.specialItems.config.ConfigUpdater;
 import me.metallicgoat.specialItems.items.eggbridge.PreventHatching;
 import me.metallicgoat.specialItems.items.eggbridge.RegisterEggBridger;
@@ -14,7 +15,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.Collections;
 
 public class Main extends JavaPlugin {
 
@@ -41,16 +42,16 @@ public class Main extends JavaPlugin {
                 "------------------------------"
         );
 
-        //BedwarsAPI.onReady(() -> {
+        BedwarsAPI.onReady(() -> {
             RegisterTower registerTower = new RegisterTower();
             registerTower.registerItem();
             RegisterEggBridger registerEggBridger = new RegisterEggBridger();
             registerEggBridger.registerItem();
             RegisterSilverfish registerSilverfish = new RegisterSilverfish();
             registerSilverfish.registerItem();
-        RegisterIceBridger registerIceBridger = new RegisterIceBridger();
-        registerIceBridger.registerItem();
-        //});
+            RegisterIceBridger registerIceBridger = new RegisterIceBridger();
+            registerIceBridger.registerItem();
+        });
     }
 
     private void registerEvents() {
@@ -74,7 +75,7 @@ public class Main extends JavaPlugin {
         File configFile = new File(getDataFolder(), "config.yml");
 
         try {
-            ConfigUpdater.update(this, "config.yml", configFile, Arrays.asList("Nothing", "here"));
+            ConfigUpdater.update(this, "config.yml", configFile, Collections.singletonList("Nothing"));
         } catch (IOException e) {
             e.printStackTrace();
         }

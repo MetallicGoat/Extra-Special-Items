@@ -16,17 +16,14 @@ public class UpdateDisplayName {
             @Override
             public void run(){
                 if(SilverfishThrow.silverfishTeamHashMap.containsKey(silverfish) && !silverfish.isDead()){
-                    if(i[0] < 5){
-                        if(i[0] == 0){
-                            silverfish.setCustomName(c + "§l" + teamName + c + " [■ ■ ■ ■ ■]");
-                        }else if(i[0] == 1){
-                            silverfish.setCustomName(c + "§l" + teamName + c + " [■ ■ ■ ■ §7■]");
-                        }else if(i[0] == 2){
-                            silverfish.setCustomName(c + "§l" + teamName + c + " [■ ■ ■ §7■ ■]");
-                        }else if(i[0] == 3){
-                            silverfish.setCustomName(c + "§l" + teamName + c + " [■ ■ §7■ ■ ■]");
-                        }else if(i[0] == 4){
-                            silverfish.setCustomName(c + "§l" + teamName + c + " [■ §7■ ■ ■ ■]");
+                    if (i[0] < 5) {
+                        switch (i[0]) {
+                            default:
+                                case 0: { silverfish.setCustomName(c + "§l" + teamName + c + " [■ ■ ■ ■ ■]"); }
+                                case 1: { silverfish.setCustomName(c + "§l" + teamName + c + " [■ ■ ■ ■ §7■]"); }
+                                case 2: { silverfish.setCustomName(c + "§l" + teamName + c + " [■ ■ ■ §7■ ■]"); }
+                                case 3: { silverfish.setCustomName(c + "§l" + teamName + c + " [■ ■ §7■ ■ ■]"); }
+                                case 4: { silverfish.setCustomName(c + "§l" + teamName + c + " [■ §7■ ■ ■ ■]"); }
                         }
                     }else{
                         cancel();
