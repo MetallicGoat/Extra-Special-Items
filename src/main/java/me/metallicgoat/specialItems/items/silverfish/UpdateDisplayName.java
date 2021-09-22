@@ -19,11 +19,11 @@ public class UpdateDisplayName {
                     if (i[0] < 5) {
                         switch (i[0]) {
                             default:
-                                case 0: { silverfish.setCustomName(c + "§l" + teamName + c + " [■ ■ ■ ■ ■]"); }
-                                case 1: { silverfish.setCustomName(c + "§l" + teamName + c + " [■ ■ ■ ■ §7■]"); }
-                                case 2: { silverfish.setCustomName(c + "§l" + teamName + c + " [■ ■ ■ §7■ ■]"); }
-                                case 3: { silverfish.setCustomName(c + "§l" + teamName + c + " [■ ■ §7■ ■ ■]"); }
-                                case 4: { silverfish.setCustomName(c + "§l" + teamName + c + " [■ §7■ ■ ■ ■]"); }
+                                case 0: { silverfish.setCustomName(c + "§l" + teamName + c + " [■ ■ ■ ■ ■]"); break;}
+                                case 1: { silverfish.setCustomName(c + "§l" + teamName + c + " [■ ■ ■ ■ §7■]"); break;}
+                                case 2: { silverfish.setCustomName(c + "§l" + teamName + c + " [■ ■ ■ §7■ ■]"); break;}
+                                case 3: { silverfish.setCustomName(c + "§l" + teamName + c + " [■ ■ §7■ ■ ■]"); break;}
+                                case 4: { silverfish.setCustomName(c + "§l" + teamName + c + " [■ §7■ ■ ■ ■]"); break;}
                         }
                     }else{
                         cancel();
