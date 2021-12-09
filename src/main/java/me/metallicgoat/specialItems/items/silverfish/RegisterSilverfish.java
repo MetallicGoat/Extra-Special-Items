@@ -9,6 +9,7 @@ import de.marcely.bedwars.api.game.specialitem.SpecialItemUseHandler;
 import de.marcely.bedwars.api.game.specialitem.SpecialItemUseSession;
 import me.metallicgoat.specialItems.Main;
 import me.metallicgoat.specialItems.utils.XMaterial;
+import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
@@ -52,7 +53,7 @@ public class RegisterSilverfish {
             });
         } else {
             // id is already taken
-            System.out.println("WARNING: Another addon is probably using the 'tower' special item id");
+            plugin().getLogger().info("WARNING: Another addon is probably using the 'silverfish' special item id");
         }
     }
 

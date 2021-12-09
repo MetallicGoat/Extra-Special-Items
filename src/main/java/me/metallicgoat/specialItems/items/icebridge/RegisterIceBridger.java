@@ -53,7 +53,8 @@ public class RegisterIceBridger {
             });
         } else {
             // id is already taken
-            System.out.println("WARNING: Another addon is probably using the 'tower' special item id");
+            // id is already taken
+            plugin().getLogger().info("WARNING: Another addon is probably using the 'ice-bridger' special item id");
         }
     }
 
