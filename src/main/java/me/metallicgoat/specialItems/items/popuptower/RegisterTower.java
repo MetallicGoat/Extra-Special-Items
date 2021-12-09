@@ -44,7 +44,7 @@ public class RegisterTower {
                         }
                     };
 
-                    //TODO:
+
                     TowerPlace towerPlace = new TowerPlace();
                     towerPlace.buildTower(e, session);
 

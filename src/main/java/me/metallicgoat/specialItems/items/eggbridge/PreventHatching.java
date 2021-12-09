@@ -12,7 +12,6 @@ public class PreventHatching implements Listener {
     public void onCreatureSpawn(PlayerEggThrowEvent e){
         Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(e.getPlayer());
         if(arena != null){
-            System.out.println("EGG THROW CANCEL");
             e.setHatching(false);
         }
     }

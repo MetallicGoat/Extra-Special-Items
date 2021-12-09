@@ -15,12 +15,12 @@ import org.bukkit.scheduler.BukkitTask;
 public class EggBridgeThrow {
     public void buildEggBridge(PlayerUseSpecialItemEvent e, SpecialItemUseSession session) {
         final Player player = e.getPlayer();
-        Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(player);
+        Arena arena = e.getArena();
 
         e.setTakingItem(true);
         session.takeItem();
 
-        final DyeColor col = BedwarsAPI.getGameAPI().getArenaByPlayer(player).getPlayerTeam(player).getDyeColor();
+        final DyeColor col = arena.getPlayerTeam(player).getDyeColor();
 
         Egg egg = player.launchProjectile(Egg.class);
 
