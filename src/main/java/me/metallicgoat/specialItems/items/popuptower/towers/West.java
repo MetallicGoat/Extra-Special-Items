@@ -1,23 +1,15 @@
 package me.metallicgoat.specialItems.items.popuptower.towers;
 
 import de.marcely.bedwars.api.game.specialitem.SpecialItemUseSession;
-import me.metallicgoat.specialItems.Main;
 import me.metallicgoat.specialItems.items.popuptower.TowerBlockPlacer;
-import me.metallicgoat.specialItems.utils.XSound;
-import org.bukkit.Bukkit;
-import org.bukkit.DyeColor;
-import org.bukkit.Sound;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitTask;
+import org.bukkit.block.BlockFace;
 
 import java.util.LinkedHashMap;
 
 public class West {
 
-    private BukkitTask task;
-
-    public West(Block chest, DyeColor color, Player p, SpecialItemUseSession session) {
+    public West(Block chest, SpecialItemUseSession session) {
 
         Block placedLoc = chest.getRelative(0, 1, 0);
 
@@ -143,26 +135,7 @@ public class West {
         towerBlock.put(placedLoc.getRelative(-3, 7, 0), false);
         towerBlock.put(placedLoc.getRelative(-3, 7, -2), false);
 
-
-        task = Bukkit.getScheduler().runTaskTimer(plugin(), () -> {
-            for (int i = 0; i < 2; i++) {
-                if (!towerBlock.isEmpty()) {
-                    Block block = towerBlock.entrySet().stream().findFirst().get().getKey();
-                    XSound.ENTITY_CHICKEN_EGG.play(chest.getLocation());
-
-                    new TowerBlockPlacer(block, color, p, towerBlock.get(block), "EAST");
-                    towerBlock.remove(block);
-
-                } else {
-                    task.cancel();
-                    session.stop();
-                    return;
-                }
-            }
-        }, 0L, 1);
-    }
-    private static Main plugin(){
-        return Main.getInstance();
+        new TowerBlockPlacer(towerBlock, session, BlockFace.EAST);
     }
 }
 

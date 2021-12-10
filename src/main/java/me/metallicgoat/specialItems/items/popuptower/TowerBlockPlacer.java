@@ -1,35 +1,67 @@
 package me.metallicgoat.specialItems.items.popuptower;
 
-import de.marcely.bedwars.api.BedwarsAPI;
 import de.marcely.bedwars.api.arena.Arena;
+import de.marcely.bedwars.api.arena.Team;
+import de.marcely.bedwars.api.game.specialitem.SpecialItemUseSession;
+import me.metallicgoat.specialItems.Main;
 import me.metallicgoat.specialItems.utils.XBlock;
 import me.metallicgoat.specialItems.utils.XMaterial;
+import me.metallicgoat.specialItems.utils.XSound;
+import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
-import org.bukkit.entity.Player;
 import org.bukkit.material.Ladder;
+import org.bukkit.scheduler.BukkitTask;
+
+import java.util.HashMap;
 
 public class TowerBlockPlacer {
 
-    //TODO: Make Sound Here
+    private BukkitTask task;
 
-    public TowerBlockPlacer(Block b, DyeColor color, Player p, boolean ladder, String ladderdata) {
-        Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(p);
+    public TowerBlockPlacer(HashMap<Block, Boolean> towerBlock, SpecialItemUseSession session, BlockFace face) {
 
-        //Is block there?
-        if (b.getType().equals(Material.AIR)) {
-
-            //Is block inside region
-            if (arena != null && arena.canPlaceBlockAt(b.getLocation())) {
-                PlaceBlock(arena, ladder, b, ladderdata, color);
-            }
+        if(session == null){
+            return;
         }
+
+        Arena arena = session.getEvent().getArena();
+        Team team = arena.getPlayerTeam(session.getEvent().getPlayer());
+        DyeColor color = team.getDyeColor();
+
+        task = Bukkit.getScheduler().runTaskTimer(plugin(), () -> {
+            if(session.isActive()) {
+                for (int i = 0; i < 2; i++) {
+                    if (!towerBlock.isEmpty()) {
+                        //Get next block
+                        Block block = towerBlock.entrySet().stream().findFirst().get().getKey();
+
+                        //Is block there?
+                        if (block.getType().equals(Material.AIR)) {
+                            //Is block inside region
+                            if (arena.canPlaceBlockAt(block.getLocation())) {
+                                XSound.ENTITY_CHICKEN_EGG.play(block.getLocation());
+                                PlaceBlock(arena, towerBlock.get(block), block, face, color);
+                            }
+                        }
+                        //Remove block from list
+                        towerBlock.remove(block);
+                    } else {
+                        task.cancel();
+                        session.stop();
+                        return;
+                    }
+                }
+            }else{
+                task.cancel();
+            }
+        }, 0L, 1);
     }
 
-    private void PlaceBlock(Arena arena, boolean ladder, Block b, String ladderdata, DyeColor color){
+    private void PlaceBlock(Arena arena, boolean ladder, Block b, BlockFace face, DyeColor color){
 
         assert XMaterial.LADDER.parseMaterial() != null;
         if (!ladder && XMaterial.matchXMaterial(color.name() + "_WOOL").isPresent()) {
@@ -42,11 +74,15 @@ public class TowerBlockPlacer {
             if (b.getType() == XMaterial.LADDER.parseMaterial()) {
                 BlockState state = b.getState();
                 Ladder lad = new Ladder();
-                lad.setFacingDirection(BlockFace.valueOf(ladderdata));
+                lad.setFacingDirection(face);
                 state.setData(lad);
                 state.update();
             }
         }
         arena.setBlockPlayerPlaced(b, true);
+    }
+
+    private static Main plugin(){
+        return Main.getInstance();
     }
 }

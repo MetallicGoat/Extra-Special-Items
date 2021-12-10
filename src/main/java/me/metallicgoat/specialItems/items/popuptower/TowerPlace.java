@@ -38,13 +38,13 @@ public class TowerPlace{
             rotation += 360.0D;
         }
         if (45.0D <= rotation && rotation < 135.0D) {
-            new South(clicked, col, player, session);
+            new South(clicked, session);
         } else if (225.0D <= rotation && rotation < 315.0D) {
-            new North(clicked, col, player, session);
+            new North(clicked, session);
         } else if (135.0D <= rotation && rotation < 225.0D) {
-            new West(clicked, col, player,  session);
+            new West(clicked, session);
         } else if (0.0D <= rotation && rotation < 45.0D || 315.0D <= rotation && rotation < 360.0D) {
-            new East(clicked, col, player, session);
+            new East(clicked, session);
         }
     }
 }
