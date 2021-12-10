@@ -4,7 +4,6 @@ import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.event.player.PlayerUseSpecialItemEvent;
 import de.marcely.bedwars.api.game.specialitem.SpecialItemUseSession;
 import me.metallicgoat.specialItems.items.popuptower.towers.*;
-import org.bukkit.DyeColor;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
@@ -15,7 +14,6 @@ public class TowerPlace{
         final Player player = e.getPlayer();
         final Arena arena = e.getArena();
         final Block clicked = e.getClickedBlock();
-        final DyeColor col = arena.getPlayerTeam(player).getDyeColor();
 
         //Check if placeable
         if(clicked == null || e.getClickedBlockFace() == BlockFace.DOWN || !arena.canPlaceBlockAt(clicked.getLocation())){
@@ -29,10 +27,10 @@ public class TowerPlace{
         session.takeItem();
 
         //Choose the correct tower to build, then build it
-        ChooseTower(player, clicked, col, session);
+        ChooseTower(player, clicked, session);
     }
 
-    private void ChooseTower(Player player, Block clicked, DyeColor col, SpecialItemUseSession session){
+    private void ChooseTower(Player player, Block clicked, SpecialItemUseSession session){
         double rotation = (player.getLocation().getYaw() - 90.0F) % 360.0F;
         if (rotation < 0.0D) {
             rotation += 360.0D;
