@@ -1,6 +1,5 @@
 package me.metallicgoat.specialItems.items.eggbridge;
 
-import de.marcely.bedwars.api.BedwarsAPI;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.event.player.PlayerUseSpecialItemEvent;
 import de.marcely.bedwars.api.game.specialitem.SpecialItemUseSession;
@@ -34,6 +33,9 @@ public class EggBridgeThrow {
         private final DyeColor color;
         private final Location playerLocation;
         private final BukkitTask task;
+        private final double length = plugin().getConfig().getDouble("Egg-Bridger.Max-Length");
+        private final double yVariation = plugin().getConfig().getDouble("Egg-Bridger.Max-Y-Variation");
+        private final String eggSound = plugin().getConfig().getString("Egg-Bridger.Sound");
 
         public BridgeBlockPlacerTask(Egg egg, Location playerLocation, SpecialItemUseSession session, Arena arena, DyeColor color) {
             this.egg = egg;
@@ -41,6 +43,7 @@ public class EggBridgeThrow {
             this.arena = arena;
             this.color = color;
             this.playerLocation = playerLocation;
+
             this.task = Bukkit.getScheduler().runTaskTimer(Main.getInstance(), this, 0L, 1L);
         }
 
@@ -48,7 +51,7 @@ public class EggBridgeThrow {
 
         public void run() {
             Location eggLocation = egg.getLocation().add(0, 1, 0);
-            if (!egg.isDead() && playerLocation.distance(egg.getLocation()) <= 30.0D && playerLocation.getY() - egg.getLocation().getY() <= 18.0D) {
+            if (!egg.isDead() && playerLocation.distance(egg.getLocation()) <= length && playerLocation.getY() - egg.getLocation().getY() <= yVariation) {
                 if (playerLocation.distance(eggLocation) > 3.5D) {
                     Bukkit.getScheduler().runTaskLater(Main.getInstance(),() -> {
 
@@ -61,7 +64,7 @@ public class EggBridgeThrow {
                         Block block3 = eggLocation.clone().subtract(0.0D, 3.0D, 1.0D).getBlock();
                         new EggBridgeBlockPlacer(block3, color, arena);
 
-                        XSound.ENTITY_CHICKEN_EGG.play(eggLocation);
+                        XSound.valueOf(eggSound).play(eggLocation);
 
                     }, 2L);
                 }
@@ -71,5 +74,8 @@ public class EggBridgeThrow {
                 task.cancel();
             }
         }
+    }
+    private static Main plugin(){
+        return Main.getInstance();
     }
 }

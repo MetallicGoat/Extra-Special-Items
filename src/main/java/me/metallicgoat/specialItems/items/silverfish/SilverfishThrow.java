@@ -77,7 +77,6 @@ public class SilverfishThrow implements Listener {
     }
 
     //Possible puff of smoke
-
     @EventHandler
     public void onSilverfishDeath(EntityDeathEvent e){
         if(e.getEntity() instanceof Silverfish){
@@ -131,11 +130,12 @@ public class SilverfishThrow implements Listener {
         if(arenas != null && e.getEntity() instanceof Silverfish){
             e.setCancelled(false);
             BukkitScheduler scheduler = plugin().getServer().getScheduler();
+            long time = plugin().getConfig().getLong("Silverfish.Life-Duration");
             scheduler.runTaskLater(plugin(), () -> {
                 e.getEntity().remove();
                 silverfishTeamHashMap.remove((Silverfish) e.getEntity());
                 arenas.forEach(arena -> arenaSilverfishHashMap.remove(arena, (Silverfish) e.getEntity()));
-            }, 400L);
+            }, time);
         }
     }
 

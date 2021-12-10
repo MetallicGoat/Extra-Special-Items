@@ -1,6 +1,7 @@
 package me.metallicgoat.specialItems.items.silverfish;
 
 import de.marcely.bedwars.api.arena.Team;
+import de.marcely.bedwars.api.message.Message;
 import me.metallicgoat.specialItems.Main;
 import org.bukkit.entity.Silverfish;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -11,20 +12,14 @@ public class UpdateDisplayName {
         final int[] i = {0};
         silverfish.setCustomNameVisible(true);
         String teamName = team.getDisplayName();
-        String c = "§" + team.getChatColor().getChar();
+        String c = "&" + team.getChatColor().getChar();
+        long time = plugin().getConfig().getLong("Silverfish.Life-Duration") / 5;
         new BukkitRunnable() {
             @Override
             public void run(){
                 if(SilverfishThrow.silverfishTeamHashMap.containsKey(silverfish) && !silverfish.isDead()){
                     if (i[0] < 5) {
-                        switch (i[0]) {
-                            default:
-                                case 0: { silverfish.setCustomName(c + "§l" + teamName + c + " [■ ■ ■ ■ ■]"); break;}
-                                case 1: { silverfish.setCustomName(c + "§l" + teamName + c + " [■ ■ ■ ■ §7■]"); break;}
-                                case 2: { silverfish.setCustomName(c + "§l" + teamName + c + " [■ ■ ■ §7■ ■]"); break;}
-                                case 3: { silverfish.setCustomName(c + "§l" + teamName + c + " [■ ■ §7■ ■ ■]"); break;}
-                                case 4: { silverfish.setCustomName(c + "§l" + teamName + c + " [■ §7■ ■ ■ ■]"); break;}
-                        }
+                        silverfish.setCustomName(displayName(i[0], teamName, c));
                     }else{
                         cancel();
                         return;
@@ -34,7 +29,13 @@ public class UpdateDisplayName {
                     cancel();
                 }
             }
-        }.runTaskTimer(plugin(), 0L, 80L);
+        }.runTaskTimer(plugin(), 0L, time);
+    }
+
+    private static String displayName(int version, String teamName, String color){
+        String config = "Silverfish.Display-Name." + (version + 1);
+        String unformattedString = plugin().getConfig().getString(config);
+        return Message.build(unformattedString).placeholder("team-color", color).placeholder("team-name", teamName).done();
     }
 
 

@@ -28,9 +28,12 @@ public class TowerBlockPlacer {
             return;
         }
 
+
         Arena arena = session.getEvent().getArena();
         Team team = arena.getPlayerTeam(session.getEvent().getPlayer());
         DyeColor color = team.getDyeColor();
+        long time = plugin().getConfig().getLong("PopUpTower.Speed");
+        String sound = plugin().getConfig().getString("PopUpTower.Sound");
 
         task = Bukkit.getScheduler().runTaskTimer(plugin(), () -> {
             if(session.isActive()) {
@@ -43,7 +46,7 @@ public class TowerBlockPlacer {
                         if (block.getType().equals(Material.AIR)) {
                             //Is block inside region
                             if (arena.canPlaceBlockAt(block.getLocation())) {
-                                XSound.ENTITY_CHICKEN_EGG.play(block.getLocation());
+                                XSound.valueOf(sound).play(block.getLocation());
                                 PlaceBlock(arena, towerBlock.get(block), block, face, color);
                             }
                         }
@@ -58,7 +61,7 @@ public class TowerBlockPlacer {
             }else{
                 task.cancel();
             }
-        }, 0L, 1);
+        }, 0L, time);
     }
 
     private void PlaceBlock(Arena arena, boolean ladder, Block b, BlockFace face, DyeColor color){

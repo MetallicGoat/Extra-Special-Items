@@ -1,0 +1,20 @@
+PopUpTower:
+  Speed: 1
+  Sound: ENTITY_CHICKEN_EGG
+
+Silverfish:
+  Life-Duration: 400
+  Display-Name:
+    1: "{team-color}&l{team-name}{team-color}[■ ■ ■ ■ ■]"
+    2: "{team-color}&l{team-name}{team-color}[■ ■ ■ ■ &7■]"
+    3: "{team-color}&l{team-name}{team-color}[■ ■ ■ &7■ ■]"
+    4: "{team-color}&l{team-name}{team-color}[■ ■ &7■ ■ ■]"
+    5: "{team-color}&l{team-name}{team-color}[■ &7■ ■ ■ ■]"
+
+Egg-Bridger:
+  Max-Length: 30
+  Max-Y-Variation: 18
+  Sound: ENTITY_CHICKEN_EGG
+
+Ice-Bridger:
+  Max-Distance: 37

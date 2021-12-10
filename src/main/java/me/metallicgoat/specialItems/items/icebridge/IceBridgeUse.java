@@ -28,6 +28,7 @@ public class IceBridgeUse {
         session.takeItem();
 
         Player player = e.getPlayer();
+        double length = plugin().getConfig().getDouble("Ice-Bridger.Max-Distance");
         Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(e.getPlayer());
         BukkitScheduler scheduler = plugin().getServer().getScheduler();
 
@@ -38,7 +39,7 @@ public class IceBridgeUse {
             final Location l = player.getLocation();
 
             task = scheduler.runTaskTimer(plugin(), () -> {
-                if(i.get() <= 37 && session.isActive()){
+                if(i.get() <= length && session.isActive()){
 
                     final Location lookingStraight = new Location(l.getWorld(), l.getX(), l.getY(), l.getZ(), l.getYaw(), 0);
                     int yaw = (int)l.getYaw() % 180;
