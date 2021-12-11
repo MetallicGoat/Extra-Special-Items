@@ -128,13 +128,14 @@ public class SilverfishThrow implements Listener {
     public void onCreatureSpawn(CreatureSpawnEvent e){
         Collection<Arena> arenas = BedwarsAPI.getGameAPI().getArenaByLocation(e.getLocation());
         if(arenas != null && e.getEntity() instanceof Silverfish){
+            Silverfish silverfish = (Silverfish) e.getEntity();
             e.setCancelled(false);
             BukkitScheduler scheduler = plugin().getServer().getScheduler();
             long time = plugin().getConfig().getLong("Silverfish.Life-Duration");
             scheduler.runTaskLater(plugin(), () -> {
-                e.getEntity().remove();
-                silverfishTeamHashMap.remove((Silverfish) e.getEntity());
-                arenas.forEach(arena -> arenaSilverfishHashMap.remove(arena, (Silverfish) e.getEntity()));
+                silverfish.remove();
+                silverfishTeamHashMap.remove(silverfish);
+                arenas.forEach(arena -> arenaSilverfishHashMap.remove(arena, silverfish));
             }, time);
         }
     }
