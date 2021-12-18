@@ -15,7 +15,6 @@ import org.bukkit.plugin.Plugin;
 public class RegisterTower {
     public void registerItem() {
         SpecialItemListener listener = new SpecialItemListener() {
-
             @Override
             public void onShopBuy(PlayerBuyInShopEvent e) {
             }

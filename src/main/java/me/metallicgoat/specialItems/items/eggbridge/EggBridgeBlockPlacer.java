@@ -7,6 +7,8 @@ import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 
+import java.util.Optional;
+
 public class EggBridgeBlockPlacer {
     public EggBridgeBlockPlacer(Block b, DyeColor color, Arena arena) {
 
@@ -21,10 +23,9 @@ public class EggBridgeBlockPlacer {
     }
 
     private void PlaceBlock(Arena arena, Block b, DyeColor color){
-
-        if (XMaterial.matchXMaterial(color.name() + "_WOOL").isPresent()) {
-            XMaterial woolMat = XMaterial.matchXMaterial(color.name() + "_WOOL").get();
-            XBlock.setType(b, woolMat);
+        Optional<XMaterial> material = XMaterial.matchXMaterial(color.name() + "_WOOL");
+        if (material.isPresent()) {
+            XBlock.setType(b, material.get());
             arena.setBlockPlayerPlaced(b, true);
         }
     }

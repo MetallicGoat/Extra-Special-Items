@@ -1,6 +1,7 @@
 package me.metallicgoat.specialItems.items.eggbridge;
 
 import de.marcely.bedwars.api.arena.Arena;
+import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.event.player.PlayerUseSpecialItemEvent;
 import de.marcely.bedwars.api.game.specialitem.SpecialItemUseSession;
 import me.metallicgoat.specialItems.Main;
@@ -19,9 +20,9 @@ public class EggBridgeThrow {
         e.setTakingItem(true);
         session.takeItem();
 
-        final DyeColor col = arena.getPlayerTeam(player).getDyeColor();
-
-        Egg egg = player.launchProjectile(Egg.class);
+        final Team team = arena.getPlayerTeam(player);
+        final DyeColor col = team != null ? team.getDyeColor():DyeColor.WHITE;
+        final Egg egg = player.launchProjectile(Egg.class);
 
         new BridgeBlockPlacerTask(egg, player.getLocation(), session, arena, col);
     }

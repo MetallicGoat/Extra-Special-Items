@@ -28,9 +28,10 @@ public class TowerBlockPlacer {
             return;
         }
 
-        Arena arena = session.getEvent().getArena();
-        Team team = arena.getPlayerTeam(session.getEvent().getPlayer());
-        DyeColor color = team.getDyeColor();
+        final Arena arena = session.getEvent().getArena();
+        final Team team = arena.getPlayerTeam(session.getEvent().getPlayer());
+        final DyeColor color = team != null ? team.getDyeColor():DyeColor.WHITE;
+
         long time = plugin().getConfig().getLong("PopUpTower.Block-Place-Interval");
         int amountToPlace = plugin().getConfig().getInt("PopUpTower.Blocks-Placed-Per-Interval");
         String sound = plugin().getConfig().getString("PopUpTower.Sound");
