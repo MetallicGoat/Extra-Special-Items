@@ -3,6 +3,7 @@ package me.metallicgoat.specialItems.items.popuptower;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.game.specialitem.SpecialItemUseSession;
+import de.marcely.bedwars.tools.Pair;
 import me.metallicgoat.specialItems.Main;
 import me.metallicgoat.specialItems.utils.XBlock;
 import me.metallicgoat.specialItems.utils.XMaterial;
@@ -16,15 +17,15 @@ import org.bukkit.block.BlockState;
 import org.bukkit.material.Ladder;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.HashMap;
+import java.util.Queue;
 
 public class TowerBlockPlacer {
 
     private BukkitTask task;
 
-    public TowerBlockPlacer(HashMap<Block, Boolean> towerBlock, SpecialItemUseSession session, BlockFace face) {
+    public TowerBlockPlacer(Queue<Pair<Block, Boolean>> towerBlock, SpecialItemUseSession session, BlockFace face) {
 
-        if(session == null){
+        if(session == null || !session.isActive()){
             return;
         }
 
@@ -39,20 +40,21 @@ public class TowerBlockPlacer {
         task = Bukkit.getScheduler().runTaskTimer(plugin(), () -> {
             if(session.isActive()) {
                 for (int i = 0; i < amountToPlace; i++) {
-                    if (!towerBlock.isEmpty()) {
+                    if (towerBlock.peek() != null) {
+
+                        Pair<Block, Boolean> blockBooleanPair = towerBlock.poll();
+
                         //Get next block
-                        Block block = towerBlock.entrySet().stream().findFirst().get().getKey();
+                        Block block = blockBooleanPair.getKey();
 
                         //Is block there?
                         if (block.getType().equals(Material.AIR)) {
                             //Is block inside region
                             if (arena.canPlaceBlockAt(block.getLocation())) {
                                 XSound.valueOf(sound).play(block.getLocation());
-                                PlaceBlock(arena, towerBlock.get(block), block, face, color);
+                                PlaceBlock(arena, blockBooleanPair.getValue(), block, face, color);
                             }
                         }
-                        //Remove block from list
-                        towerBlock.remove(block);
                     } else {
                         task.cancel();
                         session.stop();
