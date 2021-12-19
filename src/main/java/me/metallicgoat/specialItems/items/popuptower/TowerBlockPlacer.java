@@ -78,7 +78,7 @@ public class TowerBlockPlacer {
             if (b.getType() == XMaterial.LADDER.parseMaterial()) {
                 BlockState state = b.getState();
                 Ladder lad = new Ladder();
-                lad.setFacingDirection(face);
+                lad.setFacingDirection(face.getOppositeFace());
                 state.setData(lad);
                 state.update();
             }
