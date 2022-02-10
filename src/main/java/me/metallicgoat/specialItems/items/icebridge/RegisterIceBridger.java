@@ -52,6 +52,11 @@ public class RegisterIceBridger {
                 }
             });
         } else {
+            SpecialItem item = GameAPI.get().getSpecialItem("ice-bridger");
+
+            if(item != null && item.getPlugin().getName().equals(Main.getInstance().getName()))
+                return;
+
             // id is already taken
             plugin().getLogger().info("WARNING: Another addon is probably using the 'ice-bridger' special item id");
         }

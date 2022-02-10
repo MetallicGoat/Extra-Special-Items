@@ -51,6 +51,11 @@ public class RegisterEggBridger {
                 }
             });
         } else {
+            SpecialItem item = GameAPI.get().getSpecialItem("egg-bridger");
+
+            if(item != null && item.getPlugin().getName().equals(Main.getInstance().getName()))
+                return;
+
             // id is already taken
             plugin().getLogger().info("WARNING: Another addon is probably using the 'egg-bridger' special item id");
         }
