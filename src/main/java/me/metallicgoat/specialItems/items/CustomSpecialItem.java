@@ -3,36 +3,34 @@ package me.metallicgoat.specialItems.items;
 import de.marcely.bedwars.api.GameAPI;
 import de.marcely.bedwars.api.event.player.PlayerBuyInShopEvent;
 import de.marcely.bedwars.api.event.player.PlayerUseSpecialItemEvent;
-import de.marcely.bedwars.api.game.specialitem.SpecialItem;
-import de.marcely.bedwars.api.game.specialitem.SpecialItemListener;
-import de.marcely.bedwars.api.game.specialitem.SpecialItemUseHandler;
-import de.marcely.bedwars.api.game.specialitem.SpecialItemUseSession;
+import de.marcely.bedwars.api.game.specialitem.*;
+import de.marcely.bedwars.tools.Helper;
 import me.metallicgoat.specialItems.Console;
 import me.metallicgoat.specialItems.ExtraSpecialItems;
+import me.metallicgoat.specialItems.items.eggbridge.EggBridger;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
 
 public class CustomSpecialItem {
 
-    private final SpecialItemType type;
+    private final SpecialItemUseHandler handler;
     private final String itemId;
     private final String messagesFileId;
     private final ItemStack itemStack;
 
     public CustomSpecialItem(
-            SpecialItemType type,
+            SpecialItemUseHandler handler,
             String itemId,
             String messagesFileId,
             ItemStack itemStack){
 
-        this.type = type;
+        this.handler = handler;
         this.itemId = itemId;
         this.messagesFileId = messagesFileId;
         this.itemStack = itemStack;
     }
 
-    public SpecialItemType getType(){
-        return this.type;
+    public SpecialItemUseHandler handler(){
+        return this.handler;
     }
 
     public String getId(){
@@ -47,10 +45,34 @@ public class CustomSpecialItem {
         return this.itemStack;
     }
 
+    public static void registerAll(){
+        register(new CustomSpecialItem(
+                EggBridger.getEggBridgeHandler(),
+                "egg-bridger",
+                "%EggBridgerItem%",
+                Helper.get().parseItemStack("EGG")));
 
-    public static void register(CustomSpecialItem item){
+        register(new CustomSpecialItem(
+                null,
+                "ice-bridger",
+                "%IceBridgerItem%",
+                Helper.get().parseItemStack("ICE")));
+
+        register(new CustomSpecialItem(
+                null,
+                "tower",
+                "%TowerItem%",
+                Helper.get().parseItemStack("CHEST")));
+
+        register(new CustomSpecialItem(
+                null,
+                "silverfish",
+                "%SilverFishItem%",
+                Helper.get().parseItemStack("SNOWBALL")));
+    }
+
+    private static void register(CustomSpecialItem item){
         SpecialItemListener listener = new SpecialItemListener() {
-
             @Override
             public void onShopBuy(PlayerBuyInShopEvent e) {
             }
@@ -64,34 +86,18 @@ public class CustomSpecialItem {
 
         if (specialItem != null) {
             specialItem.registerListener(listener);
+            specialItem.setHandler(item.handler());
 
-            specialItem.setHandler(new SpecialItemUseHandler() {
-                @Override
-                public Plugin getPlugin() {
-                    return ExtraSpecialItems.getInstance();
-                }
-
-                @Override
-                public SpecialItemUseSession openSession(PlayerUseSpecialItemEvent e) {
-                    SpecialItemUseSession session = new SpecialItemUseSession(e) {
-                        @Override
-                        protected void handleStop() {
-                        }
-                    };
-
-                    // TODO
-                    //SilverfishThrow.throwSilverfish(e, session);
-                    return session;
-                }
-            });
         } else {
             SpecialItem registeredItem = GameAPI.get().getSpecialItem(item.getId());
 
+            // TODO better way?
+            // Probably reloading bedwars or something
             if(registeredItem != null && registeredItem.getPlugin().getName().equals(ExtraSpecialItems.getInstance().getName()))
                 return;
 
-            // id is already taken
-            Console.printSpecializedInfo("Custom Item Registration Failed", "Another addon is probably using the " + item.getId() + " special item id");
+            // id is already taken by some other addon
+            Console.printSpecializedInfo("SpecialItem Registration Failed", "Another addon is probably using the " + item.getId() + " special item id");
         }
     }
 }

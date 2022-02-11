@@ -13,56 +13,27 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
 public class RegisterIceBridger {
-    public void registerItem() {
-        SpecialItemListener listener = new SpecialItemListener() {
 
+    public static SpecialItemUseHandler getIceBridgeHandler(){
+        return new SpecialItemUseHandler() {
             @Override
-            public void onShopBuy(PlayerBuyInShopEvent e) {
+            public Plugin getPlugin() {
+                return ExtraSpecialItems.getInstance();
             }
 
             @Override
-            public void onUse(PlayerUseSpecialItemEvent e) {
+            public SpecialItemUseSession openSession(PlayerUseSpecialItemEvent e) {
+                SpecialItemUseSession session = new SpecialItemUseSession(e) {
+                    @Override
+                    protected void handleStop() {
+                    }
+                };
+
+                IceBridgeUse iceBridge = new IceBridgeUse();
+                iceBridge.createIceBridge(e, session);
+
+                return session;
             }
         };
-
-        assert XMaterial.ICE.parseMaterial() != null;
-        SpecialItem specialItem = GameAPI.get().registerSpecialItem("ice-bridger", plugin(), "%eggBridgerItem%", new ItemStack(XMaterial.ICE.parseMaterial()));
-
-        if (specialItem != null) {
-            specialItem.registerListener(listener);
-
-            specialItem.setHandler(new SpecialItemUseHandler() {
-                @Override
-                public Plugin getPlugin() {
-                    return plugin();
-                }
-
-                @Override
-                public SpecialItemUseSession openSession(PlayerUseSpecialItemEvent e) {
-                    SpecialItemUseSession session = new SpecialItemUseSession(e) {
-                        @Override
-                        protected void handleStop() {
-                        }
-                    };
-
-                    IceBridgeUse iceBridge = new IceBridgeUse();
-                    iceBridge.createIceBridge(e, session);
-
-                    return session;
-                }
-            });
-        } else {
-            SpecialItem item = GameAPI.get().getSpecialItem("ice-bridger");
-
-            if(item != null && item.getPlugin().getName().equals(ExtraSpecialItems.getInstance().getName()))
-                return;
-
-            // id is already taken
-            plugin().getLogger().info("WARNING: Another addon is probably using the 'ice-bridger' special item id");
-        }
-    }
-
-    public static ExtraSpecialItems plugin(){
-        return ExtraSpecialItems.getInstance();
     }
 }

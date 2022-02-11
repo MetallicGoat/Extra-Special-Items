@@ -2,11 +2,8 @@ package me.metallicgoat.specialItems;
 
 import de.marcely.bedwars.api.BedwarsAPI;
 import me.metallicgoat.specialItems.config.ConfigUpdater;
+import me.metallicgoat.specialItems.items.CustomSpecialItem;
 import me.metallicgoat.specialItems.items.eggbridge.PreventHatching;
-import me.metallicgoat.specialItems.items.eggbridge.RegisterEggBridger;
-import me.metallicgoat.specialItems.items.icebridge.RegisterIceBridger;
-import me.metallicgoat.specialItems.items.popuptower.RegisterTower;
-import me.metallicgoat.specialItems.items.silverfish.RegisterSilverfish;
 import me.metallicgoat.specialItems.items.silverfish.SilverfishThrow;
 import org.bukkit.Server;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -30,7 +27,6 @@ public class ExtraSpecialItems extends JavaPlugin {
         registerEvents();
         loadConfig();
         instance = this;
-        //configManager = new ConfigManager();
 
         PluginDescriptionFile pdf = this.getDescription();
 
@@ -42,16 +38,7 @@ public class ExtraSpecialItems extends JavaPlugin {
                 "------------------------------"
         );
 
-        BedwarsAPI.onReady(() -> {
-            RegisterTower registerTower = new RegisterTower();
-            registerTower.registerItem();
-            RegisterEggBridger registerEggBridger = new RegisterEggBridger();
-            registerEggBridger.registerItem();
-            RegisterSilverfish registerSilverfish = new RegisterSilverfish();
-            registerSilverfish.registerItem();
-            RegisterIceBridger registerIceBridger = new RegisterIceBridger();
-            registerIceBridger.registerItem();
-        });
+        BedwarsAPI.onReady(CustomSpecialItem::registerAll);
     }
 
     private void registerEvents() {
@@ -75,7 +62,7 @@ public class ExtraSpecialItems extends JavaPlugin {
         File configFile = new File(getDataFolder(), "config.yml");
 
         try {
-            ConfigUpdater.update(this, "config.yml", configFile, Collections.singletonList("Nothing"));
+            ConfigUpdater.update(this, "config.yml", configFile, Collections.emptyList());
         } catch (IOException e) {
             e.printStackTrace();
         }

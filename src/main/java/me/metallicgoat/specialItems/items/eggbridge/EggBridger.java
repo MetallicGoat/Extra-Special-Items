@@ -1,4 +1,4 @@
-package me.metallicgoat.specialItems.items.popuptower;
+package me.metallicgoat.specialItems.items.eggbridge;
 
 import de.marcely.bedwars.api.event.player.PlayerUseSpecialItemEvent;
 import de.marcely.bedwars.api.game.specialitem.SpecialItemUseHandler;
@@ -6,9 +6,9 @@ import de.marcely.bedwars.api.game.specialitem.SpecialItemUseSession;
 import me.metallicgoat.specialItems.ExtraSpecialItems;
 import org.bukkit.plugin.Plugin;
 
-public class RegisterTower {
+public class EggBridger {
 
-    public static SpecialItemUseHandler getPopUpTowerHandler(){
+    public static SpecialItemUseHandler getEggBridgeHandler(){
         return new SpecialItemUseHandler() {
             @Override
             public Plugin getPlugin() {
@@ -23,9 +23,8 @@ public class RegisterTower {
                     }
                 };
 
-
-                TowerPlace towerPlace = new TowerPlace();
-                towerPlace.buildTower(e, session);
+                EggBridgeThrow bridgeThrow = new EggBridgeThrow();
+                bridgeThrow.buildEggBridge(e, session);
 
                 return session;
             }
