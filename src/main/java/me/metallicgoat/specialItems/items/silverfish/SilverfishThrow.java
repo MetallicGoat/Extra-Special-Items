@@ -6,7 +6,7 @@ import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.event.arena.RoundEndEvent;
 import de.marcely.bedwars.api.event.player.PlayerUseSpecialItemEvent;
 import de.marcely.bedwars.api.game.specialitem.SpecialItemUseSession;
-import me.metallicgoat.specialItems.Main;
+import me.metallicgoat.specialItems.ExtraSpecialItems;
 import org.bukkit.Location;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -140,7 +140,7 @@ public class SilverfishThrow implements Listener {
         }
     }
 
-    private static Main plugin(){
-        return Main.getInstance();
+    private static ExtraSpecialItems plugin(){
+        return ExtraSpecialItems.getInstance();
     }
 }

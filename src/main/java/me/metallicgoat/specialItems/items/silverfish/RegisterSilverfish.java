@@ -7,9 +7,8 @@ import de.marcely.bedwars.api.game.specialitem.SpecialItem;
 import de.marcely.bedwars.api.game.specialitem.SpecialItemListener;
 import de.marcely.bedwars.api.game.specialitem.SpecialItemUseHandler;
 import de.marcely.bedwars.api.game.specialitem.SpecialItemUseSession;
-import me.metallicgoat.specialItems.Main;
+import me.metallicgoat.specialItems.ExtraSpecialItems;
 import me.metallicgoat.specialItems.utils.XMaterial;
-import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
@@ -54,7 +53,7 @@ public class RegisterSilverfish {
         } else {
             SpecialItem item = GameAPI.get().getSpecialItem("tower");
 
-            if(item != null && item.getPlugin().getName().equals(Main.getInstance().getName()))
+            if(item != null && item.getPlugin().getName().equals(ExtraSpecialItems.getInstance().getName()))
                 return;
 
             // id is already taken
@@ -62,7 +61,7 @@ public class RegisterSilverfish {
         }
     }
 
-    public static Main plugin(){
-        return Main.getInstance();
+    public static ExtraSpecialItems plugin(){
+        return ExtraSpecialItems.getInstance();
     }
 }

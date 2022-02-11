@@ -7,7 +7,7 @@ import de.marcely.bedwars.api.game.specialitem.SpecialItem;
 import de.marcely.bedwars.api.game.specialitem.SpecialItemListener;
 import de.marcely.bedwars.api.game.specialitem.SpecialItemUseHandler;
 import de.marcely.bedwars.api.game.specialitem.SpecialItemUseSession;
-import me.metallicgoat.specialItems.Main;
+import me.metallicgoat.specialItems.ExtraSpecialItems;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
@@ -53,7 +53,7 @@ public class RegisterEggBridger {
         } else {
             SpecialItem item = GameAPI.get().getSpecialItem("egg-bridger");
 
-            if(item != null && item.getPlugin().getName().equals(Main.getInstance().getName()))
+            if(item != null && item.getPlugin().getName().equals(ExtraSpecialItems.getInstance().getName()))
                 return;
 
             // id is already taken
@@ -61,7 +61,7 @@ public class RegisterEggBridger {
         }
     }
 
-    public static Main plugin(){
-        return Main.getInstance();
+    public static ExtraSpecialItems plugin(){
+        return ExtraSpecialItems.getInstance();
     }
 }

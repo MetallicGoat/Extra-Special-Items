@@ -4,7 +4,7 @@ import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.event.player.PlayerUseSpecialItemEvent;
 import de.marcely.bedwars.api.game.specialitem.SpecialItemUseSession;
-import me.metallicgoat.specialItems.Main;
+import me.metallicgoat.specialItems.ExtraSpecialItems;
 import me.metallicgoat.specialItems.utils.XSound;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -45,7 +45,7 @@ public class EggBridgeThrow {
             this.color = color;
             this.playerLocation = playerLocation;
 
-            this.task = Bukkit.getScheduler().runTaskTimer(Main.getInstance(), this, 0L, 1L);
+            this.task = Bukkit.getScheduler().runTaskTimer(ExtraSpecialItems.getInstance(), this, 0L, 1L);
         }
 
         //TODO: try player y + 1 (Block y -1) (Distance config)
@@ -54,7 +54,7 @@ public class EggBridgeThrow {
             Location eggLocation = egg.getLocation().add(0, 1, 0);
             if (!egg.isDead() && playerLocation.distance(egg.getLocation()) <= length && playerLocation.getY() - egg.getLocation().getY() <= yVariation) {
                 if (playerLocation.distance(eggLocation) > 3.5D) {
-                    Bukkit.getScheduler().runTaskLater(Main.getInstance(),() -> {
+                    Bukkit.getScheduler().runTaskLater(ExtraSpecialItems.getInstance(),() -> {
 
                         Block block1 = eggLocation.clone().subtract(0.0D, 3.0D, 0.0D).getBlock();
                         new EggBridgeBlockPlacer(block1, color, arena);
@@ -76,7 +76,7 @@ public class EggBridgeThrow {
             }
         }
     }
-    private static Main plugin(){
-        return Main.getInstance();
+    private static ExtraSpecialItems plugin(){
+        return ExtraSpecialItems.getInstance();
     }
 }

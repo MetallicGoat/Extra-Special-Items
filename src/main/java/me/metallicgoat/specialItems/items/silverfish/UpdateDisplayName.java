@@ -2,7 +2,7 @@ package me.metallicgoat.specialItems.items.silverfish;
 
 import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.message.Message;
-import me.metallicgoat.specialItems.Main;
+import me.metallicgoat.specialItems.ExtraSpecialItems;
 import org.bukkit.entity.Silverfish;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -39,7 +39,7 @@ public class UpdateDisplayName {
     }
 
 
-    private static Main plugin(){
-        return Main.getInstance();
+    private static ExtraSpecialItems plugin(){
+        return ExtraSpecialItems.getInstance();
     }
 }

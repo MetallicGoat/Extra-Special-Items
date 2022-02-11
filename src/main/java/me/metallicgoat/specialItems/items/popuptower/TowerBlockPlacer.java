@@ -4,7 +4,7 @@ import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.game.specialitem.SpecialItemUseSession;
 import de.marcely.bedwars.tools.Pair;
-import me.metallicgoat.specialItems.Main;
+import me.metallicgoat.specialItems.ExtraSpecialItems;
 import me.metallicgoat.specialItems.utils.XBlock;
 import me.metallicgoat.specialItems.utils.XMaterial;
 import me.metallicgoat.specialItems.utils.XSound;
@@ -88,7 +88,7 @@ public class TowerBlockPlacer {
         arena.setBlockPlayerPlaced(b, true);
     }
 
-    private static Main plugin(){
-        return Main.getInstance();
+    private static ExtraSpecialItems plugin(){
+        return ExtraSpecialItems.getInstance();
     }
 }

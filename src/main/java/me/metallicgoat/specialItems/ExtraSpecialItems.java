@@ -17,9 +17,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 
-public class Main extends JavaPlugin {
+public class ExtraSpecialItems extends JavaPlugin {
 
-    private static Main instance;
+    private static ExtraSpecialItems instance;
     private final Server server = getServer();
 
     public void onEnable() {
@@ -61,7 +61,7 @@ public class Main extends JavaPlugin {
     }
 
 
-    public static Main getInstance() {
+    public static ExtraSpecialItems getInstance() {
         return instance;
     }
 
