@@ -7,7 +7,10 @@ import de.marcely.bedwars.api.game.specialitem.*;
 import de.marcely.bedwars.tools.Helper;
 import me.metallicgoat.specialItems.Console;
 import me.metallicgoat.specialItems.ExtraSpecialItems;
-import me.metallicgoat.specialItems.items.eggbridge.EggBridger;
+import me.metallicgoat.specialItems.items.eggbridge.EggBridgerHandler;
+import me.metallicgoat.specialItems.items.icebridge.IceBridgerHandler;
+import me.metallicgoat.specialItems.items.popuptower.TowerHandler;
+import me.metallicgoat.specialItems.items.silverfish.SilverfishHandler;
 import org.bukkit.inventory.ItemStack;
 
 public class CustomSpecialItem {
@@ -47,25 +50,25 @@ public class CustomSpecialItem {
 
     public static void registerAll(){
         register(new CustomSpecialItem(
-                EggBridger.getEggBridgeHandler(),
+                EggBridgerHandler.getEggBridgeHandler(),
                 "egg-bridger",
                 "%EggBridgerItem%",
                 Helper.get().parseItemStack("EGG")));
 
         register(new CustomSpecialItem(
-                null,
+                IceBridgerHandler.getIceBridgeHandler(),
                 "ice-bridger",
                 "%IceBridgerItem%",
                 Helper.get().parseItemStack("ICE")));
 
         register(new CustomSpecialItem(
-                null,
+                TowerHandler.getPopUpTowerHandler(),
                 "tower",
                 "%TowerItem%",
                 Helper.get().parseItemStack("CHEST")));
 
         register(new CustomSpecialItem(
-                null,
+                SilverfishHandler.getSilverfishHandler(),
                 "silverfish",
                 "%SilverFishItem%",
                 Helper.get().parseItemStack("SNOWBALL")));

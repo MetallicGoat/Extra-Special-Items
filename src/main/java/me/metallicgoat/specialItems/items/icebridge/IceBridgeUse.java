@@ -5,8 +5,8 @@ import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.ArenaStatus;
 import de.marcely.bedwars.api.event.player.PlayerUseSpecialItemEvent;
 import de.marcely.bedwars.api.game.specialitem.SpecialItemUseSession;
+import de.marcely.bedwars.tools.Helper;
 import me.metallicgoat.specialItems.ExtraSpecialItems;
-import me.metallicgoat.specialItems.utils.XMaterial;
 import me.metallicgoat.specialItems.utils.XSound;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -85,8 +85,7 @@ public class IceBridgeUse {
     }
     private void setIce(Arena arena, Block block){
         if(arena.canPlaceBlockAt(block.getLocation()) && block.getType() == Material.AIR){
-            assert XMaterial.ICE.parseMaterial() != null;
-            block.setType(XMaterial.ICE.parseMaterial());
+            block.setType(Helper.get().getMaterialByName("ICE"));
             BukkitScheduler scheduler = plugin().getServer().getScheduler();
             scheduler.runTaskLater(plugin(), () -> {
                 if(arena.getStatus() == ArenaStatus.RUNNING) {

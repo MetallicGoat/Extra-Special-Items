@@ -3,10 +3,10 @@ package me.metallicgoat.specialItems.items.popuptower;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.game.specialitem.SpecialItemUseSession;
+import de.marcely.bedwars.tools.Helper;
 import de.marcely.bedwars.tools.Pair;
+import de.marcely.bedwars.tools.PersistentBlockData;
 import me.metallicgoat.specialItems.ExtraSpecialItems;
-import me.metallicgoat.specialItems.utils.XBlock;
-import me.metallicgoat.specialItems.utils.XMaterial;
 import me.metallicgoat.specialItems.utils.XSound;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
@@ -48,7 +48,7 @@ public class TowerBlockPlacer {
                         Block block = blockBooleanPair.getKey();
 
                         //Is block there?
-                        if (block.getType().equals(Material.AIR)) {
+                        if (block != null && block.getType().equals(Material.AIR)) {
                             //Is block inside region
                             if (arena.canPlaceBlockAt(block.getLocation())) {
                                 XSound.valueOf(sound).play(block.getLocation());
@@ -67,19 +67,18 @@ public class TowerBlockPlacer {
         }, 0L, time);
     }
 
-    private void PlaceBlock(Arena arena, boolean ladder, Block b, BlockFace face, DyeColor color){
+    private void PlaceBlock(Arena arena, boolean isLadder, Block b, BlockFace face, DyeColor color){
 
-        assert XMaterial.LADDER.parseMaterial() != null;
-        if (!ladder && XMaterial.matchXMaterial(color.name() + "_WOOL").isPresent()) {
-            XMaterial woolMat = XMaterial.matchXMaterial(color.name() + "_WOOL").get();
-            XBlock.setType(b, woolMat);
+        if (!isLadder) {
+            final PersistentBlockData data = PersistentBlockData.parse("WOOL").getDyedData(color);
+            data.place(b, true);
         } else {
-            b.setType(XMaterial.LADDER.parseMaterial());
+            final Material ladderMat = Helper.get().getMaterialByName("LADDER");
+            b.setType(ladderMat);
 
-            //Make this better (Error if ladder is not successfully placed from above. Ex. on a slab)
-            if (b.getType() == XMaterial.LADDER.parseMaterial()) {
-                BlockState state = b.getState();
-                Ladder lad = new Ladder();
+            if (b.getType() == ladderMat) {
+                final BlockState state = b.getState();
+                final Ladder lad = new Ladder();
                 lad.setFacingDirection(face.getOppositeFace());
                 state.setData(lad);
                 state.update();
