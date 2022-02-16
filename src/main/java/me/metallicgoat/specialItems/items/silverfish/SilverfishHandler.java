@@ -1,4 +1,4 @@
-package me.metallicgoat.specialItems.items.popuptower;
+package me.metallicgoat.specialItems.items.silverfish;
 
 import de.marcely.bedwars.api.event.player.PlayerUseSpecialItemEvent;
 import de.marcely.bedwars.api.game.specialitem.SpecialItemUseHandler;
@@ -6,9 +6,9 @@ import de.marcely.bedwars.api.game.specialitem.SpecialItemUseSession;
 import me.metallicgoat.specialItems.ExtraSpecialItems;
 import org.bukkit.plugin.Plugin;
 
-public class RegisterTower {
+public class SilverfishHandler {
 
-    public static SpecialItemUseHandler getPopUpTowerHandler(){
+    public static SpecialItemUseHandler getSilverfishHandler(){
         return new SpecialItemUseHandler() {
             @Override
             public Plugin getPlugin() {
@@ -23,9 +23,7 @@ public class RegisterTower {
                     }
                 };
 
-
-                TowerPlace towerPlace = new TowerPlace();
-                towerPlace.buildTower(e, session);
+                SilverfishThrow.throwSilverfish(e, session);
 
                 return session;
             }

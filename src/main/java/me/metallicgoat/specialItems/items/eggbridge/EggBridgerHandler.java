@@ -6,7 +6,7 @@ import de.marcely.bedwars.api.game.specialitem.SpecialItemUseSession;
 import me.metallicgoat.specialItems.ExtraSpecialItems;
 import org.bukkit.plugin.Plugin;
 
-public class EggBridger {
+public class EggBridgerHandler {
 
     public static SpecialItemUseHandler getEggBridgeHandler(){
         return new SpecialItemUseHandler() {
