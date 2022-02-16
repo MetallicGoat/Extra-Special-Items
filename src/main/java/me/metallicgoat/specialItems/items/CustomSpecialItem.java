@@ -1,8 +1,6 @@
 package me.metallicgoat.specialItems.items;
 
 import de.marcely.bedwars.api.GameAPI;
-import de.marcely.bedwars.api.event.player.PlayerBuyInShopEvent;
-import de.marcely.bedwars.api.event.player.PlayerUseSpecialItemEvent;
 import de.marcely.bedwars.api.game.specialitem.*;
 import de.marcely.bedwars.tools.Helper;
 import me.metallicgoat.specialItems.Console;
@@ -75,26 +73,16 @@ public class CustomSpecialItem {
     }
 
     private static void register(CustomSpecialItem item){
-        SpecialItemListener listener = new SpecialItemListener() {
-            @Override
-            public void onShopBuy(PlayerBuyInShopEvent e) {
-            }
 
-            @Override
-            public void onUse(PlayerUseSpecialItemEvent e) {
-            }
-        };
+        final SpecialItem specialItem = GameAPI.get().registerSpecialItem(item.getId(), ExtraSpecialItems.getInstance(), item.getMessageFileId(), item.getItemStack());
 
-        SpecialItem specialItem = GameAPI.get().registerSpecialItem(item.getId(), ExtraSpecialItems.getInstance(), item.getMessageFileId(), item.getItemStack());
-
-        if (specialItem != null) {
-            specialItem.registerListener(listener);
+        if (specialItem != null) {;
             specialItem.setHandler(item.handler());
 
         } else {
             SpecialItem registeredItem = GameAPI.get().getSpecialItem(item.getId());
 
-            // TODO better way?
+            // TODO better way to check?
             // Probably reloading bedwars or something
             if(registeredItem != null && registeredItem.getPlugin().getName().equals(ExtraSpecialItems.getInstance().getName()))
                 return;

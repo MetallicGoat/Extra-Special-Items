@@ -33,9 +33,9 @@ public class TowerBlockPlacer {
         final Team team = arena.getPlayerTeam(session.getEvent().getPlayer());
         final DyeColor color = team != null ? team.getDyeColor():DyeColor.WHITE;
 
-        long time = plugin().getConfig().getLong("PopUpTower.Block-Place-Interval");
-        int amountToPlace = plugin().getConfig().getInt("PopUpTower.Blocks-Placed-Per-Interval");
-        String sound = plugin().getConfig().getString("PopUpTower.Sound");
+        final long time = plugin().getConfig().getLong("PopUpTower.Block-Place-Interval");
+        final int amountToPlace = plugin().getConfig().getInt("PopUpTower.Blocks-Placed-Per-Interval");
+        final String sound = plugin().getConfig().getString("PopUpTower.Sound");
 
         task = Bukkit.getScheduler().runTaskTimer(plugin(), () -> {
             if(session.isActive()) {

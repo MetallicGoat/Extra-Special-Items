@@ -27,27 +27,24 @@ public class IceBridgeUse {
         e.setTakingItem(true);
         session.takeItem();
 
-        Player player = e.getPlayer();
-        double length = plugin().getConfig().getDouble("Ice-Bridger.Max-Distance");
-        Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(e.getPlayer());
-        BukkitScheduler scheduler = plugin().getServer().getScheduler();
+        final Player player = e.getPlayer();
+        final double length = plugin().getConfig().getDouble("Ice-Bridger.Max-Distance");
+        final Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(e.getPlayer());
+        final BukkitScheduler scheduler = plugin().getServer().getScheduler();
 
         if(arena != null){
 
-            AtomicInteger i = new AtomicInteger(2);
-
+            final AtomicInteger i = new AtomicInteger(2);
             final Location l = player.getLocation();
 
             task = scheduler.runTaskTimer(plugin(), () -> {
                 if(i.get() <= length && session.isActive()){
 
                     final Location lookingStraight = new Location(l.getWorld(), l.getX(), l.getY(), l.getZ(), l.getYaw(), 0);
-                    int yaw = (int)l.getYaw() % 180;
-
-                    Location blockLoc = lookingStraight.add(lookingStraight.getDirection().multiply(i.get())).add(0, -1, 0);
-
-                    Block block = blockLoc.getBlock();
-                    World world = block.getWorld();
+                    final int yaw = (int) l.getYaw() % 180;
+                    final Location blockLoc = lookingStraight.add(lookingStraight.getDirection().multiply(i.get())).add(0, -1, 0);
+                    final Block block = blockLoc.getBlock();
+                    final World world = block.getWorld();
 
                     setIce(arena, block);
 
@@ -86,7 +83,8 @@ public class IceBridgeUse {
     private void setIce(Arena arena, Block block){
         if(arena.canPlaceBlockAt(block.getLocation()) && block.getType() == Material.AIR){
             block.setType(Helper.get().getMaterialByName("ICE"));
-            BukkitScheduler scheduler = plugin().getServer().getScheduler();
+
+            final BukkitScheduler scheduler = plugin().getServer().getScheduler();
             scheduler.runTaskLater(plugin(), () -> {
                 if(arena.getStatus() == ArenaStatus.RUNNING) {
                     block.setType(Material.AIR);

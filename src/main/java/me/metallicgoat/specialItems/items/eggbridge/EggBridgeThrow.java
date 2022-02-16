@@ -15,7 +15,7 @@ import org.bukkit.scheduler.BukkitTask;
 public class EggBridgeThrow {
     public void buildEggBridge(PlayerUseSpecialItemEvent e, SpecialItemUseSession session) {
         final Player player = e.getPlayer();
-        Arena arena = e.getArena();
+        final Arena arena = e.getArena();
 
         e.setTakingItem(true);
         session.takeItem();

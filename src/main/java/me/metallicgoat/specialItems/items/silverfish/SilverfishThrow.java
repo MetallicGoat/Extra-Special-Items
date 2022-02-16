@@ -30,7 +30,7 @@ public class SilverfishThrow implements Listener {
         e.setTakingItem(true);
         session.takeItem();
 
-        Snowball snowball = player.launchProjectile(Snowball.class);
+        final Snowball snowball = player.launchProjectile(Snowball.class);
         snowballs.add(snowball);
 
         BukkitScheduler scheduler = plugin().getServer().getScheduler();
@@ -41,14 +41,15 @@ public class SilverfishThrow implements Listener {
 
     @EventHandler
     public void onProjectileHit(ProjectileHitEvent e){
-        if(e.getEntity().getShooter() instanceof Player && e.getEntity() instanceof Snowball){
-            Player player = (Player) e.getEntity().getShooter();
-            Snowball snowball = (Snowball) e.getEntity();
-            Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(player);
+        if(e.getEntity().getType() == EntityType.SNOWBALL && snowballs.contains((Snowball) e.getEntity())){
+            final Player player = (Player) e.getEntity().getShooter();
+            final Snowball snowball = (Snowball) e.getEntity();
+            final Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(player);
+
             if(arena != null && snowballs.contains(snowball)){
-                Team team = arena.getPlayerTeam(player);
-                Location loc = e.getEntity().getLocation();
-                Silverfish silverfish = (Silverfish) loc.getWorld().spawnEntity(loc, EntityType.SILVERFISH);
+                final Team team = arena.getPlayerTeam(player);
+                final Location loc = e.getEntity().getLocation();
+                final Silverfish silverfish = (Silverfish) loc.getWorld().spawnEntity(loc, EntityType.SILVERFISH);
 
                 assert team != null;
                 new UpdateDisplayName().setDisplayName(team, silverfish);
