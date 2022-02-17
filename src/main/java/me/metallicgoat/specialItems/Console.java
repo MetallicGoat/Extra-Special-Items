@@ -1,6 +1,11 @@
 package me.metallicgoat.specialItems;
 
 public class Console {
+
+    public static void printConfigWarning(String configName, String warning){
+        printSpecializedWarning("Config", "(" + configName + ") " + warning);
+    }
+
     public static void printSpecializedWarning(String type, String warning){
         printWarning("[" + type + "] " + warning);
     }

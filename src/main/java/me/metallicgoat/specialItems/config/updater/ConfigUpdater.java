@@ -1,4 +1,4 @@
-package me.metallicgoat.specialItems.config;
+package me.metallicgoat.specialItems.config.updater;
 
 import com.google.common.base.Preconditions;
 import org.bukkit.configuration.ConfigurationSection;

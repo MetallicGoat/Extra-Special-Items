@@ -21,4 +21,6 @@ Egg-Bridger:
   Sound: ENTITY_CHICKEN_EGG
 
 Ice-Bridger:
+  Block-Type: ICE
   Max-Distance: 37
+

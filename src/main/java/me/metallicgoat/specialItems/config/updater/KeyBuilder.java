@@ -1,4 +1,4 @@
-package me.metallicgoat.specialItems.config;
+package me.metallicgoat.specialItems.config.updater;
 
 import org.bukkit.configuration.file.FileConfiguration;
 
