@@ -47,25 +47,26 @@ public class EggBridgeThrow {
         }
 
         public void run() {
-            Location eggLocation = egg.getLocation().add(0, 1, 0);
+            Location eggLocation = egg.getLocation();
+
             if (!egg.isDead()
-                    && playerLocation.distance(egg.getLocation()) <= ConfigValue.egg_bridger_max_length
-                    && playerLocation.getY() - egg.getLocation().getY() <= ConfigValue.egg_bridger_max_y_variation
-                    && playerLocation.distance(eggLocation) > 3.5D) {
+                    && playerLocation.distanceSquared(eggLocation) <= ConfigValue.egg_bridger_max_length * ConfigValue.egg_bridger_max_length
+                    && playerLocation.getY() - eggLocation.getY() <= ConfigValue.egg_bridger_max_y_variation){
 
                 Bukkit.getScheduler().runTaskLater(ExtraSpecialItems.getInstance(),() -> {
+                    if(playerLocation.distanceSquared(eggLocation.clone().add(0, 1, 0)) > 12.25D) {
 
-                    Block block1 = eggLocation.clone().subtract(0.0D, 3.0D, 0.0D).getBlock();
-                    new EggBridgeBlockPlacer(block1, color, arena);
+                        Block block1 = eggLocation.clone().subtract(0.0D, 2.0D, 0.0D).getBlock();
+                        new EggBridgeBlockPlacer(block1, color, arena);
 
-                    Block block2 = eggLocation.clone().subtract(1.0D, 3.0D, 0.0D).getBlock();
-                    new EggBridgeBlockPlacer(block2, color, arena);
+                        Block block2 = eggLocation.clone().subtract(1.0D, 2.0D, 0.0D).getBlock();
+                        new EggBridgeBlockPlacer(block2, color, arena);
 
-                    Block block3 = eggLocation.clone().subtract(0.0D, 3.0D, 1.0D).getBlock();
-                    new EggBridgeBlockPlacer(block3, color, arena);
+                        Block block3 = eggLocation.clone().subtract(0.0D, 2.0D, 1.0D).getBlock();
+                        new EggBridgeBlockPlacer(block3, color, arena);
 
-                    XSound.matchXSound(ConfigValue.egg_bridger_place_sound).play(eggLocation);
-
+                        XSound.matchXSound(ConfigValue.egg_bridger_place_sound).play(eggLocation);
+                    }
                 }, 2L);
 
             } else {

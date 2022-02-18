@@ -22,7 +22,8 @@ import java.util.Queue;
 
 public class TowerBlockPlacer {
 
-    private BukkitTask task;
+    private static BukkitTask task;
+    private static final Material ladderMaterial = Helper.get().getMaterialByName("LADDER");
 
     public TowerBlockPlacer(Queue<Pair<Block, Boolean>> towerBlock, SpecialItemUseSession session, BlockFace face) {
 
@@ -49,7 +50,7 @@ public class TowerBlockPlacer {
                             //Is block inside region
                             if (arena.canPlaceBlockAt(block.getLocation())) {
                                 XSound.matchXSound(ConfigValue.tower_place_place_sound).play(block.getLocation());
-                                PlaceBlock(arena, blockBooleanPair.getValue(), block, face, color);
+                                PlaceBlock(arena, Boolean.TRUE.equals(blockBooleanPair.getValue()), block, face, color);
                             }
                         }
                     } else {
@@ -70,10 +71,12 @@ public class TowerBlockPlacer {
             final PersistentBlockData data = PersistentBlockData.parse("WOOL").getDyedData(color);
             data.place(b, true);
         } else {
-            final Material ladderMat = Helper.get().getMaterialByName("LADDER");
-            b.setType(ladderMat);
+            if(ladderMaterial == null)
+                return;
 
-            if (b.getType() == ladderMat) {
+            b.setType(ladderMaterial);
+
+            if (b.getType() == ladderMaterial) {
                 final BlockState state = b.getState();
                 final Ladder lad = new Ladder();
                 lad.setFacingDirection(face.getOppositeFace());

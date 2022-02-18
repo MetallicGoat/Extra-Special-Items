@@ -22,7 +22,7 @@ public class Config {
         final File configFile = new File(plugin.getDataFolder(), "config.yml");
 
         try {
-            ConfigUpdater.update(plugin, "config.yml", configFile, Collections.emptyList());
+            ConfigUpdater.update(plugin, "config.yml", configFile, Collections.singletonList("Silverfish.Display-Name"));
         } catch (IOException e) {
             e.printStackTrace();
         }
