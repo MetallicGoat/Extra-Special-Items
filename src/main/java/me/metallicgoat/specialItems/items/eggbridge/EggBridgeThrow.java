@@ -5,6 +5,7 @@ import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.event.player.PlayerUseSpecialItemEvent;
 import de.marcely.bedwars.api.game.specialitem.SpecialItemUseSession;
 import me.metallicgoat.specialItems.ExtraSpecialItems;
+import me.metallicgoat.specialItems.config.ConfigValue;
 import me.metallicgoat.specialItems.utils.XSound;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -34,9 +35,6 @@ public class EggBridgeThrow {
         private final DyeColor color;
         private final Location playerLocation;
         private final BukkitTask task;
-        private final double length = plugin().getConfig().getDouble("Egg-Bridger.Max-Length");
-        private final double yVariation = plugin().getConfig().getDouble("Egg-Bridger.Max-Y-Variation");
-        private final String eggSound = plugin().getConfig().getString("Egg-Bridger.Sound");
 
         public BridgeBlockPlacerTask(Egg egg, Location playerLocation, SpecialItemUseSession session, Arena arena, DyeColor color) {
             this.egg = egg;
@@ -48,27 +46,27 @@ public class EggBridgeThrow {
             this.task = Bukkit.getScheduler().runTaskTimer(ExtraSpecialItems.getInstance(), this, 0L, 1L);
         }
 
-        //TODO: try player y + 1 (Block y -1) (Distance config)
-
         public void run() {
             Location eggLocation = egg.getLocation().add(0, 1, 0);
-            if (!egg.isDead() && playerLocation.distance(egg.getLocation()) <= length && playerLocation.getY() - egg.getLocation().getY() <= yVariation) {
-                if (playerLocation.distance(eggLocation) > 3.5D) {
-                    Bukkit.getScheduler().runTaskLater(ExtraSpecialItems.getInstance(),() -> {
+            if (!egg.isDead()
+                    && playerLocation.distance(egg.getLocation()) <= ConfigValue.egg_bridger_max_length
+                    && playerLocation.getY() - egg.getLocation().getY() <= ConfigValue.egg_bridger_max_y_variation
+                    && playerLocation.distance(eggLocation) > 3.5D) {
 
-                        Block block1 = eggLocation.clone().subtract(0.0D, 3.0D, 0.0D).getBlock();
-                        new EggBridgeBlockPlacer(block1, color, arena);
+                Bukkit.getScheduler().runTaskLater(ExtraSpecialItems.getInstance(),() -> {
 
-                        Block block2 = eggLocation.clone().subtract(1.0D, 3.0D, 0.0D).getBlock();
-                        new EggBridgeBlockPlacer(block2, color, arena);
+                    Block block1 = eggLocation.clone().subtract(0.0D, 3.0D, 0.0D).getBlock();
+                    new EggBridgeBlockPlacer(block1, color, arena);
 
-                        Block block3 = eggLocation.clone().subtract(0.0D, 3.0D, 1.0D).getBlock();
-                        new EggBridgeBlockPlacer(block3, color, arena);
+                    Block block2 = eggLocation.clone().subtract(1.0D, 3.0D, 0.0D).getBlock();
+                    new EggBridgeBlockPlacer(block2, color, arena);
 
-                        XSound.valueOf(eggSound).play(eggLocation);
+                    Block block3 = eggLocation.clone().subtract(0.0D, 3.0D, 1.0D).getBlock();
+                    new EggBridgeBlockPlacer(block3, color, arena);
 
-                    }, 2L);
-                }
+                    XSound.matchXSound(ConfigValue.egg_bridger_place_sound).play(eggLocation);
+
+                }, 2L);
 
             } else {
                 session.stop();

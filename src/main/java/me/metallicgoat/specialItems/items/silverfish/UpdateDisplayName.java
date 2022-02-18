@@ -3,6 +3,7 @@ package me.metallicgoat.specialItems.items.silverfish;
 import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.message.Message;
 import me.metallicgoat.specialItems.ExtraSpecialItems;
+import me.metallicgoat.specialItems.config.ConfigValue;
 import org.bukkit.entity.Silverfish;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -14,16 +15,21 @@ public class UpdateDisplayName {
         silverfish.setCustomNameVisible(true);
 
         final String teamName = team.getDisplayName();
-        final String c = "&" + team.getChatColor().getChar();
-        final long time = plugin().getConfig().getLong("Silverfish.Life-Duration") / 5;
-        final AtomicInteger i = new AtomicInteger(2);
+        final String color = "&" + team.getChatColor().getChar();
+        final int amountOfTags = ConfigValue.silverfish_life_display_name.getKeys(false).size();
+        final String[] displayNames = ConfigValue.silverfish_life_display_name.getKeys(false).toArray(new String[0]);
+        final long time = ConfigValue.silverfish_life_duration / amountOfTags;
+        final AtomicInteger i = new AtomicInteger(0);
 
         new BukkitRunnable() {
             @Override
             public void run(){
                 if(SilverfishThrow.silverfishTeamHashMap.containsKey(silverfish) && !silverfish.isDead()){
-                    if (i.get() < 5) {
-                        silverfish.setCustomName(displayName(i.get(), teamName, c));
+                    if (i.get() < amountOfTags) {
+                        final String unformattedDisplayName = displayNames[i.get()] != null ? displayNames[i.get()] : "";
+                        final String displayName = Message.build(unformattedDisplayName).placeholder("team-color", color).placeholder("team-name", teamName).done();
+
+                        silverfish.setCustomName(displayName);
                     }else{
                         cancel();
                         return;
@@ -35,13 +41,6 @@ public class UpdateDisplayName {
             }
         }.runTaskTimer(plugin(), 0L, time);
     }
-
-    private static String displayName(int version, String teamName, String color){
-        final String config = "Silverfish.Display-Name." + (version + 1);
-        final String unformattedString = plugin().getConfig().getString(config);
-        return Message.build(unformattedString).placeholder("team-color", color).placeholder("team-name", teamName).done();
-    }
-
 
     private static ExtraSpecialItems plugin(){
         return ExtraSpecialItems.getInstance();

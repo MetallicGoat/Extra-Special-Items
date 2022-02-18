@@ -7,6 +7,7 @@ import de.marcely.bedwars.api.event.player.PlayerUseSpecialItemEvent;
 import de.marcely.bedwars.api.game.specialitem.SpecialItemUseSession;
 import de.marcely.bedwars.tools.Helper;
 import me.metallicgoat.specialItems.ExtraSpecialItems;
+import me.metallicgoat.specialItems.config.ConfigValue;
 import me.metallicgoat.specialItems.utils.XSound;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -28,7 +29,6 @@ public class IceBridgeUse {
         session.takeItem();
 
         final Player player = e.getPlayer();
-        final double length = plugin().getConfig().getDouble("Ice-Bridger.Max-Distance");
         final Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(e.getPlayer());
         final BukkitScheduler scheduler = plugin().getServer().getScheduler();
 
@@ -38,7 +38,7 @@ public class IceBridgeUse {
             final Location l = player.getLocation();
 
             task = scheduler.runTaskTimer(plugin(), () -> {
-                if(i.get() <= length && session.isActive()){
+                if(i.get() <= ConfigValue.ice_bridger_max_distance && session.isActive()){
 
                     final Location lookingStraight = new Location(l.getWorld(), l.getX(), l.getY(), l.getZ(), l.getYaw(), 0);
                     final int yaw = (int) l.getYaw() % 180;
@@ -68,9 +68,6 @@ public class IceBridgeUse {
                     }
                     i.getAndIncrement();
                 }else{
-
-                    //clear bridge
-
                     session.stop();
                     task.cancel();
                 }
@@ -82,7 +79,7 @@ public class IceBridgeUse {
     }
     private void setIce(Arena arena, Block block){
         if(arena.canPlaceBlockAt(block.getLocation()) && block.getType() == Material.AIR){
-            block.setType(Helper.get().getMaterialByName("ICE"));
+            block.setType(ConfigValue.ice_bridger_material);
 
             final BukkitScheduler scheduler = plugin().getServer().getScheduler();
             scheduler.runTaskLater(plugin(), () -> {

@@ -7,6 +7,7 @@ import de.marcely.bedwars.tools.Helper;
 import de.marcely.bedwars.tools.Pair;
 import de.marcely.bedwars.tools.PersistentBlockData;
 import me.metallicgoat.specialItems.ExtraSpecialItems;
+import me.metallicgoat.specialItems.config.ConfigValue;
 import me.metallicgoat.specialItems.utils.XSound;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
@@ -25,7 +26,7 @@ public class TowerBlockPlacer {
 
     public TowerBlockPlacer(Queue<Pair<Block, Boolean>> towerBlock, SpecialItemUseSession session, BlockFace face) {
 
-        if(session == null || !session.isActive()){
+        if((session != null && session.getEvent() == null) || session == null || !session.isActive()){
             return;
         }
 
@@ -33,25 +34,21 @@ public class TowerBlockPlacer {
         final Team team = arena.getPlayerTeam(session.getEvent().getPlayer());
         final DyeColor color = team != null ? team.getDyeColor():DyeColor.WHITE;
 
-        final long time = plugin().getConfig().getLong("PopUpTower.Block-Place-Interval");
-        final int amountToPlace = plugin().getConfig().getInt("PopUpTower.Blocks-Placed-Per-Interval");
-        final String sound = plugin().getConfig().getString("PopUpTower.Sound");
-
         task = Bukkit.getScheduler().runTaskTimer(plugin(), () -> {
             if(session.isActive()) {
-                for (int i = 0; i < amountToPlace; i++) {
+                for (int i = 0; i < ConfigValue.tower_block_placed_per_interval; i++) {
                     if (towerBlock.peek() != null) {
 
-                        Pair<Block, Boolean> blockBooleanPair = towerBlock.poll();
+                        final Pair<Block, Boolean> blockBooleanPair = towerBlock.poll();
 
                         //Get next block
-                        Block block = blockBooleanPair.getKey();
+                        final Block block = blockBooleanPair.getKey();
 
                         //Is block there?
                         if (block != null && block.getType().equals(Material.AIR)) {
                             //Is block inside region
                             if (arena.canPlaceBlockAt(block.getLocation())) {
-                                XSound.valueOf(sound).play(block.getLocation());
+                                XSound.matchXSound(ConfigValue.tower_place_place_sound).play(block.getLocation());
                                 PlaceBlock(arena, blockBooleanPair.getValue(), block, face, color);
                             }
                         }
@@ -64,7 +61,7 @@ public class TowerBlockPlacer {
             }else{
                 task.cancel();
             }
-        }, 0L, time);
+        }, 0L, ConfigValue.tower_block_place_interval);
     }
 
     private void PlaceBlock(Arena arena, boolean isLadder, Block b, BlockFace face, DyeColor color){
