@@ -5,6 +5,7 @@ import me.metallicgoat.specialItems.config.Config;
 import me.metallicgoat.specialItems.items.CustomSpecialItem;
 import me.metallicgoat.specialItems.items.eggbridge.PreventHatching;
 import me.metallicgoat.specialItems.items.silverfish.SilverfishThrow;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Server;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
@@ -17,15 +18,15 @@ public class ExtraSpecialItems extends JavaPlugin {
 
     public void onEnable() {
 
-        //int pluginId = 11772;
-        //Metrics metrics = new Metrics(this, pluginId);
+        final int pluginId = 14359;
+        final Metrics metrics = new Metrics(this, pluginId);
 
         instance = this;
         registerEvents();
         Config.save();
 
 
-        PluginDescriptionFile pdf = this.getDescription();
+        final PluginDescriptionFile pdf = this.getDescription();
 
         log(
                 "------------------------------",
@@ -43,7 +44,7 @@ public class ExtraSpecialItems extends JavaPlugin {
     }
 
     private void registerEvents() {
-        PluginManager manager = this.server.getPluginManager();
+        final PluginManager manager = this.server.getPluginManager();
         manager.registerEvents(new PreventHatching(), this);
         manager.registerEvents(new SilverfishThrow(), this);
     }
