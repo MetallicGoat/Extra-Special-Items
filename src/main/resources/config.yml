@@ -1,3 +1,14 @@
+#Join our discord for support: https://discord.gg/3mJuxUW
+
+#SPECIAL ITEM ID's
+# PopUpTower - tower
+# Silverfish - silverfish
+# Egg-Bridger - egg-bridger
+# Ice-Bridger - ice-bridger
+# Custom-Command-Items - You Choose!
+
+
+#Automaticlly builds you a tower
 #Note: Block-Place-Interval in ticks (20 ticks = 1 second)
 PopUpTower:
   Block-Type: WOOL
@@ -5,6 +16,7 @@ PopUpTower:
   Blocks-Placed-Per-Interval: 2
   Sound: ENTITY_CHICKEN_EGG
 
+#Summon a Silverfish to help defend your base
 #Note: Life-Duration in ticks (20 ticks = 1 second)
 #Display-Name Placeholders: {team-name} {team-color}
 Silverfish:
@@ -16,13 +28,24 @@ Silverfish:
     4: "{team-color}&l{team-name} {team-color}[■ ■ &7■ ■ ■]"
     5: "{team-color}&l{team-name} {team-color}[■ &7■ ■ ■ ■]"
 
+#Construct a bridger following the path of an egg
 Egg-Bridger:
   Block-Type: WOOL
   Max-Length: 30
   Max-Y-Variation: 18
   Sound: ENTITY_CHICKEN_EGG
 
+#Builds a flat bridge that only lasts for a few seconds
 Ice-Bridger:
   Block-Type: ICE
   Max-Distance: 37
 
+#Create as many custom Special items at you want
+#Spesify is you want the command to be run as player, or as console
+#Add the item to your shop.cm2 though the use of the specialID
+Custom-Command-Items:
+  Enabled: false
+  Player:
+    - "specialID:command"
+  Console:
+    - "specialID:command"
