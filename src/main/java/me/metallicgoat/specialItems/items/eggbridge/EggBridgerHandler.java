@@ -17,7 +17,7 @@ public class EggBridgerHandler {
 
             @Override
             public SpecialItemUseSession openSession(PlayerUseSpecialItemEvent e) {
-                SpecialItemUseSession session = new SpecialItemUseSession(e) {
+                final SpecialItemUseSession session = new SpecialItemUseSession(e) {
                     @Override
                     protected void handleStop() {
                     }

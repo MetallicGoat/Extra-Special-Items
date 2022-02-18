@@ -6,6 +6,8 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 
+import java.util.HashMap;
+
 public class ConfigValue {
 
     public static Material tower_block_material = Helper.get().getMaterialByName("WOOL");
@@ -23,5 +25,9 @@ public class ConfigValue {
 
     public static Material ice_bridger_material = Helper.get().getMaterialByName("ICE");
     public static int ice_bridger_max_distance = 37;
+
+    public static boolean command_item_enabled = false;
+    public static HashMap<String, String> command_item_player_commands = new HashMap<>();
+    public static HashMap<String, String> command_item_console_commands = new HashMap<>();
 
 }

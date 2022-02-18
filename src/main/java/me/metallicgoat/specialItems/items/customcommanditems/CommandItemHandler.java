@@ -1,0 +1,66 @@
+package me.metallicgoat.specialItems.items.customcommanditems;
+
+import de.marcely.bedwars.api.event.player.PlayerUseSpecialItemEvent;
+import de.marcely.bedwars.api.game.specialitem.SpecialItemUseHandler;
+import de.marcely.bedwars.api.game.specialitem.SpecialItemUseSession;
+import de.marcely.bedwars.api.message.Message;
+import de.marcely.bedwars.tools.Helper;
+import me.metallicgoat.specialItems.ExtraSpecialItems;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+
+public class CommandItemHandler {
+
+    private static String command;
+    private static boolean console;
+
+    public CommandItemHandler(String command, boolean console){
+        CommandItemHandler.command = command;
+        CommandItemHandler.console = console;
+    }
+
+    public static SpecialItemUseHandler getCustomItemHandler(){
+        return new SpecialItemUseHandler() {
+            @Override
+            public Plugin getPlugin() {
+                return ExtraSpecialItems.getInstance();
+            }
+
+            @Override
+            public SpecialItemUseSession openSession(PlayerUseSpecialItemEvent e) {
+                final SpecialItemUseSession session = new SpecialItemUseSession(e) {
+                    @Override
+                    protected void handleStop() {
+                    }
+                };
+
+                if(!session.isActive() || session.getEvent() == null){
+                    session.stop();
+                    return session;
+                }
+
+                final Player player = session.getEvent().getPlayer();
+                final Location loc = player.getLocation();
+                final String commandFormatted = Message.build(command)
+                        .placeholder("player", player.getName())
+                        .placeholder("player-display-name", Helper.get().getPlayerDisplayName(player))
+                        .placeholder("x", (int) loc.getX())
+                        .placeholder("y", (int) loc.getY())
+                        .placeholder("z", (int) loc.getZ())
+                        .placeholder("yaw", (int) loc.getYaw())
+                        .placeholder("pitch", (int) loc.getPitch())
+                        .done();
+
+                if(console)
+                    Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), commandFormatted);
+                else
+                    Bukkit.getServer().dispatchCommand(player, commandFormatted);
+
+                session.stop();
+                return session;
+            }
+        };
+    }
+}

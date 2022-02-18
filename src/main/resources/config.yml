@@ -43,6 +43,7 @@ Ice-Bridger:
 #Create as many custom Special items at you want
 #Spesify is you want the command to be run as player, or as console
 #Add the item to your shop.cm2 though the use of the specialID
+#PlaceHolders: {player} {player-display-name} {x} {y} {z} {yaw} {pitch}
 Custom-Command-Items:
   Enabled: false
   Player:
