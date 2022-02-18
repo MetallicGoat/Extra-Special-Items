@@ -5,7 +5,7 @@ import me.metallicgoat.specialItems.config.Config;
 import me.metallicgoat.specialItems.items.CustomSpecialItem;
 import me.metallicgoat.specialItems.items.eggbridge.PreventHatching;
 import me.metallicgoat.specialItems.items.silverfish.SilverfishThrow;
-import org.bstats.bukkit.Metrics;
+import me.metallicgoat.specialItems.utils.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -15,7 +15,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class ExtraSpecialItems extends JavaPlugin {
 
     public static final int MIN_MBEDWARS_API_VER = 8;
-    public static final String MIN_MBEDWARS_VER_NAME = "5.0.8";
+    public static final String MIN_MBEDWARS_VER_NAME = "5.0.7";
 
     private ExtraSpecialItemsAddon addon;
     private static ExtraSpecialItems instance;
