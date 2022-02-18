@@ -37,12 +37,22 @@ public class Config {
         final FileConfiguration mainConfig = plugin.getConfig();
 
         // POP UP TOWER
+        final String config_tower_block_material = mainConfig.getString("Ice-Bridger.Block-Type");
+        if(config_tower_block_material != null){
+            final Material material = Helper.get().getMaterialByName(config_tower_block_material.toUpperCase());
+
+            if(material != null)
+                ConfigValue.tower_block_material = material;
+            else
+                Console.printConfigWarning("PopUpTower.Block-Type", "Cannot parse material " + config_tower_block_material);
+        }
+
         ConfigValue.tower_block_place_interval = mainConfig.getInt("PopUpTower.Block-Place-Interval", ConfigValue.tower_block_place_interval);
         ConfigValue.tower_block_placed_per_interval = mainConfig.getInt("PopUpTower.Blocks-Placed-Per-Interval", ConfigValue.tower_block_placed_per_interval);
         final String config_tower_place_sound = mainConfig.getString("PopUpTower.Sound");
 
         if(config_tower_place_sound != null){
-            Optional<XSound> soundType = XSound.matchXSound(config_tower_place_sound);
+            Optional<XSound> soundType = XSound.matchXSound(config_tower_place_sound.toUpperCase());
 
             if(soundType.isPresent())
                 ConfigValue.tower_place_place_sound = soundType.get().parseSound();
@@ -55,12 +65,22 @@ public class Config {
         ConfigValue.silverfish_life_display_name = mainConfig.getConfigurationSection("Silverfish.Display-Name");
 
         // EGG BRIDGER
+        final String config_egg_bridger_material = mainConfig.getString("Ice-Bridger.Block-Type");
+        if(config_egg_bridger_material != null){
+            final Material material = Helper.get().getMaterialByName(config_egg_bridger_material.toUpperCase());
+
+            if(material != null)
+                ConfigValue.egg_bridger_block_material = material;
+            else
+                Console.printConfigWarning("Egg-Bridger.Block-Type", "Cannot parse material " + config_egg_bridger_material);
+        }
+
         ConfigValue.egg_bridger_max_length = mainConfig.getInt("Egg-Bridger.Max-Length", ConfigValue.egg_bridger_max_length);
         ConfigValue.egg_bridger_max_y_variation = mainConfig.getInt("Egg-Bridger.Max-Y-Variation", ConfigValue.egg_bridger_max_y_variation);
         final String config_egg_bridger_place_sound = mainConfig.getString("Egg-Bridger.Sound");
 
         if(config_egg_bridger_place_sound != null){
-            Optional<XSound> soundType = XSound.matchXSound(config_egg_bridger_place_sound);
+            Optional<XSound> soundType = XSound.matchXSound(config_egg_bridger_place_sound.toUpperCase());
 
             if(soundType.isPresent())
                 ConfigValue.egg_bridger_place_sound = soundType.get().parseSound();
@@ -71,12 +91,12 @@ public class Config {
         // ICE BRIDGER
         final String config_ice_bridger_material = mainConfig.getString("Ice-Bridger.Block-Type");
         if(config_ice_bridger_material != null){
-            final Material material = Helper.get().getMaterialByName(config_ice_bridger_material);
+            final Material material = Helper.get().getMaterialByName(config_ice_bridger_material.toUpperCase());
 
             if(material != null)
                 ConfigValue.ice_bridger_material = material;
             else
-                Console.printConfigWarning("Egg-Bridger.Sound", "Cannot parse sound " + config_egg_bridger_place_sound);
+                Console.printConfigWarning("Ice-Bridger.Block-Type", "Cannot parse material " + config_ice_bridger_material);
         }
 
         ConfigValue.ice_bridger_max_distance = mainConfig.getInt("Ice-Bridger.Max-Distance", ConfigValue.ice_bridger_max_distance);

@@ -1,5 +1,6 @@
 #Note: Block-Place-Interval in ticks (20 ticks = 1 second)
 PopUpTower:
+  Block-Type: WOOL
   Block-Place-Interval: 1
   Blocks-Placed-Per-Interval: 2
   Sound: ENTITY_CHICKEN_EGG
@@ -16,6 +17,7 @@ Silverfish:
     5: "{team-color}&l{team-name} {team-color}[■ &7■ ■ ■ ■]"
 
 Egg-Bridger:
+  Block-Type: WOOL
   Max-Length: 30
   Max-Y-Variation: 18
   Sound: ENTITY_CHICKEN_EGG

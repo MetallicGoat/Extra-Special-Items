@@ -68,7 +68,7 @@ public class TowerBlockPlacer {
     private void PlaceBlock(Arena arena, boolean isLadder, Block b, BlockFace face, DyeColor color){
 
         if (!isLadder) {
-            final PersistentBlockData data = PersistentBlockData.parse("WOOL").getDyedData(color);
+            final PersistentBlockData data = PersistentBlockData.fromMaterial(ConfigValue.tower_block_material).getDyedData(color);
             data.place(b, true);
         } else {
             if(ladderMaterial == null)
