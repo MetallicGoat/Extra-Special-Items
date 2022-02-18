@@ -13,15 +13,7 @@ import org.bukkit.plugin.Plugin;
 
 public class CommandItemHandler {
 
-    private static String command;
-    private static boolean console;
-
-    public CommandItemHandler(String command, boolean console){
-        CommandItemHandler.command = command;
-        CommandItemHandler.console = console;
-    }
-
-    public static SpecialItemUseHandler getCustomItemHandler(){
+    public static SpecialItemUseHandler getCustomItemHandler(String command, boolean console){
         return new SpecialItemUseHandler() {
             @Override
             public Plugin getPlugin() {

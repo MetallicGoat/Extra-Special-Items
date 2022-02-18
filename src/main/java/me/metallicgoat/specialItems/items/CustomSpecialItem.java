@@ -3,6 +3,8 @@ package me.metallicgoat.specialItems.items;
 import de.marcely.bedwars.api.GameAPI;
 import de.marcely.bedwars.api.game.specialitem.*;
 import de.marcely.bedwars.tools.Helper;
+import me.metallicgoat.specialItems.config.ConfigValue;
+import me.metallicgoat.specialItems.items.customcommanditems.CommandItemHandler;
 import me.metallicgoat.specialItems.utils.Console;
 import me.metallicgoat.specialItems.ExtraSpecialItems;
 import me.metallicgoat.specialItems.items.eggbridge.EggBridgerHandler;
@@ -70,13 +72,37 @@ public class CustomSpecialItem {
                 "silverfish",
                 "%SilverFishItem%",
                 Helper.get().parseItemStack("SNOWBALL")));
+
+        if(ConfigValue.command_item_enabled){
+            if(ConfigValue.command_item_player_commands != null
+                    && !ConfigValue.command_item_player_commands.isEmpty()){
+                ConfigValue.command_item_player_commands.forEach((id, command) -> {
+                    register(new CustomSpecialItem(
+                            CommandItemHandler.getCustomItemHandler(command, false),
+                            id,
+                            "%" + id + "%",
+                            Helper.get().parseItemStack("STONE")));
+                });
+            }
+
+            if(ConfigValue.command_item_console_commands != null
+                    && !ConfigValue.command_item_console_commands.isEmpty()){
+                ConfigValue.command_item_console_commands.forEach((id, command) -> {
+                    register(new CustomSpecialItem(
+                            CommandItemHandler.getCustomItemHandler(command, true),
+                            id,
+                            "%" + id + "%",
+                            Helper.get().parseItemStack("STONE")));
+                });
+            }
+        }
     }
 
     private static void register(CustomSpecialItem item){
 
         final SpecialItem specialItem = GameAPI.get().registerSpecialItem(item.getId(), ExtraSpecialItems.getInstance(), item.getMessageFileId(), item.getItemStack());
 
-        if (specialItem != null) {;
+        if (specialItem != null) {
             specialItem.setHandler(item.handler());
 
         } else {
