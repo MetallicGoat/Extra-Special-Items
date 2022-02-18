@@ -11,6 +11,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
 public class Config {
@@ -100,5 +102,32 @@ public class Config {
         }
 
         ConfigValue.ice_bridger_max_distance = mainConfig.getInt("Ice-Bridger.Max-Distance", ConfigValue.ice_bridger_max_distance);
+
+        // CUSTOM ITEMS
+        ConfigValue.command_item_enabled = mainConfig.getBoolean("Custom-Command-Items.Enabled", ConfigValue.command_item_enabled);
+
+        final List<String> config_command_items_player_commands = mainConfig.getStringList("Custom-Command-Items.Player");
+        if(!config_command_items_player_commands.isEmpty()){
+            ConfigValue.command_item_player_commands = formatIdCommands(config_command_items_player_commands);
+        }
+
+        final List<String> config_command_items_console_commands = mainConfig.getStringList("Custom-Command-Items.Console");
+        if(!config_command_items_console_commands.isEmpty()){
+            ConfigValue.command_item_console_commands = formatIdCommands(config_command_items_console_commands);
+        }
+    }
+
+    private static HashMap<String, String> formatIdCommands(List<String> keys){
+        final HashMap<String, String> idCommand = new HashMap<>();
+
+        for(String string:keys){
+            if(string.contains(":")){
+                final String[] idCommandString = string.split(":");
+
+                // remove the command '/' if there is one
+                idCommand.put(idCommandString[0], idCommandString[1].startsWith("/") ? idCommandString[1].substring(1) : idCommandString[1]);
+            }
+        }
+        return idCommand;
     }
 }
