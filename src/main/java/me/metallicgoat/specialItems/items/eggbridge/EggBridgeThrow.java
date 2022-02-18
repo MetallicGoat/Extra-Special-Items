@@ -18,12 +18,11 @@ import java.util.List;
 
 public class EggBridgeThrow {
     public void buildEggBridge(PlayerUseSpecialItemEvent e, SpecialItemUseSession session) {
-        final Player player = e.getPlayer();
-        final Arena arena = e.getArena();
-
         e.setTakingItem(true);
         session.takeItem();
 
+        final Player player = e.getPlayer();
+        final Arena arena = e.getArena();
         final Team team = arena.getPlayerTeam(player);
         final DyeColor col = team != null ? team.getDyeColor():DyeColor.WHITE;
         final Egg egg = player.launchProjectile(Egg.class);

@@ -11,6 +11,7 @@ import me.metallicgoat.specialItems.items.eggbridge.EggBridgerHandler;
 import me.metallicgoat.specialItems.items.icebridge.IceBridgerHandler;
 import me.metallicgoat.specialItems.items.popuptower.TowerHandler;
 import me.metallicgoat.specialItems.items.silverfish.SilverfishHandler;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 public class CustomSpecialItem {
@@ -76,23 +77,25 @@ public class CustomSpecialItem {
         if(ConfigValue.command_item_enabled){
             if(ConfigValue.command_item_player_commands != null
                     && !ConfigValue.command_item_player_commands.isEmpty()){
-                ConfigValue.command_item_player_commands.forEach((id, command) -> {
+                ConfigValue.command_item_player_commands.forEach((id, materialStringPair) -> {
+                    final Material material = materialStringPair.getKey();
                     register(new CustomSpecialItem(
-                            CommandItemHandler.getCustomItemHandler(command, false),
+                            CommandItemHandler.getCustomItemHandler(materialStringPair.getValue(), false),
                             id,
                             "%" + id + "%",
-                            Helper.get().parseItemStack("STONE")));
+                            material != null ? new ItemStack(material) : Helper.get().parseItemStack("STONE")));
                 });
             }
 
             if(ConfigValue.command_item_console_commands != null
                     && !ConfigValue.command_item_console_commands.isEmpty()){
-                ConfigValue.command_item_console_commands.forEach((id, command) -> {
+                ConfigValue.command_item_console_commands.forEach((id, materialStringPair) -> {
+                    final Material material = materialStringPair.getKey();
                     register(new CustomSpecialItem(
-                            CommandItemHandler.getCustomItemHandler(command, true),
+                            CommandItemHandler.getCustomItemHandler(materialStringPair.getValue(), true),
                             id,
                             "%" + id + "%",
-                            Helper.get().parseItemStack("STONE")));
+                            material != null ? new ItemStack(material) : Helper.get().parseItemStack("STONE")));
                 });
             }
         }

@@ -28,12 +28,10 @@ public class CommandItemHandler {
                     }
                 };
 
-                if(!session.isActive() || session.getEvent() == null){
-                    session.stop();
-                    return session;
-                }
+                e.setTakingItem(true);
+                session.takeItem();
 
-                final Player player = session.getEvent().getPlayer();
+                final Player player = e.getPlayer();
                 final Location loc = player.getLocation();
                 final String commandFormatted = Message.build(command)
                         .placeholder("player", player.getName())

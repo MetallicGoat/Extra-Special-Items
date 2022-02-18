@@ -1,6 +1,7 @@
 package me.metallicgoat.specialItems.config;
 
 import de.marcely.bedwars.tools.Helper;
+import de.marcely.bedwars.tools.Pair;
 import me.metallicgoat.specialItems.utils.Console;
 import me.metallicgoat.specialItems.ExtraSpecialItems;
 import me.metallicgoat.specialItems.config.updater.ConfigUpdater;
@@ -95,8 +96,8 @@ public class Config {
         return def;
     }
 
-    private static HashMap<String, String> formatIdCommands(List<String> keys){
-        final HashMap<String, String> idCommand = new HashMap<>();
+    private static HashMap<String, Pair<Material, String>> formatIdCommands(List<String> keys){
+        final HashMap<String, Pair<Material, String>> idCommand = new HashMap<>();
 
         if(keys.isEmpty())
             return idCommand;
@@ -106,7 +107,13 @@ public class Config {
                 final String[] idCommandString = string.split(":");
 
                 // remove the command '/' if there is one
-                idCommand.put(idCommandString[0], idCommandString[1].startsWith("/") ? idCommandString[1].substring(1) : idCommandString[1]);
+                final Material material = Helper.get().getMaterialByName(idCommandString[1]);
+                if(material == null)
+                    Helper.get().getMaterialByName("STONE");
+
+                Pair<Material, String> materialCommand = new Pair<>(material, idCommandString[2].startsWith("/") ? idCommandString[2].substring(1) : idCommandString[2]);
+
+                idCommand.put(idCommandString[0], materialCommand);
             }
         }
         return idCommand;

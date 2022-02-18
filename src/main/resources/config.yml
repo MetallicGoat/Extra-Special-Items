@@ -47,6 +47,6 @@ Ice-Bridger:
 Custom-Command-Items:
   Enabled: false
   Player:
-    - "specialID:command"
+    - "specialID:material:command"
   Console:
-    - "specialID:command"
+    - "specialID:material:command"

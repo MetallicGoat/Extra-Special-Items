@@ -1,6 +1,7 @@
 package me.metallicgoat.specialItems.config;
 
 import de.marcely.bedwars.tools.Helper;
+import de.marcely.bedwars.tools.Pair;
 import me.metallicgoat.specialItems.utils.XSound;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -27,7 +28,7 @@ public class ConfigValue {
     public static int ice_bridger_max_distance = 37;
 
     public static boolean command_item_enabled = false;
-    public static HashMap<String, String> command_item_player_commands = null;
-    public static HashMap<String, String> command_item_console_commands = null;
+    public static HashMap<String, Pair<Material, String>> command_item_player_commands = null;
+    public static HashMap<String, Pair<Material, String>> command_item_console_commands = null;
 
 }
