@@ -13,6 +13,9 @@ import org.bukkit.entity.Egg;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class EggBridgeThrow {
     public void buildEggBridge(PlayerUseSpecialItemEvent e, SpecialItemUseSession session) {
         final Player player = e.getPlayer();
@@ -56,14 +59,14 @@ public class EggBridgeThrow {
                 Bukkit.getScheduler().runTaskLater(ExtraSpecialItems.getInstance(),() -> {
                     if(playerLocation.distanceSquared(eggLocation.clone().add(0, 1, 0)) > 12.25D) {
 
-                        Block block1 = eggLocation.clone().subtract(0.0D, 2.0D, 0.0D).getBlock();
-                        new EggBridgeBlockPlacer(block1, color, arena);
+                        final List<Block> blocks = new ArrayList<>();
 
-                        Block block2 = eggLocation.clone().subtract(1.0D, 2.0D, 0.0D).getBlock();
-                        new EggBridgeBlockPlacer(block2, color, arena);
+                        blocks.add(eggLocation.clone().subtract(0.0D, 2.0D, 0.0D).getBlock());
+                        blocks.add(eggLocation.clone().subtract(1.0D, 2.0D, 0.0D).getBlock());
+                        blocks.add(eggLocation.clone().subtract(0.0D, 2.0D, 1.0D).getBlock());
 
-                        Block block3 = eggLocation.clone().subtract(0.0D, 2.0D, 1.0D).getBlock();
-                        new EggBridgeBlockPlacer(block3, color, arena);
+                        for(Block block:blocks)
+                            new EggBridgeBlockPlacer(block, color, arena);
 
                         XSound.matchXSound(ConfigValue.egg_bridger_place_sound).play(eggLocation);
                     }
