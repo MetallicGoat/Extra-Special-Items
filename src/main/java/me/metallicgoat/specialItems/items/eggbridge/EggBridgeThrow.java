@@ -74,7 +74,4 @@ public class EggBridgeThrow {
             }
         }
     }
-    private static ExtraSpecialItems plugin(){
-        return ExtraSpecialItems.getInstance();
-    }
 }

@@ -1,7 +1,7 @@
 package me.metallicgoat.specialItems.config;
 
 import de.marcely.bedwars.tools.Helper;
-import me.metallicgoat.specialItems.Console;
+import me.metallicgoat.specialItems.utils.Console;
 import me.metallicgoat.specialItems.ExtraSpecialItems;
 import me.metallicgoat.specialItems.config.updater.ConfigUpdater;
 import me.metallicgoat.specialItems.utils.XSound;

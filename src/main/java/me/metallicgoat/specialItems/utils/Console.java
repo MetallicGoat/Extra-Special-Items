@@ -1,4 +1,6 @@
-package me.metallicgoat.specialItems;
+package me.metallicgoat.specialItems.utils;
+
+import me.metallicgoat.specialItems.ExtraSpecialItems;
 
 public class Console {
 

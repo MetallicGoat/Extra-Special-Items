@@ -3,7 +3,7 @@ package me.metallicgoat.specialItems.items;
 import de.marcely.bedwars.api.GameAPI;
 import de.marcely.bedwars.api.game.specialitem.*;
 import de.marcely.bedwars.tools.Helper;
-import me.metallicgoat.specialItems.Console;
+import me.metallicgoat.specialItems.utils.Console;
 import me.metallicgoat.specialItems.ExtraSpecialItems;
 import me.metallicgoat.specialItems.items.eggbridge.EggBridgerHandler;
 import me.metallicgoat.specialItems.items.icebridge.IceBridgerHandler;
