@@ -6,6 +6,7 @@ import me.metallicgoat.specialItems.ExtraSpecialItems;
 import me.metallicgoat.specialItems.config.updater.ConfigUpdater;
 import me.metallicgoat.specialItems.utils.XSound;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.io.File;
@@ -39,86 +40,66 @@ public class Config {
         final FileConfiguration mainConfig = plugin.getConfig();
 
         // POP UP TOWER
-        final String config_tower_block_material = mainConfig.getString("Ice-Bridger.Block-Type");
-        if(config_tower_block_material != null){
-            final Material material = Helper.get().getMaterialByName(config_tower_block_material.toUpperCase());
-
-            if(material != null)
-                ConfigValue.tower_block_material = material;
-            else
-                Console.printConfigWarning("PopUpTower.Block-Type", "Cannot parse material " + config_tower_block_material);
-        }
-
+        ConfigValue.tower_block_material = parseConfigMaterial(mainConfig, "PopUpTower.Block-Type", ConfigValue.tower_block_material);
         ConfigValue.tower_block_place_interval = mainConfig.getInt("PopUpTower.Block-Place-Interval", ConfigValue.tower_block_place_interval);
         ConfigValue.tower_block_placed_per_interval = mainConfig.getInt("PopUpTower.Blocks-Placed-Per-Interval", ConfigValue.tower_block_placed_per_interval);
-        final String config_tower_place_sound = mainConfig.getString("PopUpTower.Sound");
-
-        if(config_tower_place_sound != null){
-            Optional<XSound> soundType = XSound.matchXSound(config_tower_place_sound.toUpperCase());
-
-            if(soundType.isPresent())
-                ConfigValue.tower_place_place_sound = soundType.get().parseSound();
-            else
-                Console.printConfigWarning("PopUpTower.Sound", "Cannot parse sound " + config_tower_place_sound);
-        }
+        ConfigValue.tower_place_place_sound = parseConfigSound(mainConfig, "PopUpTower.Sound", ConfigValue.tower_place_place_sound);
 
         // SILVERFISH
         ConfigValue.silverfish_life_duration = mainConfig.getInt("Silverfish.Life-Duration", ConfigValue.silverfish_life_duration);
         ConfigValue.silverfish_life_display_name = mainConfig.getConfigurationSection("Silverfish.Display-Name");
 
         // EGG BRIDGER
-        final String config_egg_bridger_material = mainConfig.getString("Ice-Bridger.Block-Type");
-        if(config_egg_bridger_material != null){
-            final Material material = Helper.get().getMaterialByName(config_egg_bridger_material.toUpperCase());
-
-            if(material != null)
-                ConfigValue.egg_bridger_block_material = material;
-            else
-                Console.printConfigWarning("Egg-Bridger.Block-Type", "Cannot parse material " + config_egg_bridger_material);
-        }
-
+        ConfigValue.egg_bridger_block_material = parseConfigMaterial(mainConfig, "Egg-Bridger.Block-Type", ConfigValue.egg_bridger_block_material);
         ConfigValue.egg_bridger_max_length = mainConfig.getInt("Egg-Bridger.Max-Length", ConfigValue.egg_bridger_max_length);
         ConfigValue.egg_bridger_max_y_variation = mainConfig.getInt("Egg-Bridger.Max-Y-Variation", ConfigValue.egg_bridger_max_y_variation);
-        final String config_egg_bridger_place_sound = mainConfig.getString("Egg-Bridger.Sound");
-
-        if(config_egg_bridger_place_sound != null){
-            Optional<XSound> soundType = XSound.matchXSound(config_egg_bridger_place_sound.toUpperCase());
-
-            if(soundType.isPresent())
-                ConfigValue.egg_bridger_place_sound = soundType.get().parseSound();
-            else
-                Console.printConfigWarning("Egg-Bridger.Sound", "Cannot parse sound " + config_egg_bridger_place_sound);
-        }
+        ConfigValue.egg_bridger_place_sound = parseConfigSound(mainConfig, "Egg-Bridger.Sound", ConfigValue.egg_bridger_place_sound);
 
         // ICE BRIDGER
-        final String config_ice_bridger_material = mainConfig.getString("Ice-Bridger.Block-Type");
-        if(config_ice_bridger_material != null){
-            final Material material = Helper.get().getMaterialByName(config_ice_bridger_material.toUpperCase());
-
-            if(material != null)
-                ConfigValue.ice_bridger_material = material;
-            else
-                Console.printConfigWarning("Ice-Bridger.Block-Type", "Cannot parse material " + config_ice_bridger_material);
-        }
-
+        ConfigValue.ice_bridger_material = parseConfigMaterial(mainConfig, "Ice-Bridger.Block-Type", ConfigValue.ice_bridger_material);
         ConfigValue.ice_bridger_max_distance = mainConfig.getInt("Ice-Bridger.Max-Distance", ConfigValue.ice_bridger_max_distance);
 
         // CUSTOM ITEMS
         ConfigValue.command_item_enabled = mainConfig.getBoolean("Custom-Command-Items.Enabled", ConfigValue.command_item_enabled);
+        ConfigValue.command_item_player_commands = formatIdCommands(mainConfig.getStringList("Custom-Command-Items.Player"));
+        ConfigValue.command_item_console_commands = formatIdCommands(mainConfig.getStringList("Custom-Command-Items.Console"));
+    }
 
-        final List<String> config_command_items_player_commands = mainConfig.getStringList("Custom-Command-Items.Player");
-        if(!config_command_items_player_commands.isEmpty()){
-            ConfigValue.command_item_player_commands = formatIdCommands(config_command_items_player_commands);
+    public static Material parseConfigMaterial(FileConfiguration config, String configPath, Material def){
+        final String configMaterial = config.getString(configPath);
+
+        if(configMaterial != null){
+            final Material material = Helper.get().getMaterialByName(configMaterial.toUpperCase());
+
+            if(material != null)
+                return material;
+            else
+                Console.printConfigWarning(configPath, "Cannot parse material " + configMaterial);
         }
 
-        final List<String> config_command_items_console_commands = mainConfig.getStringList("Custom-Command-Items.Console");
-        if(!config_command_items_console_commands.isEmpty()){
-            ConfigValue.command_item_console_commands = formatIdCommands(config_command_items_console_commands);
+        return def;
+    }
+
+    public static Sound parseConfigSound(FileConfiguration config, String configPath, Sound def){
+        final String configSound = config.getString(configPath);
+
+        if(configSound != null){
+            Optional<XSound> soundType = XSound.matchXSound(configSound.toUpperCase());
+
+            if(soundType.isPresent())
+                return soundType.get().parseSound();
+            else
+                Console.printConfigWarning(configPath, "Cannot parse sound " + configSound);
         }
+
+        return def;
     }
 
     private static HashMap<String, String> formatIdCommands(List<String> keys){
         final HashMap<String, String> idCommand = new HashMap<>();
+
+        if(keys.isEmpty())
+            return idCommand;
 
         for(String string:keys){
             if(string.contains(":")){
