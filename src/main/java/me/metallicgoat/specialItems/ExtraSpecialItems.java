@@ -1,6 +1,7 @@
 package me.metallicgoat.specialItems;
 
 import de.marcely.bedwars.api.BedwarsAPI;
+import de.marcely.bedwars.tools.Helper;
 import me.metallicgoat.specialItems.config.Config;
 import me.metallicgoat.specialItems.items.CustomSpecialItem;
 import me.metallicgoat.specialItems.items.eggbridge.PreventHatching;
@@ -12,12 +13,17 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
 public class ExtraSpecialItems extends JavaPlugin {
 
     public static final int MIN_MBEDWARS_API_VER = 8;
     public static final String MIN_MBEDWARS_VER_NAME = "5.0.7";
 
-    private ExtraSpecialItemsAddon addon;
+    private static ExtraSpecialItemsAddon addon;
     private static ExtraSpecialItems instance;
     private final Server server = getServer();
 
@@ -50,6 +56,10 @@ public class ExtraSpecialItems extends JavaPlugin {
         return instance;
     }
 
+    public static ExtraSpecialItemsAddon getAddon() {
+        return addon;
+    }
+
     private void registerEvents() {
         final PluginManager manager = this.server.getPluginManager();
         manager.registerEvents(new PreventHatching(), this);
@@ -74,9 +84,9 @@ public class ExtraSpecialItems extends JavaPlugin {
     }
 
     private boolean registerAddon(){
-        this.addon = new ExtraSpecialItemsAddon(this);
+        addon = new ExtraSpecialItemsAddon(this);
 
-        if(!this.addon.register()){
+        if(!addon.register()){
             getLogger().warning("It seems like this addon has already been loaded. Please delete duplicates and try again.");
             Bukkit.getPluginManager().disablePlugin(this);
 
@@ -84,6 +94,27 @@ public class ExtraSpecialItems extends JavaPlugin {
         }
 
         return true;
+    }
+
+    public boolean copyResource(String internalPath, File out) throws IOException {
+        if(!out.exists() || out.length() == 0){
+            try(InputStream is = getResource(internalPath)){
+                if(is == null){
+                    getLogger().warning("Your plugin seems to be broken (Failed to find internal file " + internalPath + ")");
+                    return false;
+                }
+
+                out.createNewFile();
+
+                try(FileOutputStream os = new FileOutputStream(out)){
+                    Helper.get().copy(is, os);
+                }
+
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private void log(String ...args) {

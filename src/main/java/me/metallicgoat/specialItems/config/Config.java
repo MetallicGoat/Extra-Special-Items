@@ -9,6 +9,7 @@ import me.metallicgoat.specialItems.utils.XSound;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,26 +20,54 @@ import java.util.Optional;
 
 public class Config {
 
-    public static void save(){
-        final ExtraSpecialItems plugin = ExtraSpecialItems.getInstance();
-        plugin.saveDefaultConfig();
+    private static File getFile(){
+        return new File(ExtraSpecialItems.getAddon().getDataFolder(), "config.yml");
+    }
 
-        final File configFile = new File(plugin.getDataFolder(), "config.yml");
+    public static void save(){
+        ExtraSpecialItems.getAddon().getDataFolder().mkdirs();
+
+        synchronized(Config.class){
+            try{
+                saveUnchecked();
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void saveUnchecked() throws IOException {
+        final ExtraSpecialItems plugin = ExtraSpecialItems.getInstance();
+
+        final File file = getFile();
+
+        if(!file.exists())
+            plugin.copyResource("config.yml", file);
 
         try {
-            ConfigUpdater.update(plugin, "config.yml", configFile, Collections.singletonList("Silverfish.Display-Name"));
+            ConfigUpdater.update(plugin, "config.yml", file, Collections.singletonList("Silverfish.Display-Name"));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        plugin.reloadConfig();
         load();
+    }
+
+    public static FileConfiguration getConfig(){
+        final FileConfiguration config = new YamlConfiguration();
+
+        try{
+            config.load(getFile());
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        return config;
     }
 
     public static void load(){
 
-        final ExtraSpecialItems plugin = ExtraSpecialItems.getInstance();
-        final FileConfiguration mainConfig = plugin.getConfig();
+        final FileConfiguration mainConfig = getConfig();
 
         // POP UP TOWER
         ConfigValue.tower_block_material = parseConfigMaterial(mainConfig, "PopUpTower.Block-Type", ConfigValue.tower_block_material);
