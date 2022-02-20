@@ -3,7 +3,6 @@ package me.metallicgoat.specialItems.items;
 import de.marcely.bedwars.api.GameAPI;
 import de.marcely.bedwars.api.game.specialitem.*;
 import de.marcely.bedwars.tools.Helper;
-import me.metallicgoat.specialItems.config.Config;
 import me.metallicgoat.specialItems.config.ConfigValue;
 import me.metallicgoat.specialItems.items.customcommanditems.CommandItemHandler;
 import me.metallicgoat.specialItems.utils.Console;
@@ -55,7 +54,7 @@ public class CustomSpecialItem {
                 EggBridgerHandler.getEggBridgeHandler(),
                 "egg-bridger",
                 "%EggBridgerItem%",
-                new ItemStack(ConfigValue.egg_bridger_block_material)));
+                new ItemStack(ConfigValue.egg_bridger_icon_material)));
 
         register(new CustomSpecialItem(
                 IceBridgerHandler.getIceBridgeHandler(),
