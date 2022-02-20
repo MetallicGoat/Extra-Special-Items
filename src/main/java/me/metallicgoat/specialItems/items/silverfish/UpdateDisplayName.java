@@ -27,7 +27,10 @@ public class UpdateDisplayName {
                 if(SilverfishThrow.silverfishTeamHashMap.containsKey(silverfish) && !silverfish.isDead()){
                     if (i.get() < amountOfTags) {
                         final String unformattedDisplayName = displayNames[i.get()] != null ? ConfigValue.silverfish_life_display_name.getString(displayNames[i.get()]) : "";
-                        final String displayName = Message.build(unformattedDisplayName).placeholder("team-color", color).placeholder("team-name", teamName).done();
+                        final String displayName = Message.build(unformattedDisplayName)
+                                .placeholder("team-color", color)
+                                .placeholder("team-name", teamName)
+                                .placeholder("sqr", "■").done();
 
                         silverfish.setCustomName(displayName);
                     }else{

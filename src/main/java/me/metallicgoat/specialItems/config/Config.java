@@ -20,7 +20,7 @@ import java.util.Optional;
 
 public class Config {
 
-    private static File getFile(){
+    public static File getFile(){
         return new File(ExtraSpecialItems.getAddon().getDataFolder(), "config.yml");
     }
 
@@ -36,7 +36,7 @@ public class Config {
         }
     }
 
-    public static void saveUnchecked() throws IOException {
+    private static void saveUnchecked() throws IOException {
         final ExtraSpecialItems plugin = ExtraSpecialItems.getInstance();
 
         final File file = getFile();
@@ -70,22 +70,26 @@ public class Config {
         final FileConfiguration mainConfig = getConfig();
 
         // POP UP TOWER
+        ConfigValue.tower_icon_material = parseConfigMaterial(mainConfig, "PopUpTower.Icon-Type", ConfigValue.tower_icon_material);
         ConfigValue.tower_block_material = parseConfigMaterial(mainConfig, "PopUpTower.Block-Type", ConfigValue.tower_block_material);
         ConfigValue.tower_block_place_interval = mainConfig.getInt("PopUpTower.Block-Place-Interval", ConfigValue.tower_block_place_interval);
         ConfigValue.tower_block_placed_per_interval = mainConfig.getInt("PopUpTower.Blocks-Placed-Per-Interval", ConfigValue.tower_block_placed_per_interval);
         ConfigValue.tower_place_place_sound = parseConfigSound(mainConfig, "PopUpTower.Sound", ConfigValue.tower_place_place_sound);
 
         // SILVERFISH
+        ConfigValue.silverfish_icon_material = parseConfigMaterial(mainConfig, "Silverfish.Icon-Type", ConfigValue.silverfish_icon_material);
         ConfigValue.silverfish_life_duration = mainConfig.getInt("Silverfish.Life-Duration", ConfigValue.silverfish_life_duration);
         ConfigValue.silverfish_life_display_name = mainConfig.getConfigurationSection("Silverfish.Display-Name");
 
         // EGG BRIDGER
+        ConfigValue.egg_bridger_icon_material = parseConfigMaterial(mainConfig, "Egg-Bridger.Icon-Type", ConfigValue.egg_bridger_icon_material);
         ConfigValue.egg_bridger_block_material = parseConfigMaterial(mainConfig, "Egg-Bridger.Block-Type", ConfigValue.egg_bridger_block_material);
         ConfigValue.egg_bridger_max_length = mainConfig.getInt("Egg-Bridger.Max-Length", ConfigValue.egg_bridger_max_length);
         ConfigValue.egg_bridger_max_y_variation = mainConfig.getInt("Egg-Bridger.Max-Y-Variation", ConfigValue.egg_bridger_max_y_variation);
         ConfigValue.egg_bridger_place_sound = parseConfigSound(mainConfig, "Egg-Bridger.Sound", ConfigValue.egg_bridger_place_sound);
 
         // ICE BRIDGER
+        ConfigValue.ice_bridger_icon_material = parseConfigMaterial(mainConfig, "Ice-Bridger.Icon-Type", ConfigValue.ice_bridger_material);
         ConfigValue.ice_bridger_material = parseConfigMaterial(mainConfig, "Ice-Bridger.Block-Type", ConfigValue.ice_bridger_material);
         ConfigValue.ice_bridger_max_distance = mainConfig.getInt("Ice-Bridger.Max-Distance", ConfigValue.ice_bridger_max_distance);
 
@@ -95,7 +99,7 @@ public class Config {
         ConfigValue.command_item_console_commands = formatIdCommands(mainConfig.getStringList("Custom-Command-Items.Console"));
     }
 
-    public static Material parseConfigMaterial(FileConfiguration config, String configPath, Material def){
+    private static Material parseConfigMaterial(FileConfiguration config, String configPath, Material def){
         final String configMaterial = config.getString(configPath);
 
         if(configMaterial != null){
@@ -110,7 +114,7 @@ public class Config {
         return def;
     }
 
-    public static Sound parseConfigSound(FileConfiguration config, String configPath, Sound def){
+    private static Sound parseConfigSound(FileConfiguration config, String configPath, Sound def){
         final String configSound = config.getString(configPath);
 
         if(configSound != null){

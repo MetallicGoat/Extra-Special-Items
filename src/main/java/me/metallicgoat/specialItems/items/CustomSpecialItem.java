@@ -3,6 +3,7 @@ package me.metallicgoat.specialItems.items;
 import de.marcely.bedwars.api.GameAPI;
 import de.marcely.bedwars.api.game.specialitem.*;
 import de.marcely.bedwars.tools.Helper;
+import me.metallicgoat.specialItems.config.Config;
 import me.metallicgoat.specialItems.config.ConfigValue;
 import me.metallicgoat.specialItems.items.customcommanditems.CommandItemHandler;
 import me.metallicgoat.specialItems.utils.Console;
@@ -54,25 +55,25 @@ public class CustomSpecialItem {
                 EggBridgerHandler.getEggBridgeHandler(),
                 "egg-bridger",
                 "%EggBridgerItem%",
-                Helper.get().parseItemStack("EGG")));
+                new ItemStack(ConfigValue.egg_bridger_block_material)));
 
         register(new CustomSpecialItem(
                 IceBridgerHandler.getIceBridgeHandler(),
                 "ice-bridger",
                 "%IceBridgerItem%",
-                Helper.get().parseItemStack("ICE")));
+                new ItemStack(ConfigValue.ice_bridger_icon_material)));
 
         register(new CustomSpecialItem(
                 TowerHandler.getPopUpTowerHandler(),
                 "tower",
                 "%TowerItem%",
-                Helper.get().parseItemStack("CHEST")));
+                new ItemStack(ConfigValue.tower_icon_material)));
 
         register(new CustomSpecialItem(
                 SilverfishHandler.getSilverfishHandler(),
                 "silverfish",
                 "%SilverFishItem%",
-                Helper.get().parseItemStack("SNOWBALL")));
+                new ItemStack(ConfigValue.silverfish_icon_material)));
 
         if(ConfigValue.command_item_enabled){
             if(ConfigValue.command_item_player_commands != null
