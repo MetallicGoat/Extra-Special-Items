@@ -67,6 +67,13 @@ public class TowerBlockPlacer {
 
     private void PlaceBlock(Arena arena, boolean isLadder, Block b, BlockFace face, DyeColor color){
 
+        if(ConfigValue.dye_tower_ukraine){
+            if(((int) b.getLocation().getY()) % 2 != 0)
+                color = DyeColor.BLUE;
+            else
+                color = DyeColor.YELLOW;
+        }
+
         if (!isLadder) {
             final PersistentBlockData data = PersistentBlockData.fromMaterial(ConfigValue.tower_block_material).getDyedData(color);
             data.place(b, true);

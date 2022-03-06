@@ -7,10 +7,13 @@
 # Ice-Bridger - ice-bridger
 # Custom-Command-Items - You Choose!
 
+#Speacial Configs (May be removed in the future)
+Dye-Tower-Ukraine: false
 
 #Automaticlly builds you a tower
 #Note: Block-Place-Interval in ticks (20 ticks = 1 second)
 PopUpTower:
+  Icon-Name: PopUpTower
   Icon-Type: CHEST
   Block-Type: WOOL
   Block-Place-Interval: 1
@@ -21,6 +24,7 @@ PopUpTower:
 #Note: Life-Duration in ticks (20 ticks = 1 second)
 #Display-Name Placeholders: {team-name} {team-color}
 Silverfish:
+  Icon-Name: BedBug
   Icon-Type: SNOWBALL
   Life-Duration: 400
   Display-Name:
@@ -32,6 +36,7 @@ Silverfish:
 
 #Construct a bridger following the path of an egg
 Egg-Bridger:
+  Icon-Name: EggBridger
   Icon-Type: EGG
   Block-Type: WOOL
   Max-Length: 30
@@ -40,6 +45,7 @@ Egg-Bridger:
 
 #Builds a flat bridge that only lasts for a few seconds
 Ice-Bridger:
+  Icon-Name: IceBridger
   Icon-Type: ICE
   Block-Type: ICE
   Max-Distance: 37

@@ -53,25 +53,25 @@ public class CustomSpecialItem {
         register(new CustomSpecialItem(
                 EggBridgerHandler.getEggBridgeHandler(),
                 "egg-bridger",
-                "%EggBridgerItem%",
+                ConfigValue.egg_bridger_icon_name,
                 new ItemStack(ConfigValue.egg_bridger_icon_material)));
 
         register(new CustomSpecialItem(
                 IceBridgerHandler.getIceBridgeHandler(),
                 "ice-bridger",
-                "%IceBridgerItem%",
+                ConfigValue.ice_bridger_icon_name,
                 new ItemStack(ConfigValue.ice_bridger_icon_material)));
 
         register(new CustomSpecialItem(
                 TowerHandler.getPopUpTowerHandler(),
                 "tower",
-                "%TowerItem%",
+                ConfigValue.tower_icon_name,
                 new ItemStack(ConfigValue.tower_icon_material)));
 
         register(new CustomSpecialItem(
                 SilverfishHandler.getSilverfishHandler(),
                 "silverfish",
-                "%SilverFishItem%",
+                ConfigValue.silverfish_icon_name,
                 new ItemStack(ConfigValue.silverfish_icon_material)));
 
         if(ConfigValue.command_item_enabled){

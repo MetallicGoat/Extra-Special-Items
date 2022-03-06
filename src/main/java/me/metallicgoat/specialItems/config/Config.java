@@ -69,7 +69,11 @@ public class Config {
 
         final FileConfiguration mainConfig = getConfig();
 
+        // SPECIAL
+        ConfigValue.dye_tower_ukraine = mainConfig.getBoolean("Dye-Tower-Ukraine");
+
         // POP UP TOWER
+        ConfigValue.tower_icon_name = mainConfig.getString("PopUpTower.Icon-Name");
         ConfigValue.tower_icon_material = parseConfigMaterial(mainConfig, "PopUpTower.Icon-Type", ConfigValue.tower_icon_material);
         ConfigValue.tower_block_material = parseConfigMaterial(mainConfig, "PopUpTower.Block-Type", ConfigValue.tower_block_material);
         ConfigValue.tower_block_place_interval = mainConfig.getInt("PopUpTower.Block-Place-Interval", ConfigValue.tower_block_place_interval);
@@ -77,11 +81,13 @@ public class Config {
         ConfigValue.tower_place_place_sound = parseConfigSound(mainConfig, "PopUpTower.Sound", ConfigValue.tower_place_place_sound);
 
         // SILVERFISH
+        ConfigValue.silverfish_icon_name = mainConfig.getString("Silverfish.Icon-Name");
         ConfigValue.silverfish_icon_material = parseConfigMaterial(mainConfig, "Silverfish.Icon-Type", ConfigValue.silverfish_icon_material);
         ConfigValue.silverfish_life_duration = mainConfig.getInt("Silverfish.Life-Duration", ConfigValue.silverfish_life_duration);
         ConfigValue.silverfish_life_display_name = mainConfig.getConfigurationSection("Silverfish.Display-Name");
 
         // EGG BRIDGER
+        ConfigValue.egg_bridger_icon_name = mainConfig.getString("Egg-Bridger.Icon-Name");
         ConfigValue.egg_bridger_icon_material = parseConfigMaterial(mainConfig, "Egg-Bridger.Icon-Type", ConfigValue.egg_bridger_icon_material);
         ConfigValue.egg_bridger_block_material = parseConfigMaterial(mainConfig, "Egg-Bridger.Block-Type", ConfigValue.egg_bridger_block_material);
         ConfigValue.egg_bridger_max_length = mainConfig.getInt("Egg-Bridger.Max-Length", ConfigValue.egg_bridger_max_length);
@@ -89,6 +95,7 @@ public class Config {
         ConfigValue.egg_bridger_place_sound = parseConfigSound(mainConfig, "Egg-Bridger.Sound", ConfigValue.egg_bridger_place_sound);
 
         // ICE BRIDGER
+        ConfigValue.ice_bridger_icon_name = mainConfig.getString("Ice-Bridger.Icon-Name");
         ConfigValue.ice_bridger_icon_material = parseConfigMaterial(mainConfig, "Ice-Bridger.Icon-Type", ConfigValue.ice_bridger_material);
         ConfigValue.ice_bridger_material = parseConfigMaterial(mainConfig, "Ice-Bridger.Block-Type", ConfigValue.ice_bridger_material);
         ConfigValue.ice_bridger_max_distance = mainConfig.getInt("Ice-Bridger.Max-Distance", ConfigValue.ice_bridger_max_distance);
