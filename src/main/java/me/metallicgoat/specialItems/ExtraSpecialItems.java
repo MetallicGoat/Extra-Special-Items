@@ -20,8 +20,8 @@ import java.io.InputStream;
 
 public class ExtraSpecialItems extends JavaPlugin {
 
-    public static final int MIN_MBEDWARS_API_VER = 8;
-    public static final String MIN_MBEDWARS_VER_NAME = "5.0.7";
+    public static final int MIN_MBEDWARS_API_VER = 14;
+    public static final String MIN_MBEDWARS_VER_NAME = "5.0.14.2";
 
     private static ExtraSpecialItemsAddon addon;
     private static ExtraSpecialItems instance;

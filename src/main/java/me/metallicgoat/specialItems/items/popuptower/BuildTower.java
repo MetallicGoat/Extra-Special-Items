@@ -10,13 +10,13 @@ import java.util.Queue;
 
 public class BuildTower {
 
-    private static BlockFace direction;
-    private static Block chest;
-    private static final Queue<Pair<Block, Boolean>> towerBlock = new ArrayDeque<>();
+    private final BlockFace direction;
+    private final Block chest;
+    private final Queue<Pair<Block, Boolean>> towerBlock = new ArrayDeque<>();
 
     public BuildTower(Block chest, SpecialItemUseSession session, BlockFace direction) {
-        BuildTower.direction = direction;
-        BuildTower.chest = chest;
+        this.direction = direction;
+        this.chest = chest;
 
         addToQueue(-1, 0, -2, false);
         addToQueue(-2, 0, -1, false);
@@ -142,7 +142,7 @@ public class BuildTower {
         new TowerBlockPlacer(towerBlock, session, direction);
     }
 
-    private static void addToQueue(int x, int height, int y, boolean ladder){
+    private void addToQueue(int x, int height, int y, boolean ladder){
         Block block = null;
         switch(direction) {
             case NORTH:

@@ -12,14 +12,18 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class UpdateDisplayName {
 
     public void setDisplayName(Team team, Silverfish silverfish){
-        silverfish.setCustomNameVisible(true);
+
+        if(ConfigValue.silverfish_life_display_name == null)
+            return;
 
         final String teamName = team.getDisplayName();
-        final String color = "&" + team.getChatColor().getChar();
+        final String color = team.getChatColor().toString();
         final int amountOfTags = ConfigValue.silverfish_life_display_name.getKeys(false).size();
         final String[] displayNames = ConfigValue.silverfish_life_display_name.getKeys(false).toArray(new String[0]);
         final long time = ConfigValue.silverfish_life_duration / amountOfTags;
         final AtomicInteger i = new AtomicInteger(0);
+
+        silverfish.setCustomNameVisible(true);
 
         new BukkitRunnable() {
             @Override

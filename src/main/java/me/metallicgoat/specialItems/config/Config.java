@@ -5,7 +5,6 @@ import de.marcely.bedwars.tools.Pair;
 import me.metallicgoat.specialItems.utils.Console;
 import me.metallicgoat.specialItems.ExtraSpecialItems;
 import me.metallicgoat.specialItems.config.updater.ConfigUpdater;
-import me.metallicgoat.specialItems.utils.XSound;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -104,6 +103,10 @@ public class Config {
         ConfigValue.command_item_enabled = mainConfig.getBoolean("Custom-Command-Items.Enabled", ConfigValue.command_item_enabled);
         ConfigValue.command_item_player_commands = formatIdCommands(mainConfig.getStringList("Custom-Command-Items.Player"));
         ConfigValue.command_item_console_commands = formatIdCommands(mainConfig.getStringList("Custom-Command-Items.Console"));
+
+
+        if(ConfigValue.silverfish_life_display_name == null)
+            Console.printConfigWarning("Silverfish.Display-Name", "Configuration section is null!");
     }
 
     private static Material parseConfigMaterial(FileConfiguration config, String configPath, Material def){
@@ -125,10 +128,10 @@ public class Config {
         final String configSound = config.getString(configPath);
 
         if(configSound != null){
-            Optional<XSound> soundType = XSound.matchXSound(configSound.toUpperCase());
+            final Sound sound = Helper.get().getSoundByName(configSound);
 
-            if(soundType.isPresent())
-                return soundType.get().parseSound();
+            if(sound != null)
+                return sound;
             else
                 Console.printConfigWarning(configPath, "Cannot parse sound " + configSound);
         }

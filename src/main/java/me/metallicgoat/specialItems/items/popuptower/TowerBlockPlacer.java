@@ -8,7 +8,6 @@ import de.marcely.bedwars.tools.Pair;
 import de.marcely.bedwars.tools.PersistentBlockData;
 import me.metallicgoat.specialItems.ExtraSpecialItems;
 import me.metallicgoat.specialItems.config.ConfigValue;
-import me.metallicgoat.specialItems.utils.XSound;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
@@ -22,11 +21,10 @@ import java.util.Queue;
 
 public class TowerBlockPlacer {
 
-    private static BukkitTask task;
-    private static final Material ladderMaterial = Helper.get().getMaterialByName("LADDER");
+    public BukkitTask task;
+    public final Material ladderMaterial = Helper.get().getMaterialByName("LADDER");
 
     public TowerBlockPlacer(Queue<Pair<Block, Boolean>> towerBlock, SpecialItemUseSession session, BlockFace face) {
-
         if((session != null && session.getEvent() == null) || session == null || !session.isActive()){
             return;
         }
@@ -49,7 +47,7 @@ public class TowerBlockPlacer {
                         if (block != null && block.getType().equals(Material.AIR)) {
                             //Is block inside region
                             if (arena.canPlaceBlockAt(block.getLocation())) {
-                                XSound.matchXSound(ConfigValue.tower_place_place_sound).play(block.getLocation());
+                                block.getLocation().getWorld().playSound(block.getLocation(), ConfigValue.tower_place_place_sound, 1, 1);
                                 PlaceBlock(arena, Boolean.TRUE.equals(blockBooleanPair.getValue()), block, face, color);
                             }
                         }
