@@ -3,7 +3,7 @@ package me.metallicgoat.specialItems.config;
 import de.marcely.bedwars.tools.Helper;
 import de.marcely.bedwars.tools.Pair;
 import me.metallicgoat.specialItems.utils.Console;
-import me.metallicgoat.specialItems.ExtraSpecialItems;
+import me.metallicgoat.specialItems.ExtraSpecialItemsPlugin;
 import me.metallicgoat.specialItems.config.updater.ConfigUpdater;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -15,16 +15,15 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 
 public class Config {
 
     public static File getFile(){
-        return new File(ExtraSpecialItems.getAddon().getDataFolder(), "config.yml");
+        return new File(ExtraSpecialItemsPlugin.getAddon().getDataFolder(), "config.yml");
     }
 
     public static void save(){
-        ExtraSpecialItems.getAddon().getDataFolder().mkdirs();
+        ExtraSpecialItemsPlugin.getAddon().getDataFolder().mkdirs();
 
         synchronized(Config.class){
             try{
@@ -36,7 +35,7 @@ public class Config {
     }
 
     private static void saveUnchecked() throws IOException {
-        final ExtraSpecialItems plugin = ExtraSpecialItems.getInstance();
+        final ExtraSpecialItemsPlugin plugin = ExtraSpecialItemsPlugin.getInstance();
 
         final File file = getFile();
 

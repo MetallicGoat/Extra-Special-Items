@@ -6,7 +6,7 @@ import de.marcely.bedwars.tools.Helper;
 import me.metallicgoat.specialItems.config.ConfigValue;
 import me.metallicgoat.specialItems.items.customcommanditems.CommandItemHandler;
 import me.metallicgoat.specialItems.utils.Console;
-import me.metallicgoat.specialItems.ExtraSpecialItems;
+import me.metallicgoat.specialItems.ExtraSpecialItemsPlugin;
 import me.metallicgoat.specialItems.items.eggbridge.EggBridgerHandler;
 import me.metallicgoat.specialItems.items.icebridge.IceBridgerHandler;
 import me.metallicgoat.specialItems.items.popuptower.TowerHandler;
@@ -103,7 +103,7 @@ public class CustomSpecialItem {
 
     private static void register(CustomSpecialItem item){
 
-        final SpecialItem specialItem = GameAPI.get().registerSpecialItem(item.getId(), ExtraSpecialItems.getInstance(), item.getMessageFileId(), item.getItemStack());
+        final SpecialItem specialItem = GameAPI.get().registerSpecialItem(item.getId(), ExtraSpecialItemsPlugin.getInstance(), item.getMessageFileId(), item.getItemStack());
 
         if (specialItem != null) {
             specialItem.setHandler(item.handler());
@@ -113,7 +113,7 @@ public class CustomSpecialItem {
 
             // TODO better way to check?
             // Probably reloading bedwars or something
-            if(registeredItem != null && registeredItem.getPlugin().getName().equals(ExtraSpecialItems.getInstance().getName()))
+            if(registeredItem != null && registeredItem.getPlugin().getName().equals(ExtraSpecialItemsPlugin.getInstance().getName()))
                 return;
 
             // id is already taken by some other addon

@@ -18,14 +18,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class ExtraSpecialItems extends JavaPlugin {
+public class ExtraSpecialItemsPlugin extends JavaPlugin {
 
-    public static final int MIN_MBEDWARS_API_VER = 14;
-    public static final String MIN_MBEDWARS_VER_NAME = "5.0.14.2";
+    public static final int MIN_MBEDWARS_API_VER = 15;
+    public static final String MIN_MBEDWARS_VER_NAME = "5.1";
 
     private static ExtraSpecialItemsAddon addon;
-    private static ExtraSpecialItems instance;
-    private final Server server = getServer();
+    private static ExtraSpecialItemsPlugin instance;
 
     public void onEnable() {
         instance = this;
@@ -33,10 +32,9 @@ public class ExtraSpecialItems extends JavaPlugin {
         if(!checkMBedwars()) return;
         if(!registerAddon()) return;
 
-        final int pluginId = 14359;
-        final Metrics metrics = new Metrics(this, pluginId);
+        new Metrics(this, 14359);
 
-        registerEvents();
+        addon.registerEvents();
         Config.save();
 
         final PluginDescriptionFile pdf = this.getDescription();
@@ -52,18 +50,12 @@ public class ExtraSpecialItems extends JavaPlugin {
         BedwarsAPI.onReady(CustomSpecialItem::registerAll);
     }
 
-    public static ExtraSpecialItems getInstance() {
+    public static ExtraSpecialItemsPlugin getInstance() {
         return instance;
     }
 
     public static ExtraSpecialItemsAddon getAddon() {
         return addon;
-    }
-
-    private void registerEvents() {
-        final PluginManager manager = this.server.getPluginManager();
-        manager.registerEvents(new PreventHatching(), this);
-        manager.registerEvents(new SilverfishThrow(), this);
     }
 
     private boolean checkMBedwars(){
@@ -73,7 +65,8 @@ public class ExtraSpecialItems extends JavaPlugin {
 
             if(apiVersion < MIN_MBEDWARS_API_VER)
                 throw new IllegalStateException();
-        }catch(Exception e){
+
+        } catch(Exception e) {
             getLogger().warning("Sorry, your installed version of MBedwars is not supported. Please install at least v" + MIN_MBEDWARS_VER_NAME);
             Bukkit.getPluginManager().disablePlugin(this);
 

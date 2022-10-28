@@ -3,7 +3,7 @@ package me.metallicgoat.specialItems.items.popuptower;
 import de.marcely.bedwars.api.event.player.PlayerUseSpecialItemEvent;
 import de.marcely.bedwars.api.game.specialitem.SpecialItemUseHandler;
 import de.marcely.bedwars.api.game.specialitem.SpecialItemUseSession;
-import me.metallicgoat.specialItems.ExtraSpecialItems;
+import me.metallicgoat.specialItems.ExtraSpecialItemsPlugin;
 import org.bukkit.plugin.Plugin;
 
 public class TowerHandler {
@@ -12,7 +12,7 @@ public class TowerHandler {
         return new SpecialItemUseHandler() {
             @Override
             public Plugin getPlugin() {
-                return ExtraSpecialItems.getInstance();
+                return ExtraSpecialItemsPlugin.getInstance();
             }
 
             @Override

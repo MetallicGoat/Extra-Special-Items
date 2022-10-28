@@ -3,7 +3,7 @@ package me.metallicgoat.specialItems.items.eggbridge;
 import de.marcely.bedwars.api.event.player.PlayerUseSpecialItemEvent;
 import de.marcely.bedwars.api.game.specialitem.SpecialItemUseHandler;
 import de.marcely.bedwars.api.game.specialitem.SpecialItemUseSession;
-import me.metallicgoat.specialItems.ExtraSpecialItems;
+import me.metallicgoat.specialItems.ExtraSpecialItemsPlugin;
 import org.bukkit.plugin.Plugin;
 
 public class EggBridgerHandler {
@@ -12,7 +12,7 @@ public class EggBridgerHandler {
         return new SpecialItemUseHandler() {
             @Override
             public Plugin getPlugin() {
-                return ExtraSpecialItems.getInstance();
+                return ExtraSpecialItemsPlugin.getInstance();
             }
 
             @Override
@@ -23,7 +23,7 @@ public class EggBridgerHandler {
                     }
                 };
 
-                EggBridgeThrow bridgeThrow = new EggBridgeThrow();
+                final EggBridgeThrow bridgeThrow = new EggBridgeThrow();
                 bridgeThrow.buildEggBridge(e, session);
 
                 return session;

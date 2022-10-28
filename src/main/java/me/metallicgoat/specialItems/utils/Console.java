@@ -1,6 +1,6 @@
 package me.metallicgoat.specialItems.utils;
 
-import me.metallicgoat.specialItems.ExtraSpecialItems;
+import me.metallicgoat.specialItems.ExtraSpecialItemsPlugin;
 
 public class Console {
 
@@ -17,10 +17,10 @@ public class Console {
     }
 
     public static void printWarning(String warning){
-        ExtraSpecialItems.getInstance().getLogger().warning(warning);
+        ExtraSpecialItemsPlugin.getInstance().getLogger().warning(warning);
     }
 
     public static void printInfo(String info){
-        ExtraSpecialItems.getInstance().getLogger().info(info);
+        ExtraSpecialItemsPlugin.getInstance().getLogger().info(info);
     }
 }

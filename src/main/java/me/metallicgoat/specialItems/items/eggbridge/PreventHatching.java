@@ -11,8 +11,9 @@ public class PreventHatching implements Listener {
     @EventHandler
     public void onCreatureSpawn(PlayerEggThrowEvent e){
         final Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(e.getPlayer());
-        if(arena != null){
+
+        if(arena != null)
             e.setHatching(false);
-        }
+
     }
 }
