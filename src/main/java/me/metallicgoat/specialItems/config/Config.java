@@ -94,8 +94,8 @@ public class Config {
             final ConfigurationSection playerSection = config.getConfigurationSection("Command-Items.Player-Run");
             if(playerSection != null) {
                 for (String id : playerSection.getKeys(false)) {
-                    final String materialName = config.getString("Command-Items.Player-Run." + ".Material");
-                    final String command = config.getString("Command-Items.Player-Run." + ".Command");
+                    final String materialName = playerSection.getString(id + ".Material");
+                    final String command = playerSection.getString(id + ".Command");
                     ConfigValue.command_item_player_commands.put(id, new Pair<>(parseItemStack(materialName), command));
                 }
             }
@@ -104,8 +104,8 @@ public class Config {
             final ConfigurationSection consoleSection = config.getConfigurationSection("Command-Items.Console-Run");
             if(consoleSection != null) {
                 for (String id : consoleSection.getKeys(false)) {
-                    final String materialName = config.getString("Command-Items.Console-Run." + ".Material");
-                    final String command = config.getString("Command-Items.Console-Run." + ".Command");
+                    final String materialName = consoleSection.getString(id + ".Material");
+                    final String command = consoleSection.getString(id + ".Command");
                     ConfigValue.command_item_console_commands.put(id, new Pair<>(parseItemStack(materialName), command));
                 }
             }
@@ -195,16 +195,26 @@ public class Config {
         {
             config.set("Custom-Items.Enabled", ConfigValue.command_item_enabled);
 
-            for (String itemId : ConfigValue.command_item_player_commands.keySet()) {
-                final Pair<ItemStack, String> pair = ConfigValue.command_item_player_commands.get(itemId);
-                config.set("Custom-Items.Player-Run." + itemId + ".Material", pair.getKey() != null ? Helper.get().composeItemStack(pair.getKey()) : "STONE");
-                config.set("Custom-Items.Player-Run." + itemId + ".Command", pair.getValue());
+            if(!ConfigValue.command_item_player_commands.isEmpty()) {
+                for (String itemId : ConfigValue.command_item_player_commands.keySet()) {
+                    final Pair<ItemStack, String> pair = ConfigValue.command_item_player_commands.get(itemId);
+                    config.set("Custom-Items.Player-Run." + itemId + ".Material", pair.getKey() != null ? Helper.get().composeItemStack(pair.getKey()) : "STONE");
+                    config.set("Custom-Items.Player-Run." + itemId + ".Command", pair.getValue());
+                }
+            } else {
+                config.set("Custom-Items.Player-Run.player-example.Material", "stone");
+                config.set("Custom-Items.Player-Run.player-example.Command", "a command that is run by a player");
             }
 
-            for (String itemId : ConfigValue.command_item_console_commands.keySet()) {
-                final Pair<ItemStack, String> pair = ConfigValue.command_item_console_commands.get(itemId);
-                config.set("Custom-Items.Console-Run." + itemId + ".Material", pair.getKey() != null ? Helper.get().composeItemStack(pair.getKey()) : "STONE");
-                config.set("Custom-Items.Console-Run." + itemId + ".Command", pair.getValue());
+            if(!ConfigValue.command_item_console_commands.isEmpty()) {
+                for (String itemId : ConfigValue.command_item_console_commands.keySet()) {
+                    final Pair<ItemStack, String> pair = ConfigValue.command_item_console_commands.get(itemId);
+                    config.set("Custom-Items.Console-Run." + itemId + ".Material", pair.getKey() != null ? Helper.get().composeItemStack(pair.getKey()) : "STONE");
+                    config.set("Custom-Items.Console-Run." + itemId + ".Command", pair.getValue());
+                }
+            } else {
+                config.set("Custom-Items.Player-Run.console-example.Material", "stone");
+                config.set("Custom-Items.Player-Run.console-example.Command", "a command that is run by a player");
             }
         }
 

@@ -28,12 +28,12 @@ public class ConfigValue {
     public static Material silverfish_icon_material = Helper.get().getMaterialByName("SNOWBALL");
     public static int silverfish_life_duration = 400;
     public static List<String> silverfish_name_tag = Arrays.asList(
-            "{team-color}&l{team-name} {team-color}[{sqr} {sqr} {sqr} {sqr} {sqr}]",
-            "{team-color}&l{team-name} {team-color}[{sqr} {sqr} {sqr} {sqr} &7{sqr}]",
-            "{team-color}&l{team-name} {team-color}[{sqr} {sqr} {sqr} &7{sqr} {sqr}]",
-            "{team-color}&l{team-name} {team-color}[{sqr} {sqr} &7{sqr} {sqr} {sqr}]",
-            "{team-color}&l{team-name} {team-color}[{sqr} &7{sqr} {sqr} {sqr} {sqr}]"
-    ); // TODO remove sqr placeholder
+            "{team-color}&l{team-name} {team-color}[■ ■ ■ ■ ■]",
+            "{team-color}&l{team-name} {team-color}[■ ■ ■ ■ &7■]",
+            "{team-color}&l{team-name} {team-color}[■ ■ ■ &7■ ■]",
+            "{team-color}&l{team-name} {team-color}[■ ■ &7■ ■ ■]",
+            "{team-color}&l{team-name} {team-color}[■ &7■ ■ ■ ■]"
+    );
 
     // Egg Bridger
     public static String egg_bridger_icon_name = "EggBridger";
