@@ -32,7 +32,7 @@ public class UpdateDisplayName {
                         final String displayName = Message.build(unformattedDisplayName != null ? unformattedDisplayName : "")
                                 .placeholder("team-color", color)
                                 .placeholder("team-name", teamName)
-                                .placeholder("sqr", "■").done();
+                                .done();
 
                         silverfish.setCustomName(displayName);
                     }else{

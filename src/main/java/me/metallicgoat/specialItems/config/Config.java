@@ -10,6 +10,7 @@ import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -52,7 +53,7 @@ public class Config {
             e.printStackTrace();
         }
 
-        // SPECIAL
+        // SPECIAL CONFIGS
         ConfigValue.dye_tower_ukraine = config.getBoolean("Dye-Tower-Ukraine");
 
         // POP UP TOWER
@@ -86,23 +87,27 @@ public class Config {
         ConfigValue.ice_bridger_material = parseConfigMaterial(config, "Ice-Bridger.Block-Type", ConfigValue.ice_bridger_material);
         ConfigValue.ice_bridger_max_distance = config.getInt("Ice-Bridger.Max-Distance", ConfigValue.ice_bridger_max_distance);
 
-        // TODO CUSTOM ITEMS ITEM PARSING
+        // COMMAND ITEMS
         ConfigValue.command_item_enabled = config.getBoolean("Command-Items.Enabled");
         {
             ConfigValue.command_item_player_commands.clear();
-
-            for (String id : config.getConfigurationSection("Command-Items.Player-Run").getKeys(false)) {
-                final String materialName = config.getString("Command-Items.Player-Run." + ".Material");
-                final String command = config.getString("Command-Items.Player-Run." + ".Command");
-                ConfigValue.command_item_player_commands.put(id, new Pair<>(Helper.get().getMaterialByName(materialName), command));
+            final ConfigurationSection playerSection = config.getConfigurationSection("Command-Items.Player-Run");
+            if(playerSection != null) {
+                for (String id : playerSection.getKeys(false)) {
+                    final String materialName = config.getString("Command-Items.Player-Run." + ".Material");
+                    final String command = config.getString("Command-Items.Player-Run." + ".Command");
+                    ConfigValue.command_item_player_commands.put(id, new Pair<>(parseItemStack(materialName), command));
+                }
             }
 
-            ConfigValue.command_item_player_commands.clear();
-
-            for (String id : config.getConfigurationSection("Command-Items.Console-Run").getKeys(false)) {
-                final String materialName = config.getString("Command-Items.Console-Run." + ".Material");
-                final String command = config.getString("Command-Items.Console-Run." + ".Command");
-                ConfigValue.command_item_console_commands.put(id, new Pair<>(Helper.get().getMaterialByName(materialName), command));
+            ConfigValue.command_item_console_commands.clear();
+            final ConfigurationSection consoleSection = config.getConfigurationSection("Command-Items.Console-Run");
+            if(consoleSection != null) {
+                for (String id : consoleSection.getKeys(false)) {
+                    final String materialName = config.getString("Command-Items.Console-Run." + ".Material");
+                    final String command = config.getString("Command-Items.Console-Run." + ".Command");
+                    ConfigValue.command_item_console_commands.put(id, new Pair<>(parseItemStack(materialName), command));
+                }
             }
         }
 
@@ -126,6 +131,26 @@ public class Config {
 
         config.addEmptyLine();
 
+        config.addComment("Join our discord for support: https://discord.gg/3mJuxUW");
+
+        config.addEmptyLine();
+
+        config.addComment("SPECIAL ITEM ID's");
+        config.addComment("PopUpTower - 'tower'");
+        config.addComment("Silverfish - 'silverfish'");
+        config.addComment("Egg-Bridger - 'egg-bridger'");
+        config.addComment("Ice-Bridger - 'ice-bridger'");
+        config.addComment("Command-Items - You Choose!");
+
+        config.addEmptyLine();
+
+        config.addComment("Special Configs (May be removed in the future)");
+        config.set("Dye-Tower-Ukraine", ConfigValue.dye_tower_ukraine);
+
+        config.addEmptyLine();
+
+        config.addComment("Automatically builds you a tower");
+        config.addComment("Note: Block-Place-Interval in ticks (20 ticks = 1 second)");
         config.set("PopUpTower.Icon-Name", ConfigValue.tower_icon_name);
         config.set("PopUpTower.Icon-Type", ConfigValue.tower_icon_material.name());
         config.set("PopUpTower.Block-Type", ConfigValue.tower_block_material.name());
@@ -135,13 +160,17 @@ public class Config {
 
         config.addEmptyLine();
 
+        config.addComment("Summon a Silverfish to help defend your base");
+        config.addComment("Note: Life-Duration in ticks (20 ticks = 1 second)");
+        config.addComment("Name-Tag Placeholders: {team-name} {team-color}");
         config.set("Silverfish.Icon-Name", ConfigValue.silverfish_icon_name);
-        config.set("Silverfish.Icon-Type", ConfigValue.silverfish_icon_material);
+        config.set("Silverfish.Icon-Type", ConfigValue.silverfish_icon_material.name());
         config.set("Silverfish.Life-Duration", ConfigValue.silverfish_life_duration);
         config.set("Silverfish.Name-Tag", ConfigValue.silverfish_name_tag);
 
         config.addEmptyLine();
 
+        config.addComment("Construct a bridger following the path of an egg");
         config.set("Egg-Bridger.Icon-Name", ConfigValue.egg_bridger_icon_name);
         config.set("Egg-Bridger.Icon-Type", ConfigValue.egg_bridger_icon_material.name());
         config.set("Egg-Bridger.Block-Type", ConfigValue.egg_bridger_block_material.name());
@@ -151,23 +180,32 @@ public class Config {
 
         config.addEmptyLine();
 
+        config.addComment("Builds a flat bridge that only lasts for a few seconds");
         config.set("Ice-Bridger.Icon-Name", ConfigValue.ice_bridger_icon_name);
-        config.set("Ice-Bridger.Icon-Type", ConfigValue.ice_bridger_material);
-        config.set("Ice-Bridger.Block-Type", ConfigValue.ice_bridger_material);
+        config.set("Ice-Bridger.Icon-Type", ConfigValue.ice_bridger_material.name());
+        config.set("Ice-Bridger.Block-Type", ConfigValue.ice_bridger_material.name());
         config.set("Ice-Bridger.Max-Distance",ConfigValue.ice_bridger_max_distance);
 
-        config.set("Custom-Items.Enabled", ConfigValue.command_item_enabled);
+        config.addEmptyLine();
 
-        for(String itemId : ConfigValue.command_item_player_commands.keySet()){
-            final Pair<Material, String> pair = ConfigValue.command_item_player_commands.get(itemId);
-            config.set("Custom-Items.Player-Run." + itemId + ".Material", pair.getKey() != null ? pair.getKey().name() : Material.STONE);
-            config.set("Custom-Items.Player-Run." + itemId + ".Command", pair.getValue());
-        }
+        config.addComment("Create as many custom Special items at you want");
+        config.addComment("Specify is you want the command to be run as player, or as console");
+        config.addComment("Add the item to your shop.cm2 though the use of the specialID");
+        config.addComment("PlaceHolders: {player} {player-display-name} {x} {y} {z} {yaw} {pitch}");
+        {
+            config.set("Custom-Items.Enabled", ConfigValue.command_item_enabled);
 
-        for(String itemId : ConfigValue.command_item_console_commands.keySet()){
-            final Pair<Material, String> pair = ConfigValue.command_item_console_commands.get(itemId);
-            config.set("Custom-Items.Console-Run." + itemId + ".Material", pair.getKey() != null ? pair.getKey().name() : Material.STONE);
-            config.set("Custom-Items.Console-Run." + itemId + ".Command", pair.getValue());
+            for (String itemId : ConfigValue.command_item_player_commands.keySet()) {
+                final Pair<ItemStack, String> pair = ConfigValue.command_item_player_commands.get(itemId);
+                config.set("Custom-Items.Player-Run." + itemId + ".Material", pair.getKey() != null ? Helper.get().composeItemStack(pair.getKey()) : "STONE");
+                config.set("Custom-Items.Player-Run." + itemId + ".Command", pair.getValue());
+            }
+
+            for (String itemId : ConfigValue.command_item_console_commands.keySet()) {
+                final Pair<ItemStack, String> pair = ConfigValue.command_item_console_commands.get(itemId);
+                config.set("Custom-Items.Console-Run." + itemId + ".Material", pair.getKey() != null ? Helper.get().composeItemStack(pair.getKey()) : "STONE");
+                config.set("Custom-Items.Console-Run." + itemId + ".Command", pair.getValue());
+            }
         }
 
         config.save(getFile());
@@ -178,17 +216,33 @@ public class Config {
         {
             if (config.isConfigurationSection("Custom-Command-Items")) {
                 ConfigValue.command_item_enabled = config.getBoolean("Custom-Command-Items.Enabled", ConfigValue.command_item_enabled);
-                ConfigValue.command_item_player_commands = loadLegacyCommandItems(config.getStringList("Custom-Command-Items.Player"));
-                ConfigValue.command_item_console_commands = loadLegacyCommandItems(config.getStringList("Custom-Command-Items.Console"));
+
+                if(ConfigValue.command_item_enabled) {
+                    ConfigValue.command_item_player_commands = loadLegacyCommandItems(config.getStringList("Custom-Command-Items.Player"));
+                    ConfigValue.command_item_console_commands = loadLegacyCommandItems(config.getStringList("Custom-Command-Items.Console"));
+                }
             }
         }
 
         // Silverfish Name Tags
         {
             final ConfigurationSection section = config.getConfigurationSection("Silverfish.Display-Name");
-            if (section != null)
-                ConfigValue.silverfish_name_tag = new ArrayList<>(section.getKeys(false));
+            if (section != null) {
+                final List<String> nameTags = new ArrayList<>();
+
+                for(String tagVal : section.getKeys(false)){
+                    final String tag = section.getString(tagVal, "");
+                    nameTags.add(tag.replace("{sqr}", "■"));
+                }
+
+                ConfigValue.silverfish_name_tag = nameTags;
+            }
         }
+    }
+
+    private static ItemStack parseItemStack(String string){
+        final ItemStack stack = Helper.get().parseItemStack(string);
+        return stack != null ? stack : new ItemStack(Material.STONE);
     }
 
     private static Material parseConfigMaterial(FileConfiguration config, String configPath, Material def){
@@ -222,8 +276,8 @@ public class Config {
     }
 
     @Deprecated
-    private static HashMap<String, Pair<Material, String>> loadLegacyCommandItems(List<String> keys){
-        final HashMap<String, Pair<Material, String>> idCommand = new HashMap<>();
+    private static HashMap<String, Pair<ItemStack, String>> loadLegacyCommandItems(List<String> keys){
+        final HashMap<String, Pair<ItemStack, String>> idCommand = new HashMap<>();
 
         if(keys.isEmpty())
             return idCommand;
@@ -233,13 +287,10 @@ public class Config {
                 final String[] idCommandString = string.split(":");
 
                 // remove the command '/' if there is one
-                final Material material = Helper.get().getMaterialByName(idCommandString[1]);
-                if(material == null)
-                    Helper.get().getMaterialByName("STONE");
+                final String command = idCommandString[2].startsWith("/") ? idCommandString[2].substring(1) : idCommandString[2];
+                final ItemStack itemStack = parseItemStack(idCommandString[1]);
 
-                Pair<Material, String> materialCommand = new Pair<>(material, idCommandString[2].startsWith("/") ? idCommandString[2].substring(1) : idCommandString[2]);
-
-                idCommand.put(idCommandString[0], materialCommand);
+                idCommand.put(idCommandString[0], new Pair<>(itemStack, command));
             }
         }
         return idCommand;

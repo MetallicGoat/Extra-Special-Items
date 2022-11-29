@@ -77,24 +77,24 @@ public class CustomSpecialItem {
             if(ConfigValue.command_item_player_commands != null
                     && !ConfigValue.command_item_player_commands.isEmpty()){
                 ConfigValue.command_item_player_commands.forEach((id, materialStringPair) -> {
-                    final Material material = materialStringPair.getKey();
+                    final ItemStack material = materialStringPair.getKey();
                     register(new CustomSpecialItem(
                             CommandItemHandler.getCustomItemHandler(materialStringPair.getValue(), false),
                             id,
                             "%" + id + "%",
-                            material != null ? new ItemStack(material) : Helper.get().parseItemStack("STONE")));
+                            material));
                 });
             }
 
             if(ConfigValue.command_item_console_commands != null
                     && !ConfigValue.command_item_console_commands.isEmpty()){
                 ConfigValue.command_item_console_commands.forEach((id, materialStringPair) -> {
-                    final Material material = materialStringPair.getKey();
+                    final ItemStack material = materialStringPair.getKey();
                     register(new CustomSpecialItem(
                             CommandItemHandler.getCustomItemHandler(materialStringPair.getValue(), true),
                             id,
                             "%" + id + "%",
-                            material != null ? new ItemStack(material) : Helper.get().parseItemStack("STONE")));
+                            material));
                 });
             }
         }
