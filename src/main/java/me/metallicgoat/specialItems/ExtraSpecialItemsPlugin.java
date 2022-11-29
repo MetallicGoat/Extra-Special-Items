@@ -3,14 +3,10 @@ package me.metallicgoat.specialItems;
 import de.marcely.bedwars.api.BedwarsAPI;
 import de.marcely.bedwars.tools.Helper;
 import me.metallicgoat.specialItems.config.Config;
-import me.metallicgoat.specialItems.items.CustomSpecialItem;
-import me.metallicgoat.specialItems.items.eggbridge.PreventHatching;
-import me.metallicgoat.specialItems.items.silverfish.SilverfishThrow;
+import me.metallicgoat.specialItems.items.commanditems.CustomSpecialItem;
 import me.metallicgoat.specialItems.utils.Metrics;
 import org.bukkit.Bukkit;
-import org.bukkit.Server;
 import org.bukkit.plugin.PluginDescriptionFile;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -35,7 +31,7 @@ public class ExtraSpecialItemsPlugin extends JavaPlugin {
         new Metrics(this, 14359);
 
         addon.registerEvents();
-        Config.save();
+        Config.load();
 
         final PluginDescriptionFile pdf = this.getDescription();
 

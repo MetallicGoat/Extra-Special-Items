@@ -4,9 +4,10 @@ import de.marcely.bedwars.tools.Helper;
 import de.marcely.bedwars.tools.Pair;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.configuration.ConfigurationSection;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 public class ConfigValue {
 
@@ -23,7 +24,13 @@ public class ConfigValue {
     public static String silverfish_icon_name = "Silverfish";
     public static Material silverfish_icon_material = Helper.get().getMaterialByName("SNOWBALL");
     public static int silverfish_life_duration = 400;
-    public static ConfigurationSection silverfish_life_display_name = null;
+    public static List<String> silverfish_name_tag = Arrays.asList(
+            "{team-color}&l{team-name} {team-color}[{sqr} {sqr} {sqr} {sqr} {sqr}]",
+            "{team-color}&l{team-name} {team-color}[{sqr} {sqr} {sqr} {sqr} &7{sqr}]",
+            "{team-color}&l{team-name} {team-color}[{sqr} {sqr} {sqr} &7{sqr} {sqr}]",
+            "{team-color}&l{team-name} {team-color}[{sqr} {sqr} &7{sqr} {sqr} {sqr}]",
+            "{team-color}&l{team-name} {team-color}[{sqr} &7{sqr} {sqr} {sqr} {sqr}]"
+    ); // TODO remove sqr placeholder
 
     public static String egg_bridger_icon_name = "EggBridger";
     public static Material egg_bridger_icon_material = Helper.get().getMaterialByName("EGG");
@@ -38,7 +45,7 @@ public class ConfigValue {
     public static int ice_bridger_max_distance = 37;
 
     public static boolean command_item_enabled = false;
-    public static HashMap<String, Pair<Material, String>> command_item_player_commands = null;
-    public static HashMap<String, Pair<Material, String>> command_item_console_commands = null;
+    public static HashMap<String, Pair<Material, String>> command_item_player_commands = new HashMap<>();
+    public static HashMap<String, Pair<Material, String>> command_item_console_commands = new HashMap<>();
 
 }

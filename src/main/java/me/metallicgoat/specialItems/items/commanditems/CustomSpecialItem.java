@@ -1,10 +1,9 @@
-package me.metallicgoat.specialItems.items;
+package me.metallicgoat.specialItems.items.commanditems;
 
 import de.marcely.bedwars.api.GameAPI;
 import de.marcely.bedwars.api.game.specialitem.*;
 import de.marcely.bedwars.tools.Helper;
 import me.metallicgoat.specialItems.config.ConfigValue;
-import me.metallicgoat.specialItems.items.customcommanditems.CommandItemHandler;
 import me.metallicgoat.specialItems.utils.Console;
 import me.metallicgoat.specialItems.ExtraSpecialItemsPlugin;
 import me.metallicgoat.specialItems.items.eggbridge.EggBridgerHandler;

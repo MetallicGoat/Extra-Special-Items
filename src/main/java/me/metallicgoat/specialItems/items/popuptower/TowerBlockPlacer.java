@@ -21,8 +21,9 @@ import java.util.Queue;
 
 public class TowerBlockPlacer {
 
-    public BukkitTask task;
-    public final Material ladderMaterial = Helper.get().getMaterialByName("LADDER");
+    private BukkitTask task;
+    private final Material ladderMaterial = Helper.get().getMaterialByName("LADDER");
+    private final PersistentBlockData blockData = PersistentBlockData.fromMaterial(ConfigValue.tower_block_material);
 
     public TowerBlockPlacer(Queue<Pair<Block, Boolean>> towerBlock, SpecialItemUseSession session, BlockFace face) {
         if (session == null || session.getEvent() == null || !session.isActive())
@@ -61,32 +62,32 @@ public class TowerBlockPlacer {
         }, 0L, ConfigValue.tower_block_place_interval);
     }
 
-    private void PlaceBlock(Arena arena, boolean isLadder, Block b, BlockFace face, DyeColor color) {
+    private void PlaceBlock(Arena arena, boolean isLadder, Block block, BlockFace face, DyeColor color) {
 
         if (ConfigValue.dye_tower_ukraine) {
-            if (((int) b.getLocation().getY()) % 2 != 0)
+            if (((int) block.getLocation().getY()) % 2 != 0)
                 color = DyeColor.BLUE;
             else
                 color = DyeColor.YELLOW;
         }
 
         if (!isLadder) {
-            final PersistentBlockData data = PersistentBlockData.fromMaterial(ConfigValue.tower_block_material).getDyedData(color);
-            data.place(b, true);
+            final PersistentBlockData data = blockData.getDyedData(color);
+            data.place(block, true);
         } else {
             if (ladderMaterial == null)
                 return;
 
-            b.setType(ladderMaterial);
+            block.setType(ladderMaterial);
 
-            if (b.getType() == ladderMaterial) {
-                final BlockState state = b.getState();
+            if (block.getType() == ladderMaterial) {
+                final BlockState state = block.getState();
                 final Ladder lad = new Ladder();
                 lad.setFacingDirection(face.getOppositeFace());
                 state.setData(lad);
                 state.update();
             }
         }
-        arena.setBlockPlayerPlaced(b, true);
+        arena.setBlockPlayerPlaced(block, true);
     }
 }

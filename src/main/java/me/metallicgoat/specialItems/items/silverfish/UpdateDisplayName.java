@@ -7,31 +7,29 @@ import me.metallicgoat.specialItems.config.ConfigValue;
 import org.bukkit.entity.Silverfish;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 public class UpdateDisplayName {
 
     public void setDisplayName(Team team, Silverfish silverfish){
 
-        if(ConfigValue.silverfish_life_display_name == null)
+        if(ConfigValue.silverfish_name_tag == null)
             return;
 
         final String teamName = team.getDisplayName();
         final String color = team.getChatColor().toString();
-        final int amountOfTags = ConfigValue.silverfish_life_display_name.getKeys(false).size();
-        final String[] displayNames = ConfigValue.silverfish_life_display_name.getKeys(false).toArray(new String[0]);
+        final int amountOfTags = ConfigValue.silverfish_name_tag.size();
         final long time = ConfigValue.silverfish_life_duration / amountOfTags;
-        final AtomicInteger i = new AtomicInteger(0);
 
         silverfish.setCustomNameVisible(true);
 
         new BukkitRunnable() {
+            int i = 0;
+
             @Override
             public void run(){
                 if(SilverfishThrow.silverfishTeamHashMap.containsKey(silverfish) && !silverfish.isDead()){
-                    if (i.get() < amountOfTags) {
-                        final String unformattedDisplayName = displayNames[i.get()] != null ? ConfigValue.silverfish_life_display_name.getString(displayNames[i.get()]) : "";
-                        final String displayName = Message.build(unformattedDisplayName)
+                    if (i < amountOfTags) {
+                        final String unformattedDisplayName = ConfigValue.silverfish_name_tag.get(i);
+                        final String displayName = Message.build(unformattedDisplayName != null ? unformattedDisplayName : "")
                                 .placeholder("team-color", color)
                                 .placeholder("team-name", teamName)
                                 .placeholder("sqr", "■").done();
@@ -41,7 +39,7 @@ public class UpdateDisplayName {
                         cancel();
                         return;
                     }
-                    i.getAndIncrement();
+                    i++;
                 }else{
                     cancel();
                 }
