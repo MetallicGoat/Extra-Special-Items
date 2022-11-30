@@ -14,8 +14,8 @@ jobs:
       - name: Setup JDK
         uses: actions/setup-java@v3
         with:
-          distribution: 'oracle'
-          java-version: '8'
+          distribution: 'adopt'
+          java-version: '17'
       - name: Build jar with Maven
         run: mvn package --file pom.xml
       - name: Upload jar
