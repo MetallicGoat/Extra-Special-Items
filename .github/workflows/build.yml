@@ -1,9 +1,9 @@
 name: Build Jar
 
-on: [push]
-#  push:
-#    tags:
-#      "v*"
+on:
+ push:
+    tags:
+      "v*"
 
 jobs:
   build_dev_jars:
