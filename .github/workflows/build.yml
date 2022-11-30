@@ -1,6 +1,6 @@
 name: Build Jar
 
-#on:
+on: [push]
 #  push:
 #    tags:
 #      "v*"
