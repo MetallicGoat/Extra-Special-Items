@@ -14,18 +14,18 @@ public class TowerPlace{
         final Block clicked = e.getClickedBlock();
         final BlockFace blockFace = e.getClickedBlockFace();
 
-        //Check if placeable
+        // Check if placeable
         if(clicked == null || blockFace == null || blockFace == BlockFace.DOWN || !arena.canPlaceBlockAt(clicked.getRelative(blockFace))){
             e.setTakingItem(false);
             session.stop();
             return;
         }
 
-        //Take item
+        // Take item
         e.setTakingItem(true);
         session.takeItem();
 
-        //Choose the correct tower to build, then build it
+        // Choose the correct tower to build, then build it
         ChooseTower(player, clicked.getRelative(blockFace), session);
     }
 

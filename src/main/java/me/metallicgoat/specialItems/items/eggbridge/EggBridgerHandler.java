@@ -19,8 +19,7 @@ public class EggBridgerHandler {
             public SpecialItemUseSession openSession(PlayerUseSpecialItemEvent e) {
                 final SpecialItemUseSession session = new SpecialItemUseSession(e) {
                     @Override
-                    protected void handleStop() {
-                    }
+                    protected void handleStop() {}
                 };
 
                 final EggBridgeThrow bridgeThrow = new EggBridgeThrow();

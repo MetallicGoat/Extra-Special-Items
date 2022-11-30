@@ -19,9 +19,7 @@ public class SilverfishHandler {
             public SpecialItemUseSession openSession(PlayerUseSpecialItemEvent e) {
                 final SpecialItemUseSession session = new SpecialItemUseSession(e) {
                     @Override
-                    protected void handleStop() {
-
-                    }
+                    protected void handleStop() {}
                 };
 
                 SilverfishThrow.throwSilverfish(e, session);

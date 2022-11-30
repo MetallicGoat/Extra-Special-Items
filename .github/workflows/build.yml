@@ -1,0 +1,25 @@
+name: Build Jar
+
+on: [push, pull_request]
+
+jobs:
+  build_dev_jars:
+    name: Build jar
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Setup JDK
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '17'
+      - name: Build jar with Maven
+        run: ./mvn package
+      - name: Upload jar
+        uses: actions/upload-artifact@v3
+        with:
+          path: |
+            *.jar

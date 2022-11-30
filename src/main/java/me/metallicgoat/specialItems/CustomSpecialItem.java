@@ -1,16 +1,14 @@
-package me.metallicgoat.specialItems.items.commanditems;
+package me.metallicgoat.specialItems;
 
 import de.marcely.bedwars.api.GameAPI;
 import de.marcely.bedwars.api.game.specialitem.*;
-import de.marcely.bedwars.tools.Helper;
 import me.metallicgoat.specialItems.config.ConfigValue;
+import me.metallicgoat.specialItems.items.commanditems.CommandItemHandler;
 import me.metallicgoat.specialItems.utils.Console;
-import me.metallicgoat.specialItems.ExtraSpecialItemsPlugin;
 import me.metallicgoat.specialItems.items.eggbridge.EggBridgerHandler;
 import me.metallicgoat.specialItems.items.icebridge.IceBridgerHandler;
 import me.metallicgoat.specialItems.items.popuptower.TowerHandler;
 import me.metallicgoat.specialItems.items.silverfish.SilverfishHandler;
-import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 public class CustomSpecialItem {
@@ -108,7 +106,7 @@ public class CustomSpecialItem {
             specialItem.setHandler(item.handler());
 
         } else {
-            SpecialItem registeredItem = GameAPI.get().getSpecialItem(item.getId());
+            final SpecialItem registeredItem = GameAPI.get().getSpecialItem(item.getId());
 
             // TODO better way to check?
             // Probably reloading bedwars or something

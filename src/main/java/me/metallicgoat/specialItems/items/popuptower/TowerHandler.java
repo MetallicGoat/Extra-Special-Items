@@ -16,16 +16,14 @@ public class TowerHandler {
             }
 
             @Override
-            public SpecialItemUseSession openSession(PlayerUseSpecialItemEvent e) {
-                final SpecialItemUseSession session = new SpecialItemUseSession(e) {
+            public SpecialItemUseSession openSession(PlayerUseSpecialItemEvent event) {
+                final SpecialItemUseSession session = new SpecialItemUseSession(event) {
                     @Override
-                    protected void handleStop() {
-                    }
+                    protected void handleStop() {}
                 };
 
-
                 TowerPlace towerPlace = new TowerPlace();
-                towerPlace.buildTower(e, session);
+                towerPlace.buildTower(event, session);
 
                 return session;
             }

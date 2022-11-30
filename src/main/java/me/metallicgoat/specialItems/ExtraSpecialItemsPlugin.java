@@ -3,7 +3,6 @@ package me.metallicgoat.specialItems;
 import de.marcely.bedwars.api.BedwarsAPI;
 import de.marcely.bedwars.tools.Helper;
 import me.metallicgoat.specialItems.config.Config;
-import me.metallicgoat.specialItems.items.commanditems.CustomSpecialItem;
 import me.metallicgoat.specialItems.utils.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginDescriptionFile;

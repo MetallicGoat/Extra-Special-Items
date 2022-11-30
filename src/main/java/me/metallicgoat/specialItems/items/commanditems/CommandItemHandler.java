@@ -21,17 +21,16 @@ public class CommandItemHandler {
             }
 
             @Override
-            public SpecialItemUseSession openSession(PlayerUseSpecialItemEvent e) {
-                final SpecialItemUseSession session = new SpecialItemUseSession(e) {
+            public SpecialItemUseSession openSession(PlayerUseSpecialItemEvent event) {
+                final SpecialItemUseSession session = new SpecialItemUseSession(event) {
                     @Override
-                    protected void handleStop() {
-                    }
+                    protected void handleStop() {}
                 };
 
-                e.setTakingItem(true);
+                event.setTakingItem(true);
                 session.takeItem();
 
-                final Player player = e.getPlayer();
+                final Player player = event.getPlayer();
                 final Location loc = player.getLocation();
                 final String commandFormatted = Message.build(command)
                         .placeholder("player", player.getName())
@@ -43,10 +42,8 @@ public class CommandItemHandler {
                         .placeholder("pitch", (int) loc.getPitch())
                         .done();
 
-                if(console)
-                    Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), commandFormatted);
-                else
-                    Bukkit.getServer().dispatchCommand(player, commandFormatted);
+                // run command
+                Bukkit.getServer().dispatchCommand(console ? Bukkit.getConsoleSender() : player, commandFormatted);
 
                 session.stop();
                 return session;

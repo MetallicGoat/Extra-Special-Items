@@ -24,10 +24,10 @@ public class EggBridgeThrow {
         final Player player = event.getPlayer();
         final Arena arena = event.getArena();
         final Team team = arena.getPlayerTeam(player);
-        final DyeColor col = team != null ? team.getDyeColor():DyeColor.WHITE;
+        final DyeColor color = team != null ? team.getDyeColor() : DyeColor.WHITE;
         final Egg egg = player.launchProjectile(Egg.class);
 
-        new BridgeBlockPlacerTask(egg, player.getLocation(), session, arena, col)
+        new BridgeBlockPlacerTask(egg, player.getLocation(), session, arena, color)
                 .runTaskTimerAsynchronously(ExtraSpecialItemsPlugin.getInstance(), 0L, 1L);
     }
 }
