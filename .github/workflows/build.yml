@@ -1,6 +1,9 @@
 name: Build Jar
 
-on: [push, pull_request]
+#on:
+#  push:
+#    tags:
+#      "v*"
 
 jobs:
   build_dev_jars:
@@ -9,17 +12,24 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
       - name: Setup JDK
         uses: actions/setup-java@v3
         with:
-          distribution: 'adopt'
-          java-version: '17'
+          java-version: '11'
+          distribution: 'temurin'
       - name: Build jar with Maven
         run: mvn package --file pom.xml
       - name: Upload jar
         uses: actions/upload-artifact@v3
         with:
+          name: Extra-Special-Items.jar
           path: |
+            target/*.jar
+      - name: Create Pre-Release
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          prerelease: true
+          files: |
+            LICENSE.txt
             target/*.jar
