@@ -17,7 +17,7 @@ jobs:
           distribution: 'adopt'
           java-version: '17'
       - name: Build jar with Maven
-        run: ./mvn package
+        run: mvn package --file pom.xml
       - name: Upload jar
         uses: actions/upload-artifact@v3
         with:
