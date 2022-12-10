@@ -6,7 +6,7 @@
 
     <groupId>me.metallicgoat</groupId>
     <artifactId>Extra-Special-Items</artifactId>
-    <version>2.2.0-Dev-B</version>
+    <version>2.2.0</version>
 
     <repositories>
         <repository>
