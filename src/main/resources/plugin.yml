@@ -1,6 +1,6 @@
 name: ExtraSpecialItems
 author: MetallicGoat
-version: 2.2.0
+version: 2.2.1-Dev-A
 main: me.metallicgoat.specialItems.ExtraSpecialItemsPlugin
 depend: [MBedwars]
 api-version: 1.13

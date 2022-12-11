@@ -21,6 +21,7 @@ import java.util.Queue;
 
 public class TowerBlockPlacer {
 
+    private int currLevel = 1;
     private BukkitTask task;
     private final Material ladderMaterial = Helper.get().getMaterialByName("LADDER");
     private final PersistentBlockData blockData = PersistentBlockData.fromMaterial(ConfigValue.tower_block_material);
@@ -59,18 +60,18 @@ public class TowerBlockPlacer {
                     PlaceBlock(arena, Boolean.TRUE.equals(blockBooleanPair.getValue()), block, face, color);
                 }
             }
+
+            currLevel++;
         }, 0L, ConfigValue.tower_block_place_interval);
     }
 
     private void PlaceBlock(Arena arena, boolean isLadder, Block block, BlockFace face, DyeColor color) {
 
-        if (ConfigValue.dye_tower_ukraine) {
-            if (((int) block.getLocation().getY()) % 2 != 0)
-                color = DyeColor.BLUE;
-            else
-                color = DyeColor.YELLOW;
-        }
+        // Re-Dye
+        if (ConfigValue.dye_tower_ukraine)
+            color = currLevel > 4 ? DyeColor.BLUE : DyeColor.YELLOW;
 
+        // Place Block
         if (!isLadder) {
             final PersistentBlockData data = blockData.getDyedData(color);
             data.place(block, true);
