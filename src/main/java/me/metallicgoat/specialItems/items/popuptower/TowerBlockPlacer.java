@@ -21,15 +21,16 @@ import java.util.Queue;
 
 public class TowerBlockPlacer {
 
-    private int currLevel = 1;
+    private int startY;
     private BukkitTask task;
     private final Material ladderMaterial = Helper.get().getMaterialByName("LADDER");
     private final PersistentBlockData blockData = PersistentBlockData.fromMaterial(ConfigValue.tower_block_material);
 
-    public TowerBlockPlacer(Queue<Pair<Block, Boolean>> towerBlock, SpecialItemUseSession session, BlockFace face) {
+    public TowerBlockPlacer(Queue<Pair<Block, Boolean>> towerBlock, SpecialItemUseSession session, BlockFace face, int startY) {
         if (session == null || session.getEvent() == null || !session.isActive())
             return;
 
+        this.startY = startY;
         final Arena arena = session.getEvent().getArena();
         final Team team = arena.getPlayerTeam(session.getEvent().getPlayer());
         final DyeColor color = team != null ? team.getDyeColor() : DyeColor.WHITE;
@@ -61,7 +62,6 @@ public class TowerBlockPlacer {
                 }
             }
 
-            currLevel++;
         }, 0L, ConfigValue.tower_block_place_interval);
     }
 
@@ -69,7 +69,7 @@ public class TowerBlockPlacer {
 
         // Re-Dye
         if (ConfigValue.dye_tower_ukraine)
-            color = currLevel > 4 ? DyeColor.BLUE : DyeColor.YELLOW;
+            color = block.getY() - startY > 3 ? DyeColor.BLUE : DyeColor.YELLOW;
 
         // Place Block
         if (!isLadder) {

@@ -139,7 +139,7 @@ public class BuildTower {
         addToQueue(0, 7, -3, false);
         addToQueue(2, 7, -3, false);
 
-        new TowerBlockPlacer(towerBlock, session, direction);
+        new TowerBlockPlacer(towerBlock, session, direction, chest.getY());
     }
 
     private void addToQueue(int x, int height, int y, boolean ladder){
