@@ -2,6 +2,7 @@ package me.metallicgoat.specialItems;
 
 import de.marcely.bedwars.api.GameAPI;
 import de.marcely.bedwars.api.game.specialitem.*;
+import de.marcely.bedwars.tools.Pair;
 import me.metallicgoat.specialItems.config.ConfigValue;
 import me.metallicgoat.specialItems.items.commanditems.CommandItemHandler;
 import me.metallicgoat.specialItems.utils.Console;
@@ -10,6 +11,9 @@ import me.metallicgoat.specialItems.items.icebridge.IceBridgerHandler;
 import me.metallicgoat.specialItems.items.popuptower.TowerHandler;
 import me.metallicgoat.specialItems.items.silverfish.SilverfishHandler;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.HashMap;
+import java.util.List;
 
 public class CustomSpecialItem {
 
@@ -51,50 +55,43 @@ public class CustomSpecialItem {
                 EggBridgerHandler.getEggBridgeHandler(),
                 "egg-bridger",
                 ConfigValue.egg_bridger_icon_name,
-                new ItemStack(ConfigValue.egg_bridger_icon_material)));
+                ConfigValue.egg_bridger_icon_material));
 
         register(new CustomSpecialItem(
                 IceBridgerHandler.getIceBridgeHandler(),
                 "ice-bridger",
                 ConfigValue.ice_bridger_icon_name,
-                new ItemStack(ConfigValue.ice_bridger_icon_material)));
+                ConfigValue.ice_bridger_icon_material));
 
         register(new CustomSpecialItem(
                 TowerHandler.getPopUpTowerHandler(),
                 "tower",
                 ConfigValue.tower_icon_name,
-                new ItemStack(ConfigValue.tower_icon_material)));
+                ConfigValue.tower_icon_material));
 
         register(new CustomSpecialItem(
                 SilverfishHandler.getSilverfishHandler(),
                 "silverfish",
                 ConfigValue.silverfish_icon_name,
-                new ItemStack(ConfigValue.silverfish_icon_material)));
+                ConfigValue.silverfish_icon_material));
 
         if(ConfigValue.command_item_enabled){
-            if(ConfigValue.command_item_player_commands != null
-                    && !ConfigValue.command_item_player_commands.isEmpty()){
-                ConfigValue.command_item_player_commands.forEach((id, materialStringPair) -> {
-                    final ItemStack material = materialStringPair.getKey();
-                    register(new CustomSpecialItem(
-                            CommandItemHandler.getCustomItemHandler(materialStringPair.getValue(), false),
-                            id,
-                            "%" + id + "%",
-                            material));
-                });
-            }
 
-            if(ConfigValue.command_item_console_commands != null
-                    && !ConfigValue.command_item_console_commands.isEmpty()){
-                ConfigValue.command_item_console_commands.forEach((id, materialStringPair) -> {
-                    final ItemStack material = materialStringPair.getKey();
-                    register(new CustomSpecialItem(
-                            CommandItemHandler.getCustomItemHandler(materialStringPair.getValue(), true),
-                            id,
-                            "%" + id + "%",
-                            material));
-                });
-            }
+            loadCommandItems(ConfigValue.command_item_player_commands, false);
+            loadCommandItems(ConfigValue.command_item_console_commands, true);
+        }
+    }
+
+    private static void loadCommandItems(HashMap<String, Pair<ItemStack, String>> map, boolean console){
+        if(map != null && !map.isEmpty()){
+            map.forEach((id, materialStringPair) -> {
+                final ItemStack material = materialStringPair.getKey();
+                register(new CustomSpecialItem(
+                        CommandItemHandler.getCustomItemHandler(materialStringPair.getValue(), console),
+                        id,
+                        "%" + id + "%", // TODO do I need these '%'?
+                        material));
+            });
         }
     }
 

@@ -58,15 +58,15 @@ public class Config {
 
         // POP UP TOWER
         ConfigValue.tower_icon_name = config.getString("PopUpTower.Icon-Name");
-        ConfigValue.tower_icon_material = parseConfigMaterial(config, "PopUpTower.Icon-Type", ConfigValue.tower_icon_material);
-        ConfigValue.tower_block_material = parseConfigMaterial(config, "PopUpTower.Block-Type", ConfigValue.tower_block_material);
+        ConfigValue.tower_icon_material = parseItemStack(config.getString("PopUpTower.Icon-Type"), ConfigValue.tower_icon_material);
+        ConfigValue.tower_block_material = parseMaterial(config.getString("PopUpTower.Block-Type"), ConfigValue.tower_block_material);
         ConfigValue.tower_block_place_interval = config.getInt("PopUpTower.Block-Place-Interval", ConfigValue.tower_block_place_interval);
         ConfigValue.tower_block_placed_per_interval = config.getInt("PopUpTower.Blocks-Placed-Per-Interval", ConfigValue.tower_block_placed_per_interval);
         ConfigValue.tower_place_place_sound = parseConfigSound(config, "PopUpTower.Sound", ConfigValue.tower_place_place_sound);
 
         // SILVERFISH
         ConfigValue.silverfish_icon_name = config.getString("Silverfish.Icon-Name");
-        ConfigValue.silverfish_icon_material = parseConfigMaterial(config, "Silverfish.Icon-Type", ConfigValue.silverfish_icon_material);
+        ConfigValue.silverfish_icon_material = parseItemStack(config.getString("Silverfish.Icon-Type"), ConfigValue.silverfish_icon_material);
         ConfigValue.silverfish_life_duration = config.getInt("Silverfish.Life-Duration", ConfigValue.silverfish_life_duration);
 
         final List<String> silverfishNameTag = config.getStringList("Silverfish.Name-Tag");
@@ -75,16 +75,16 @@ public class Config {
 
         // EGG BRIDGER
         ConfigValue.egg_bridger_icon_name = config.getString("Egg-Bridger.Icon-Name");
-        ConfigValue.egg_bridger_icon_material = parseConfigMaterial(config, "Egg-Bridger.Icon-Type", ConfigValue.egg_bridger_icon_material);
-        ConfigValue.egg_bridger_block_material = parseConfigMaterial(config, "Egg-Bridger.Block-Type", ConfigValue.egg_bridger_block_material);
+        ConfigValue.egg_bridger_icon_material = parseItemStack(config.getString("Egg-Bridger.Icon-Type"), ConfigValue.egg_bridger_icon_material);
+        ConfigValue.egg_bridger_block_material = parseMaterial(config.getString("Egg-Bridger.Block-Type"), ConfigValue.egg_bridger_block_material);
         ConfigValue.egg_bridger_max_length = config.getInt("Egg-Bridger.Max-Length", ConfigValue.egg_bridger_max_length);
         ConfigValue.egg_bridger_max_y_variation = config.getInt("Egg-Bridger.Max-Y-Variation", ConfigValue.egg_bridger_max_y_variation);
         ConfigValue.egg_bridger_place_sound = parseConfigSound(config, "Egg-Bridger.Sound", ConfigValue.egg_bridger_place_sound);
 
         // ICE BRIDGER
         ConfigValue.ice_bridger_icon_name = config.getString("Ice-Bridger.Icon-Name");
-        ConfigValue.ice_bridger_icon_material = parseConfigMaterial(config, "Ice-Bridger.Icon-Type", ConfigValue.ice_bridger_material);
-        ConfigValue.ice_bridger_material = parseConfigMaterial(config, "Ice-Bridger.Block-Type", ConfigValue.ice_bridger_material);
+        ConfigValue.ice_bridger_icon_material = parseItemStack(config.getString("Ice-Bridger.Icon-Type"), ConfigValue.ice_bridger_material);
+        ConfigValue.ice_bridger_material = parseMaterial(config.getString("Ice-Bridger.Block-Type"), ConfigValue.ice_bridger_material);
         ConfigValue.ice_bridger_max_distance = config.getInt("Ice-Bridger.Max-Distance", ConfigValue.ice_bridger_max_distance);
 
         // COMMAND ITEMS
@@ -96,7 +96,7 @@ public class Config {
                 for (String id : playerSection.getKeys(false)) {
                     final String materialName = playerSection.getString(id + ".Material");
                     final String command = playerSection.getString(id + ".Command");
-                    ConfigValue.command_item_player_commands.put(id, new Pair<>(parseItemStack(materialName), command));
+                    ConfigValue.command_item_player_commands.put(id, new Pair<>(parseItemStack(materialName, Material.STONE), command));
                 }
             }
 
@@ -106,7 +106,7 @@ public class Config {
                 for (String id : consoleSection.getKeys(false)) {
                     final String materialName = consoleSection.getString(id + ".Material");
                     final String command = consoleSection.getString(id + ".Command");
-                    ConfigValue.command_item_console_commands.put(id, new Pair<>(parseItemStack(materialName), command));
+                    ConfigValue.command_item_console_commands.put(id, new Pair<>(parseItemStack(materialName, Material.STONE), command));
                 }
             }
         }
@@ -152,7 +152,7 @@ public class Config {
         config.addComment("Automatically builds you a tower");
         config.addComment("Note: Block-Place-Interval in ticks (20 ticks = 1 second)");
         config.set("PopUpTower.Icon-Name", ConfigValue.tower_icon_name);
-        config.set("PopUpTower.Icon-Type", ConfigValue.tower_icon_material.name());
+        config.set("PopUpTower.Icon-Type", Helper.get().composeItemStack(ConfigValue.tower_icon_material));
         config.set("PopUpTower.Block-Type", ConfigValue.tower_block_material.name());
         config.set("PopUpTower.Block-Place-Interval", ConfigValue.tower_block_place_interval);
         config.set("PopUpTower.Blocks-Placed-Per-Interval", ConfigValue.tower_block_placed_per_interval);
@@ -164,7 +164,7 @@ public class Config {
         config.addComment("Note: Life-Duration in ticks (20 ticks = 1 second)");
         config.addComment("Name-Tag Placeholders: {team-name} {team-color}");
         config.set("Silverfish.Icon-Name", ConfigValue.silverfish_icon_name);
-        config.set("Silverfish.Icon-Type", ConfigValue.silverfish_icon_material.name());
+        config.set("Silverfish.Icon-Type", Helper.get().composeItemStack(ConfigValue.silverfish_icon_material));
         config.set("Silverfish.Life-Duration", ConfigValue.silverfish_life_duration);
         config.set("Silverfish.Name-Tag", ConfigValue.silverfish_name_tag);
 
@@ -172,7 +172,7 @@ public class Config {
 
         config.addComment("Construct a bridger following the path of an egg");
         config.set("Egg-Bridger.Icon-Name", ConfigValue.egg_bridger_icon_name);
-        config.set("Egg-Bridger.Icon-Type", ConfigValue.egg_bridger_icon_material.name());
+        config.set("Egg-Bridger.Icon-Type", Helper.get().composeItemStack(ConfigValue.egg_bridger_icon_material));
         config.set("Egg-Bridger.Block-Type", ConfigValue.egg_bridger_block_material.name());
         config.set("Egg-Bridger.Max-Length", ConfigValue.egg_bridger_max_length);
         config.set("Egg-Bridger.Max-Y-Variation", ConfigValue.egg_bridger_max_y_variation);
@@ -250,24 +250,18 @@ public class Config {
         }
     }
 
-    private static ItemStack parseItemStack(String string){
-        final ItemStack stack = Helper.get().parseItemStack(string);
-        return stack != null ? stack : new ItemStack(Material.STONE);
+    private static ItemStack parseItemStack(String string, Material def){
+        return parseItemStack(string, new ItemStack(def));
     }
 
-    private static Material parseConfigMaterial(FileConfiguration config, String configPath, Material def){
-        final String configMaterial = config.getString(configPath);
+    private static ItemStack parseItemStack(String string, ItemStack def){
+        final ItemStack stack = Helper.get().parseItemStack(string);
+        return stack != null ? stack : new ItemStack(def);
+    }
 
-        if(configMaterial != null){
-            final Material material = Helper.get().getMaterialByName(configMaterial.toUpperCase());
-
-            if(material != null)
-                return material;
-            else
-                Console.printConfigWarning(configPath, "Cannot parse material " + configMaterial);
-        }
-
-        return def;
+    private static Material parseMaterial(String string, Material def){
+        final Material mat = Helper.get().getMaterialByName(string);
+        return mat != null ? mat : def;
     }
 
     private static Sound parseConfigSound(FileConfiguration config, String configPath, Sound def){
@@ -298,7 +292,7 @@ public class Config {
 
                 // remove the command '/' if there is one
                 final String command = idCommandString[2].startsWith("/") ? idCommandString[2].substring(1) : idCommandString[2];
-                final ItemStack itemStack = parseItemStack(idCommandString[1]);
+                final ItemStack itemStack = parseItemStack(idCommandString[1], Material.STONE);
 
                 idCommand.put(idCommandString[0], new Pair<>(itemStack, command));
             }

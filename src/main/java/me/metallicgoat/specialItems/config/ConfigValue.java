@@ -17,7 +17,7 @@ public class ConfigValue {
 
     // Tower
     public static String tower_icon_name = "PopUpTower";
-    public static Material tower_icon_material = Helper.get().getMaterialByName("CHEST");
+    public static ItemStack tower_icon_material = Helper.get().parseItemStack("CHEST");
     public static Material tower_block_material = Helper.get().getMaterialByName("WHITE_WOOL");
     public static int tower_block_place_interval = 1;
     public static int tower_block_placed_per_interval = 2;
@@ -25,7 +25,7 @@ public class ConfigValue {
 
     // Sliverfish
     public static String silverfish_icon_name = "Silverfish";
-    public static Material silverfish_icon_material = Helper.get().getMaterialByName("SNOWBALL");
+    public static ItemStack silverfish_icon_material = Helper.get().parseItemStack("SNOWBALL");
     public static int silverfish_life_duration = 400;
     public static List<String> silverfish_name_tag = Arrays.asList(
             "{team-color}&l{team-name} {team-color}[■ ■ ■ ■ ■]",
@@ -37,7 +37,7 @@ public class ConfigValue {
 
     // Egg Bridger
     public static String egg_bridger_icon_name = "EggBridger";
-    public static Material egg_bridger_icon_material = Helper.get().getMaterialByName("EGG");
+    public static ItemStack egg_bridger_icon_material = Helper.get().parseItemStack("EGG");
     public static Material egg_bridger_block_material = Helper.get().getMaterialByName("WHITE_WOOL");
     public static int egg_bridger_max_length = 30;
     public static int egg_bridger_max_y_variation = 18;
@@ -45,7 +45,7 @@ public class ConfigValue {
 
     // Ice Bridger
     public static String ice_bridger_icon_name = "IceBridger";
-    public static Material ice_bridger_icon_material = Helper.get().getMaterialByName("ICE");
+    public static ItemStack ice_bridger_icon_material = Helper.get().parseItemStack("ICE");
     public static Material ice_bridger_material = Helper.get().getMaterialByName("ICE");
     public static int ice_bridger_max_distance = 37;
 
