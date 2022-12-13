@@ -1,4 +1,4 @@
-package me.metallicgoat.specialItems.customitems.use.silverfish;
+package me.metallicgoat.specialItems.customitems.use;
 
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.Team;
@@ -42,9 +42,7 @@ public class SilverfishHandler extends CustomSpecialItemUseSession {
     }
 
     @Override
-    protected void handleStop() {
-
-    }
+    protected void handleStop() { }
 
     public static void updateDisplayName(Team team, Silverfish silverfish){
 

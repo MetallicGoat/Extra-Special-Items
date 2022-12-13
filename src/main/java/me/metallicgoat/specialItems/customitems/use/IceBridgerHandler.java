@@ -1,4 +1,4 @@
-package me.metallicgoat.specialItems.customitems.use.icebridge;
+package me.metallicgoat.specialItems.customitems.use;
 
 import de.marcely.bedwars.api.BedwarsAPI;
 import de.marcely.bedwars.api.arena.Arena;

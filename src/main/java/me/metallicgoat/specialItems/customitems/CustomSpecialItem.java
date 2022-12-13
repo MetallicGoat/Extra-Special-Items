@@ -6,12 +6,12 @@ import de.marcely.bedwars.api.game.specialitem.*;
 import de.marcely.bedwars.tools.Pair;
 import me.metallicgoat.specialItems.ExtraSpecialItemsPlugin;
 import me.metallicgoat.specialItems.config.ConfigValue;
-import me.metallicgoat.specialItems.customitems.use.commanditems.CommandItemHandler;
-import me.metallicgoat.specialItems.customitems.use.icebridge.IceBridgerHandler;
-import me.metallicgoat.specialItems.customitems.use.popuptower.TowerHandler;
-import me.metallicgoat.specialItems.customitems.use.silverfish.SilverfishHandler;
+import me.metallicgoat.specialItems.customitems.use.CommandItemHandler;
+import me.metallicgoat.specialItems.customitems.use.IceBridgerHandler;
+import me.metallicgoat.specialItems.customitems.use.TowerHandler;
+import me.metallicgoat.specialItems.customitems.use.SilverfishHandler;
 import me.metallicgoat.specialItems.utils.Console;
-import me.metallicgoat.specialItems.customitems.use.eggbridge.EggBridgerHandler;
+import me.metallicgoat.specialItems.customitems.use.EggBridgerHandler;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
