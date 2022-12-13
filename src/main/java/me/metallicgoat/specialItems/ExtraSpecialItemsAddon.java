@@ -1,8 +1,8 @@
 package me.metallicgoat.specialItems;
 
 import de.marcely.bedwars.api.BedwarsAddon;
-import me.metallicgoat.specialItems.items.eggbridge.PreventHatching;
-import me.metallicgoat.specialItems.items.silverfish.SilverfishThrow;
+import me.metallicgoat.specialItems.customitems.use.eggbridge.PreventHatching;
+import me.metallicgoat.specialItems.customitems.use.silverfish.SilverfishEventManager;
 import org.bukkit.plugin.PluginManager;
 
 public class ExtraSpecialItemsAddon extends BedwarsAddon {
@@ -19,7 +19,7 @@ public class ExtraSpecialItemsAddon extends BedwarsAddon {
         final PluginManager manager = plugin.getServer().getPluginManager();
 
         manager.registerEvents(new PreventHatching(), plugin);
-        manager.registerEvents(new SilverfishThrow(), plugin);
+        manager.registerEvents(new SilverfishEventManager(), plugin);
     }
 
     @Override

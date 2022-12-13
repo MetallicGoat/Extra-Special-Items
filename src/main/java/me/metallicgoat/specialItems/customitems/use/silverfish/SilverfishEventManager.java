@@ -1,13 +1,12 @@
-package me.metallicgoat.specialItems.items.silverfish;
+package me.metallicgoat.specialItems.customitems.use.silverfish;
 
 import de.marcely.bedwars.api.BedwarsAPI;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.event.arena.RoundEndEvent;
-import de.marcely.bedwars.api.event.player.PlayerUseSpecialItemEvent;
-import de.marcely.bedwars.api.game.specialitem.SpecialItemUseSession;
 import me.metallicgoat.specialItems.ExtraSpecialItemsPlugin;
 import me.metallicgoat.specialItems.config.ConfigValue;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -16,47 +15,28 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.*;
 import org.bukkit.scheduler.BukkitScheduler;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 
-public class SilverfishThrow implements Listener {
-    public static HashMap <Silverfish, Team> silverfishTeamHashMap = new HashMap<>();
-    private static final HashMap <Arena, Silverfish> arenaSilverfishHashMap = new HashMap<>();
-    private static final ArrayList<Snowball> snowballs = new ArrayList<>();
-
-    public static void throwSilverfish(PlayerUseSpecialItemEvent event, SpecialItemUseSession session) {
-        final Player player = event.getPlayer();
-
-        event.setTakingItem(true);
-        session.takeItem();
-
-        final Snowball snowball = player.launchProjectile(Snowball.class);
-        snowballs.add(snowball);
-
-        final BukkitScheduler scheduler = plugin().getServer().getScheduler();
-        scheduler.runTaskLater(plugin(), () -> snowballs.remove(snowball), 150L);
-
-        session.stop();
-    }
+public class SilverfishEventManager implements Listener {
 
     @EventHandler
     public void onProjectileHit(ProjectileHitEvent event){
-        if(event.getEntity().getType() == EntityType.SNOWBALL && snowballs.contains((Snowball) event.getEntity())){
+        if(event.getEntity().getType() == EntityType.SNOWBALL && SilverfishHandler.snowballs.contains((Snowball) event.getEntity())){
             final Player player = (Player) event.getEntity().getShooter();
             final Snowball snowball = (Snowball) event.getEntity();
             final Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(player);
 
-            if(arena != null && snowballs.contains(snowball)){
+            if(arena != null && SilverfishHandler.snowballs.contains(snowball)){
                 final Team team = arena.getPlayerTeam(player);
                 final Location loc = event.getEntity().getLocation();
                 final Silverfish silverfish = (Silverfish) loc.getWorld().spawnEntity(loc, EntityType.SILVERFISH);
 
-                assert team != null;
-                new UpdateDisplayName().setDisplayName(team, silverfish);
+                if(team == null)
+                    return;
 
-                silverfishTeamHashMap.put(silverfish, team);
-                arenaSilverfishHashMap.put(arena, silverfish);
+                SilverfishHandler.updateDisplayName(team, silverfish);
+                SilverfishHandler.silverfishTeamHashMap.put(silverfish, team);
+                SilverfishHandler.arenaSilverfishHashMap.put(arena, silverfish);
             }
         }
     }
@@ -68,10 +48,10 @@ public class SilverfishThrow implements Listener {
             final Player player = (Player) event.getTarget();
             final Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(player);
             final Silverfish silverfish = (Silverfish) event.getEntity();
-            if(arena != null && silverfishTeamHashMap.containsKey(silverfish)){
+            if(arena != null && SilverfishHandler.silverfishTeamHashMap.containsKey(silverfish)){
                 final Team team = arena.getPlayerTeam(player);
 
-                if(team != null && team.equals(silverfishTeamHashMap.get(silverfish))){
+                if(team != null && team.equals(SilverfishHandler.silverfishTeamHashMap.get(silverfish))){
                     event.setCancelled(true);
                 }
             }
@@ -83,14 +63,14 @@ public class SilverfishThrow implements Listener {
     public void onSilverfishDeath(EntityDeathEvent event){
         if(event.getEntity() instanceof Silverfish){
             final Silverfish silverfish = (Silverfish) event.getEntity();
-            silverfishTeamHashMap.remove(silverfish);
+            SilverfishHandler.silverfishTeamHashMap.remove(silverfish);
         }
     }
 
     @EventHandler
     public void onSilverfishBurrow(EntityChangeBlockEvent event){
         if (event.getEntity() instanceof Silverfish
-                && silverfishTeamHashMap.containsKey((Silverfish) event.getEntity())){
+                && SilverfishHandler.silverfishTeamHashMap.containsKey((Silverfish) event.getEntity())){
             event.setCancelled(true);
         }
     }
@@ -99,7 +79,7 @@ public class SilverfishThrow implements Listener {
     public void onEntityDamageEntity(EntityDamageByEntityEvent event){
         if(event.getDamager() instanceof Silverfish){
             final Silverfish silverfish = (Silverfish) event.getDamager();
-            if(silverfishTeamHashMap.containsKey(silverfish)){
+            if(SilverfishHandler.silverfishTeamHashMap.containsKey(silverfish)){
                 event.setDamage(1.5);
             }
         }else if(event.getDamager() instanceof Player && event.getEntity() instanceof Silverfish){
@@ -107,7 +87,7 @@ public class SilverfishThrow implements Listener {
             final Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(player);
             if(arena != null){
                 final Team playerTeam = arena.getPlayerTeam(player);
-                final Team silverfishTeam = silverfishTeamHashMap.get((Silverfish) event.getEntity());
+                final Team silverfishTeam = SilverfishHandler.silverfishTeamHashMap.get((Silverfish) event.getEntity());
                 if(playerTeam == silverfishTeam){
                     event.setCancelled(true);
                 }
@@ -118,12 +98,12 @@ public class SilverfishThrow implements Listener {
     @EventHandler
     public void onRoundEnd(RoundEndEvent event){
         final Arena arena = event.getArena();
-        arenaSilverfishHashMap.forEach((arena1, silverfish) -> {
+        SilverfishHandler.arenaSilverfishHashMap.forEach((arena1, silverfish) -> {
             if(arena == arena1){
-                silverfishTeamHashMap.remove(silverfish);
+                SilverfishHandler.silverfishTeamHashMap.remove(silverfish);
             }
         });
-        arenaSilverfishHashMap.remove(arena);
+        SilverfishHandler.arenaSilverfishHashMap.remove(arena);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -132,17 +112,12 @@ public class SilverfishThrow implements Listener {
         if(arenas != null && event.getEntity() instanceof Silverfish){
             event.setCancelled(false);
             final Silverfish silverfish = (Silverfish) event.getEntity();
-            final BukkitScheduler scheduler = plugin().getServer().getScheduler();
 
-            scheduler.runTaskLater(plugin(), () -> {
+            Bukkit.getScheduler().runTaskLater(ExtraSpecialItemsPlugin.getInstance(), () -> {
                 silverfish.remove();
-                silverfishTeamHashMap.remove(silverfish);
-                arenas.forEach(arena -> arenaSilverfishHashMap.remove(arena, silverfish));
+                SilverfishHandler.silverfishTeamHashMap.remove(silverfish);
+                arenas.forEach(arena -> SilverfishHandler.arenaSilverfishHashMap.remove(arena, silverfish));
             }, ConfigValue.silverfish_life_duration);
         }
-    }
-
-    private static ExtraSpecialItemsPlugin plugin(){
-        return ExtraSpecialItemsPlugin.getInstance();
     }
 }

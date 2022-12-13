@@ -1,4 +1,4 @@
-package me.metallicgoat.specialItems.items.popuptower;
+package me.metallicgoat.specialItems.customitems.use.popuptower;
 
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.Team;

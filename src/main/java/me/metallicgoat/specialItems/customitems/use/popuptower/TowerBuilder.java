@@ -1,4 +1,4 @@
-package me.metallicgoat.specialItems.items.popuptower;
+package me.metallicgoat.specialItems.customitems.use.popuptower;
 
 import de.marcely.bedwars.api.game.specialitem.SpecialItemUseSession;
 import de.marcely.bedwars.tools.Pair;
@@ -8,13 +8,13 @@ import org.bukkit.block.BlockFace;
 import java.util.ArrayDeque;
 import java.util.Queue;
 
-public class BuildTower {
+public class TowerBuilder {
 
     private final BlockFace direction;
     private final Block chest;
     private final Queue<Pair<Block, Boolean>> towerBlock = new ArrayDeque<>();
 
-    public BuildTower(Block chest, SpecialItemUseSession session, BlockFace direction) {
+    public TowerBuilder(Block chest, SpecialItemUseSession session, BlockFace direction) {
         this.direction = direction;
         this.chest = chest;
 

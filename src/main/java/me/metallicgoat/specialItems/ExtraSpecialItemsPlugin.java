@@ -1,17 +1,12 @@
 package me.metallicgoat.specialItems;
 
 import de.marcely.bedwars.api.BedwarsAPI;
-import de.marcely.bedwars.tools.Helper;
 import me.metallicgoat.specialItems.config.Config;
+import me.metallicgoat.specialItems.customitems.CustomSpecialItem;
 import me.metallicgoat.specialItems.utils.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 
 public class ExtraSpecialItemsPlugin extends JavaPlugin {
 
@@ -82,27 +77,6 @@ public class ExtraSpecialItemsPlugin extends JavaPlugin {
         }
 
         return true;
-    }
-
-    public boolean copyResource(String internalPath, File out) throws IOException {
-        if(!out.exists() || out.length() == 0){
-            try(InputStream is = getResource(internalPath)){
-                if(is == null){
-                    getLogger().warning("Your plugin seems to be broken (Failed to find internal file " + internalPath + ")");
-                    return false;
-                }
-
-                out.createNewFile();
-
-                try(FileOutputStream os = new FileOutputStream(out)){
-                    Helper.get().copy(is, os);
-                }
-
-                return true;
-            }
-        }
-
-        return false;
     }
 
     private void log(String ...args) {

@@ -1,4 +1,4 @@
-package me.metallicgoat.specialItems.items.popuptower;
+package me.metallicgoat.specialItems.customitems.experimental;
 
 import de.marcely.bedwars.api.event.player.PlayerUseSpecialItemEvent;
 import de.marcely.bedwars.api.game.specialitem.SpecialItemUseHandler;
@@ -6,9 +6,11 @@ import de.marcely.bedwars.api.game.specialitem.SpecialItemUseSession;
 import me.metallicgoat.specialItems.ExtraSpecialItemsPlugin;
 import org.bukkit.plugin.Plugin;
 
-public class TowerHandler {
+public class FloodEmpty {
 
-    public static SpecialItemUseHandler getPopUpTowerHandler(){
+    public static SpecialItemUseHandler getFloodEmptyHandler(){
+        System.out.println("Get Empty Handler");
+
         return new SpecialItemUseHandler() {
             @Override
             public Plugin getPlugin() {
@@ -16,14 +18,16 @@ public class TowerHandler {
             }
 
             @Override
-            public SpecialItemUseSession openSession(PlayerUseSpecialItemEvent event) {
-                final SpecialItemUseSession session = new SpecialItemUseSession(event) {
+            public SpecialItemUseSession openSession(PlayerUseSpecialItemEvent e) {
+                final SpecialItemUseSession session = new SpecialItemUseSession(e) {
                     @Override
                     protected void handleStop() {}
                 };
 
-                TowerPlace towerPlace = new TowerPlace();
-                towerPlace.buildTower(event, session);
+                session.takeItem();
+                System.out.println("Test");
+
+                FloodEmptyTask.flood(e, session, e.getClickedBlock());
 
                 return session;
             }

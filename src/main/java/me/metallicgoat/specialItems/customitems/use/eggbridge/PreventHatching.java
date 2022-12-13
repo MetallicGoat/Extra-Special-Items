@@ -1,4 +1,4 @@
-package me.metallicgoat.specialItems.items.eggbridge;
+package me.metallicgoat.specialItems.customitems.use.eggbridge;
 
 import de.marcely.bedwars.api.BedwarsAPI;
 import de.marcely.bedwars.api.arena.Arena;

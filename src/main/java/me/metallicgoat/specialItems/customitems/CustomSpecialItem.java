@@ -1,19 +1,21 @@
-package me.metallicgoat.specialItems;
+package me.metallicgoat.specialItems.customitems;
 
 import de.marcely.bedwars.api.GameAPI;
+import de.marcely.bedwars.api.event.player.PlayerUseSpecialItemEvent;
 import de.marcely.bedwars.api.game.specialitem.*;
 import de.marcely.bedwars.tools.Pair;
+import me.metallicgoat.specialItems.ExtraSpecialItemsPlugin;
 import me.metallicgoat.specialItems.config.ConfigValue;
-import me.metallicgoat.specialItems.items.commanditems.CommandItemHandler;
+import me.metallicgoat.specialItems.customitems.use.commanditems.CommandItemHandler;
+import me.metallicgoat.specialItems.customitems.use.icebridge.IceBridgerHandler;
+import me.metallicgoat.specialItems.customitems.use.popuptower.TowerHandler;
+import me.metallicgoat.specialItems.customitems.use.silverfish.SilverfishHandler;
 import me.metallicgoat.specialItems.utils.Console;
-import me.metallicgoat.specialItems.items.eggbridge.EggBridgerHandler;
-import me.metallicgoat.specialItems.items.icebridge.IceBridgerHandler;
-import me.metallicgoat.specialItems.items.popuptower.TowerHandler;
-import me.metallicgoat.specialItems.items.silverfish.SilverfishHandler;
+import me.metallicgoat.specialItems.customitems.use.eggbridge.EggBridgerHandler;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
-import java.util.List;
+import java.util.function.Function;
 
 public class CustomSpecialItem {
 
@@ -23,12 +25,12 @@ public class CustomSpecialItem {
     private final ItemStack itemStack;
 
     public CustomSpecialItem(
-            SpecialItemUseHandler handler,
+            Function<PlayerUseSpecialItemEvent, CustomSpecialItemUseSession> factory,
             String itemId,
             String messagesFileId,
             ItemStack itemStack){
 
-        this.handler = handler;
+        this.handler = new CustomSpecialItemUseHandler(factory);
         this.itemId = itemId;
         this.messagesFileId = messagesFileId;
         this.itemStack = itemStack;
@@ -52,28 +54,35 @@ public class CustomSpecialItem {
 
     public static void registerAll(){
         register(new CustomSpecialItem(
-                EggBridgerHandler.getEggBridgeHandler(),
+                EggBridgerHandler::new,
                 "egg-bridger",
                 ConfigValue.egg_bridger_icon_name,
                 ConfigValue.egg_bridger_icon_material));
-
         register(new CustomSpecialItem(
-                IceBridgerHandler.getIceBridgeHandler(),
+                IceBridgerHandler::new,
                 "ice-bridger",
                 ConfigValue.ice_bridger_icon_name,
                 ConfigValue.ice_bridger_icon_material));
 
         register(new CustomSpecialItem(
-                TowerHandler.getPopUpTowerHandler(),
+                TowerHandler::new,
                 "tower",
                 ConfigValue.tower_icon_name,
                 ConfigValue.tower_icon_material));
 
         register(new CustomSpecialItem(
-                SilverfishHandler.getSilverfishHandler(),
+                SilverfishHandler::new,
                 "silverfish",
                 ConfigValue.silverfish_icon_name,
                 ConfigValue.silverfish_icon_material));
+
+        /*
+        register(new CustomSpecialItem(
+                FloodEmpty.getFloodEmptyHandler(),
+                "flooder",
+                "Flood Filler",
+                new ItemStack(Material.FLINT)));
+         */
 
         if(ConfigValue.command_item_enabled){
 
@@ -87,7 +96,7 @@ public class CustomSpecialItem {
             map.forEach((id, materialStringPair) -> {
                 final ItemStack material = materialStringPair.getKey();
                 register(new CustomSpecialItem(
-                        CommandItemHandler.getCustomItemHandler(materialStringPair.getValue(), console),
+                        (event -> new CommandItemHandler(event, materialStringPair.getValue(), console)),
                         id,
                         "%" + id + "%", // TODO do I need these '%'?
                         material));

@@ -1,44 +1,43 @@
-package me.metallicgoat.specialItems.items.icebridge;
+package me.metallicgoat.specialItems.customitems.use.icebridge;
 
 import de.marcely.bedwars.api.BedwarsAPI;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.ArenaStatus;
 import de.marcely.bedwars.api.event.player.PlayerUseSpecialItemEvent;
-import de.marcely.bedwars.api.game.specialitem.SpecialItemUseSession;
 import de.marcely.bedwars.tools.Helper;
 import me.metallicgoat.specialItems.ExtraSpecialItemsPlugin;
 import me.metallicgoat.specialItems.config.ConfigValue;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.World;
+import me.metallicgoat.specialItems.customitems.CustomSpecialItemUseSession;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class IceBridgeUse {
+public class IceBridgerHandler extends CustomSpecialItemUseSession {
 
     private BukkitTask task;
 
-    public void createIceBridge(PlayerUseSpecialItemEvent e, SpecialItemUseSession session){
+    public IceBridgerHandler(PlayerUseSpecialItemEvent event) {
+        super(event);
+    }
 
-        e.setTakingItem(true);
-        session.takeItem();
+    @Override
+    public void run(PlayerUseSpecialItemEvent event) {
+        event.setTakingItem(true);
+        this.takeItem();
 
-        final Player player = e.getPlayer();
-        final Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(e.getPlayer());
-        final BukkitScheduler scheduler = plugin().getServer().getScheduler();
+        final Player player = event.getPlayer();
+        final Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(event.getPlayer());
 
         if(arena != null){
 
             final AtomicInteger i = new AtomicInteger(2);
             final Location l = player.getLocation();
 
-            task = scheduler.runTaskTimer(plugin(), () -> {
-                if(i.get() <= ConfigValue.ice_bridger_max_distance && session.isActive()){
+            task = Bukkit.getScheduler().runTaskTimer(ExtraSpecialItemsPlugin.getInstance(), () -> {
+                if(i.get() <= ConfigValue.ice_bridger_max_distance && this.isActive()){
 
                     final Location lookingStraight = new Location(l.getWorld(), l.getX(), l.getY(), l.getZ(), l.getYaw(), 0);
                     final int yaw = (int) l.getYaw() % 180;
@@ -70,21 +69,18 @@ public class IceBridgeUse {
                     }
                     i.getAndIncrement();
                 }else{
-                    session.stop();
+                    this.stop();
                     task.cancel();
                 }
-
             }, 0L, 2L);
-
         }
-
     }
+
     private void setIce(Arena arena, Block block){
         if(arena.canPlaceBlockAt(block.getLocation()) && block.getType() == Material.AIR){
             block.setType(ConfigValue.ice_bridger_material);
 
-            final BukkitScheduler scheduler = plugin().getServer().getScheduler();
-            scheduler.runTaskLater(plugin(), () -> {
+            Bukkit.getScheduler().runTaskLater(ExtraSpecialItemsPlugin.getInstance(), () -> {
                 if(arena.getStatus() == ArenaStatus.RUNNING) {
                     block.setType(Material.AIR);
                 }
@@ -92,7 +88,9 @@ public class IceBridgeUse {
         }
     }
 
-    private static ExtraSpecialItemsPlugin plugin(){
-        return ExtraSpecialItemsPlugin.getInstance();
+    @Override
+    protected void handleStop() {
+        if(task != null)
+            task.cancel();
     }
 }
