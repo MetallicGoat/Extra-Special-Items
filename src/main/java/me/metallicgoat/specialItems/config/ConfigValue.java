@@ -52,10 +52,10 @@ public class ConfigValue {
     // Command Item
     public static boolean command_item_enabled = false;
     public static HashMap<String, Pair<ItemStack, String>> command_item_player_commands = new HashMap<String, Pair<ItemStack, String>>(){{
-        put("player-example", new Pair<>(new ItemStack(Material.STONE), "a fancy player command"));
+        put("player-example", new Pair<>(new ItemStack(Material.STONE), "say a fancy player command"));
     }};
     public static HashMap<String, Pair<ItemStack, String>> command_item_console_commands = new HashMap<String, Pair<ItemStack, String>>(){{
-        put("console-example", new Pair<>(new ItemStack(Material.STONE), "a fancy console command"));
+        put("console-example", new Pair<>(new ItemStack(Material.STONE), "say a fancy console command"));
     }};
 
 }

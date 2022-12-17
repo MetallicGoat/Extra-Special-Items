@@ -4,6 +4,7 @@ import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.event.player.PlayerUseSpecialItemEvent;
 import me.metallicgoat.specialItems.customitems.CustomSpecialItemUseSession;
 import me.metallicgoat.specialItems.customitems.builders.TowerBuilder;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
@@ -24,7 +25,12 @@ public class TowerHandler extends CustomSpecialItemUseSession {
         final BlockFace blockFace = event.getClickedBlockFace();
 
         // Check if placeable
-        if(clicked == null || blockFace == null || blockFace == BlockFace.DOWN || !arena.canPlaceBlockAt(clicked.getRelative(blockFace))){
+        if(clicked == null ||
+                blockFace == null ||
+                blockFace == BlockFace.DOWN ||
+                clicked.getRelative(blockFace).getType() != Material.AIR ||
+                !arena.canPlaceBlockAt(clicked.getRelative(blockFace))) {
+
             event.setTakingItem(false);
             this.stop();
             return;

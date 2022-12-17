@@ -1,16 +1,12 @@
 package me.metallicgoat.specialItems.customitems.use;
 
 import de.marcely.bedwars.api.event.player.PlayerUseSpecialItemEvent;
-import de.marcely.bedwars.api.game.specialitem.SpecialItemUseHandler;
-import de.marcely.bedwars.api.game.specialitem.SpecialItemUseSession;
 import de.marcely.bedwars.api.message.Message;
 import de.marcely.bedwars.tools.Helper;
-import me.metallicgoat.specialItems.ExtraSpecialItemsPlugin;
 import me.metallicgoat.specialItems.customitems.CustomSpecialItemUseSession;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
 public class CommandItemHandler extends CustomSpecialItemUseSession {
 
@@ -22,25 +18,6 @@ public class CommandItemHandler extends CustomSpecialItemUseSession {
 
         this.command = command;
         this.console = console;
-    }
-
-    public static SpecialItemUseHandler getCustomItemHandler(String command, boolean console){
-        return new SpecialItemUseHandler() {
-            @Override
-            public Plugin getPlugin() {
-                return ExtraSpecialItemsPlugin.getInstance();
-            }
-
-            @Override
-            public SpecialItemUseSession openSession(PlayerUseSpecialItemEvent event) {
-                final SpecialItemUseSession session = new SpecialItemUseSession(event) {
-                    @Override
-                    protected void handleStop() {}
-                };
-
-                return session;
-            }
-        };
     }
 
     @Override
@@ -61,7 +38,7 @@ public class CommandItemHandler extends CustomSpecialItemUseSession {
                 .done();
 
         // run command
-        Bukkit.getServer().dispatchCommand(console ? Bukkit.getConsoleSender() : player, commandFormatted);
+        Bukkit.getServer().dispatchCommand(console ? Bukkit.getServer().getConsoleSender() : player, commandFormatted);
 
         this.stop();
     }

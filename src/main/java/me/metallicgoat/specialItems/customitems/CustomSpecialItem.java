@@ -85,7 +85,6 @@ public class CustomSpecialItem {
          */
 
         if(ConfigValue.command_item_enabled){
-
             loadCommandItems(ConfigValue.command_item_player_commands, false);
             loadCommandItems(ConfigValue.command_item_console_commands, true);
         }

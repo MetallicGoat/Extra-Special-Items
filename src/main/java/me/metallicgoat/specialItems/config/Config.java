@@ -88,10 +88,10 @@ public class Config {
         ConfigValue.ice_bridger_max_distance = config.getInt("Ice-Bridger.Max-Distance", ConfigValue.ice_bridger_max_distance);
 
         // COMMAND ITEMS
-        ConfigValue.command_item_enabled = config.getBoolean("Command-Items.Enabled");
+        ConfigValue.command_item_enabled = config.getBoolean("Custom-Items.Enabled");
         {
             ConfigValue.command_item_player_commands.clear();
-            final ConfigurationSection playerSection = config.getConfigurationSection("Command-Items.Player-Run");
+            final ConfigurationSection playerSection = config.getConfigurationSection("Custom-Items.Player-Run");
             if(playerSection != null) {
                 for (String id : playerSection.getKeys(false)) {
                     final String materialName = playerSection.getString(id + ".Material");
@@ -101,7 +101,7 @@ public class Config {
             }
 
             ConfigValue.command_item_console_commands.clear();
-            final ConfigurationSection consoleSection = config.getConfigurationSection("Command-Items.Console-Run");
+            final ConfigurationSection consoleSection = config.getConfigurationSection("Custom-Items.Console-Run");
             if(consoleSection != null) {
                 for (String id : consoleSection.getKeys(false)) {
                     final String materialName = consoleSection.getString(id + ".Material");
@@ -203,7 +203,7 @@ public class Config {
                 }
             } else {
                 config.set("Custom-Items.Player-Run.player-example.Material", "stone");
-                config.set("Custom-Items.Player-Run.player-example.Command", "a command that is run by a player");
+                config.set("Custom-Items.Player-Run.player-example.Command", "say a command that is run by a player");
             }
 
             if(!ConfigValue.command_item_console_commands.isEmpty()) {
@@ -213,8 +213,8 @@ public class Config {
                     config.set("Custom-Items.Console-Run." + itemId + ".Command", pair.getValue());
                 }
             } else {
-                config.set("Custom-Items.Player-Run.console-example.Material", "stone");
-                config.set("Custom-Items.Player-Run.console-example.Command", "a command that is run by a player");
+                config.set("Custom-Items.Console-Run.console-example.Material", "stone");
+                config.set("Custom-Items.Console-Run.console-example.Command", "say a command that is run by a console");
             }
         }
 
