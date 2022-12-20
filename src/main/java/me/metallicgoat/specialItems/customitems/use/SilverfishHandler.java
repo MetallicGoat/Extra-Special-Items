@@ -46,12 +46,13 @@ public class SilverfishHandler extends CustomSpecialItemUseSession {
 
     public static void updateDisplayName(Team team, Silverfish silverfish){
 
-        if(ConfigValue.silverfish_name_tag == null)
+        if(ConfigValue.silverfish_name_tag == null || ConfigValue.silverfish_name_tag.isEmpty())
             return;
 
         final String teamName = team.getDisplayName();
         final String color = team.getChatColor().toString();
         final int amountOfTags = ConfigValue.silverfish_name_tag.size();
+
         final long time = ConfigValue.silverfish_life_duration / amountOfTags;
 
         silverfish.setCustomNameVisible(true);
