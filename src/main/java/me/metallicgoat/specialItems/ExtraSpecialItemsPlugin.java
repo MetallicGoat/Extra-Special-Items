@@ -3,6 +3,7 @@ package me.metallicgoat.specialItems;
 import de.marcely.bedwars.api.BedwarsAPI;
 import me.metallicgoat.specialItems.config.Config;
 import me.metallicgoat.specialItems.customitems.CustomSpecialItem;
+import me.metallicgoat.specialItems.customitems.builders.TowerBuilder;
 import me.metallicgoat.specialItems.utils.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -37,7 +38,10 @@ public class ExtraSpecialItemsPlugin extends JavaPlugin {
                 "------------------------------"
         );
 
-        BedwarsAPI.onReady(CustomSpecialItem::registerAll);
+        BedwarsAPI.onReady(() -> {
+            CustomSpecialItem.registerAll();
+            TowerBuilder.init();
+        });
     }
 
     public static ExtraSpecialItemsPlugin getInstance() {

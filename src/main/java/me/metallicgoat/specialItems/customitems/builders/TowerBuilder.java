@@ -24,13 +24,18 @@ public class TowerBuilder {
 
     private BukkitTask task;
 
-    private final Material ladderMaterial = Helper.get().getMaterialByName("LADDER");
-    private final PersistentBlockData blockData = PersistentBlockData.fromMaterial(ConfigValue.tower_block_material);
+    private static Material ladderMaterial;
+    private static PersistentBlockData blockData;
 
     private final SpecialItemUseSession session;
     private final BlockFace direction;
     private final Block chest;
     private final Queue<Pair<Block, Boolean>> towerBlock = new ArrayDeque<>();
+
+    public static void init() {
+        ladderMaterial = Helper.get().getMaterialByName("LADDER");
+        blockData = PersistentBlockData.fromMaterial(ConfigValue.tower_block_material);
+    }
 
     public TowerBuilder(Block chest, SpecialItemUseSession session, BlockFace direction) {
         this.session = session;
@@ -159,9 +164,9 @@ public class TowerBuilder {
         addToQueue(2, 7, -3, false);
     }
 
-    private void addToQueue(int x, int height, int y, boolean ladder){
+    private void addToQueue(int x, int height, int y, boolean ladder) {
         Block block = null;
-        switch(direction) {
+        switch (direction) {
             case NORTH:
                 block = chest.getRelative(x, height, y);
                 break;
@@ -176,15 +181,14 @@ public class TowerBuilder {
                 break;
         }
 
-        if(block == null)
+        if (block == null)
             return;
 
-        Pair<Block, Boolean> pair = new Pair<>(block, ladder);
-        towerBlock.add(pair);
+        towerBlock.add(new Pair<>(block, ladder));
     }
 
-    public void build(){
-        if(session.getEvent() == null)
+    public void build() {
+        if (session.getEvent() == null)
             return;
 
         final Arena arena = session.getEvent().getArena();
@@ -249,7 +253,7 @@ public class TowerBuilder {
     }
 
     public void cancel() {
-        if(task != null)
+        if (task != null)
             task.cancel();
     }
 }

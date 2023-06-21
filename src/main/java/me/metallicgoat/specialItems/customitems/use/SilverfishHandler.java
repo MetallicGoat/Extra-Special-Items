@@ -52,7 +52,6 @@ public class SilverfishHandler extends CustomSpecialItemUseSession {
         final String teamName = team.getDisplayName();
         final String color = team.getChatColor().toString();
         final int amountOfTags = ConfigValue.silverfish_name_tag.size();
-
         final long time = ConfigValue.silverfish_life_duration / amountOfTags;
 
         silverfish.setCustomNameVisible(true);
