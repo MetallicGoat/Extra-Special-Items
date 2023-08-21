@@ -5,20 +5,20 @@ import me.metallicgoat.specialItems.customitems.Events;
 
 public class ExtraSpecialItemsAddon extends BedwarsAddon {
 
-    private final ExtraSpecialItemsPlugin plugin;
+  private final ExtraSpecialItemsPlugin plugin;
 
-    public ExtraSpecialItemsAddon(ExtraSpecialItemsPlugin plugin) {
-        super(plugin);
+  public ExtraSpecialItemsAddon(ExtraSpecialItemsPlugin plugin) {
+    super(plugin);
 
-        this.plugin = plugin;
-    }
+    this.plugin = plugin;
+  }
 
-    public void registerEvents() {
-        plugin.getServer().getPluginManager().registerEvents(new Events(), plugin);
-    }
+  public void registerEvents() {
+    plugin.getServer().getPluginManager().registerEvents(new Events(), plugin);
+  }
 
-    @Override
-    public String getName(){
-        return "ExtraSpecialItems";
-    }
+  @Override
+  public String getName() {
+    return "ExtraSpecialItems";
+  }
 }

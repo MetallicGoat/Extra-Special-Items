@@ -11,80 +11,82 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class ExtraSpecialItemsPlugin extends JavaPlugin {
 
-    public static final int MIN_MBEDWARS_API_VER = 15;
-    public static final String MIN_MBEDWARS_VER_NAME = "5.1";
+  public static final int MIN_MBEDWARS_API_VER = 15;
+  public static final String MIN_MBEDWARS_VER_NAME = "5.1";
 
-    private static ExtraSpecialItemsAddon addon;
-    private static ExtraSpecialItemsPlugin instance;
+  private static ExtraSpecialItemsAddon addon;
+  private static ExtraSpecialItemsPlugin instance;
 
-    public void onEnable() {
-        instance = this;
+  public static ExtraSpecialItemsPlugin getInstance() {
+    return instance;
+  }
 
-        if(!checkMBedwars()) return;
-        if(!registerAddon()) return;
+  public static ExtraSpecialItemsAddon getAddon() {
+    return addon;
+  }
 
-        new Metrics(this, 14359);
+  public void onEnable() {
+    instance = this;
 
-        addon.registerEvents();
-        Config.load();
+    if (!checkMBedwars())
+      return;
+    if (!registerAddon())
+      return;
 
-        final PluginDescriptionFile pdf = this.getDescription();
+    new Metrics(this, 14359);
 
-        log(
-                "------------------------------",
-                pdf.getName() + " For MBedwars",
-                "By: " + pdf.getAuthors(),
-                "Version: " + pdf.getVersion(),
-                "------------------------------"
-        );
+    addon.registerEvents();
+    Config.load();
 
-        BedwarsAPI.onReady(() -> {
-            CustomSpecialItem.registerAll();
-            TowerBuilder.init();
-        });
+    final PluginDescriptionFile pdf = this.getDescription();
+
+    log(
+        "------------------------------",
+        pdf.getName() + " For MBedwars",
+        "By: " + pdf.getAuthors(),
+        "Version: " + pdf.getVersion(),
+        "------------------------------"
+    );
+
+    BedwarsAPI.onReady(() -> {
+      CustomSpecialItem.registerAll();
+      TowerBuilder.init();
+    });
+  }
+
+  private boolean checkMBedwars() {
+    try {
+      final Class<?> apiClass = Class.forName("de.marcely.bedwars.api.BedwarsAPI");
+      final int apiVersion = (int) apiClass.getMethod("getAPIVersion").invoke(null);
+
+      if (apiVersion < MIN_MBEDWARS_API_VER)
+        throw new IllegalStateException();
+
+    } catch (Exception e) {
+      getLogger().warning("Sorry, your installed version of MBedwars is not supported. Please install at least v" + MIN_MBEDWARS_VER_NAME);
+      Bukkit.getPluginManager().disablePlugin(this);
+
+      return false;
     }
 
-    public static ExtraSpecialItemsPlugin getInstance() {
-        return instance;
+    return true;
+  }
+
+  private boolean registerAddon() {
+    addon = new ExtraSpecialItemsAddon(this);
+
+    if (!addon.register()) {
+      getLogger().warning("It seems like this addon has already been loaded. Please delete duplicates and try again.");
+      Bukkit.getPluginManager().disablePlugin(this);
+
+      return false;
     }
 
-    public static ExtraSpecialItemsAddon getAddon() {
-        return addon;
-    }
+    return true;
+  }
 
-    private boolean checkMBedwars(){
-        try{
-            final Class<?> apiClass = Class.forName("de.marcely.bedwars.api.BedwarsAPI");
-            final int apiVersion = (int) apiClass.getMethod("getAPIVersion").invoke(null);
-
-            if(apiVersion < MIN_MBEDWARS_API_VER)
-                throw new IllegalStateException();
-
-        } catch(Exception e) {
-            getLogger().warning("Sorry, your installed version of MBedwars is not supported. Please install at least v" + MIN_MBEDWARS_VER_NAME);
-            Bukkit.getPluginManager().disablePlugin(this);
-
-            return false;
-        }
-
-        return true;
-    }
-
-    private boolean registerAddon(){
-        addon = new ExtraSpecialItemsAddon(this);
-
-        if(!addon.register()){
-            getLogger().warning("It seems like this addon has already been loaded. Please delete duplicates and try again.");
-            Bukkit.getPluginManager().disablePlugin(this);
-
-            return false;
-        }
-
-        return true;
-    }
-
-    private void log(String ...args) {
-        for(String s : args)
-            getLogger().info(s);
-    }
+  private void log(String... args) {
+    for (String s : args)
+      getLogger().info(s);
+  }
 }

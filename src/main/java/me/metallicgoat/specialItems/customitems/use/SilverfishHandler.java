@@ -4,6 +4,8 @@ import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.event.player.PlayerUseSpecialItemEvent;
 import de.marcely.bedwars.api.message.Message;
+import java.util.ArrayList;
+import java.util.HashMap;
 import me.metallicgoat.specialItems.ExtraSpecialItemsPlugin;
 import me.metallicgoat.specialItems.config.ConfigValue;
 import me.metallicgoat.specialItems.customitems.CustomSpecialItemUseSession;
@@ -13,72 +15,70 @@ import org.bukkit.entity.Silverfish;
 import org.bukkit.entity.Snowball;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 public class SilverfishHandler extends CustomSpecialItemUseSession {
 
-    public static HashMap<Silverfish, Team> silverfishTeamHashMap = new HashMap<>();
-    public static final HashMap <Arena, Silverfish> arenaSilverfishHashMap = new HashMap<>();
-    public static final ArrayList<Snowball> snowballs = new ArrayList<>();
+  public static final HashMap<Arena, Silverfish> arenaSilverfishHashMap = new HashMap<>();
+  public static final ArrayList<Snowball> snowballs = new ArrayList<>();
+  public static HashMap<Silverfish, Team> silverfishTeamHashMap = new HashMap<>();
 
-    public SilverfishHandler(PlayerUseSpecialItemEvent event) {
-        super(event);
-    }
+  public SilverfishHandler(PlayerUseSpecialItemEvent event) {
+    super(event);
+  }
 
-    @Override
-    public void run(PlayerUseSpecialItemEvent event) {
-        final Player player = event.getPlayer();
+  public static void updateDisplayName(Team team, Silverfish silverfish) {
 
-        event.setTakingItem(true);
-        this.takeItem();
+    if (ConfigValue.silverfish_name_tag == null || ConfigValue.silverfish_name_tag.isEmpty())
+      return;
 
-        final Snowball snowball = player.launchProjectile(Snowball.class);
-        snowballs.add(snowball);
+    final String teamName = team.getDisplayName();
+    final String color = team.getChatColor().toString();
+    final int amountOfTags = ConfigValue.silverfish_name_tag.size();
+    final long time = ConfigValue.silverfish_life_duration / amountOfTags;
 
-        Bukkit.getScheduler().runTaskLater(ExtraSpecialItemsPlugin.getInstance(), () -> snowballs.remove(snowball), 150L);
+    silverfish.setCustomNameVisible(true);
 
-        this.stop(); // TODO dont stop here
-    }
+    new BukkitRunnable() {
+      int i = 0;
 
-    @Override
-    protected void handleStop() { }
+      @Override
+      public void run() {
+        if (silverfishTeamHashMap.containsKey(silverfish) && !silverfish.isDead()) {
+          if (i < amountOfTags) {
+            final String unformattedDisplayName = ConfigValue.silverfish_name_tag.get(i);
+            final String displayName = Message.build(unformattedDisplayName != null ? unformattedDisplayName : "")
+                .placeholder("team-color", color)
+                .placeholder("team-name", teamName)
+                .done();
 
-    public static void updateDisplayName(Team team, Silverfish silverfish){
-
-        if(ConfigValue.silverfish_name_tag == null || ConfigValue.silverfish_name_tag.isEmpty())
+            silverfish.setCustomName(displayName);
+          } else {
+            cancel();
             return;
+          }
+          i++;
+        } else {
+          cancel();
+        }
+      }
+    }.runTaskTimer(ExtraSpecialItemsPlugin.getInstance(), 0L, time);
+  }
 
-        final String teamName = team.getDisplayName();
-        final String color = team.getChatColor().toString();
-        final int amountOfTags = ConfigValue.silverfish_name_tag.size();
-        final long time = ConfigValue.silverfish_life_duration / amountOfTags;
+  @Override
+  public void run(PlayerUseSpecialItemEvent event) {
+    final Player player = event.getPlayer();
 
-        silverfish.setCustomNameVisible(true);
+    event.setTakingItem(true);
+    this.takeItem();
 
-        new BukkitRunnable() {
-            int i = 0;
+    final Snowball snowball = player.launchProjectile(Snowball.class);
+    snowballs.add(snowball);
 
-            @Override
-            public void run(){
-                if(silverfishTeamHashMap.containsKey(silverfish) && !silverfish.isDead()){
-                    if (i < amountOfTags) {
-                        final String unformattedDisplayName = ConfigValue.silverfish_name_tag.get(i);
-                        final String displayName = Message.build(unformattedDisplayName != null ? unformattedDisplayName : "")
-                                .placeholder("team-color", color)
-                                .placeholder("team-name", teamName)
-                                .done();
+    Bukkit.getScheduler().runTaskLater(ExtraSpecialItemsPlugin.getInstance(), () -> snowballs.remove(snowball), 150L);
 
-                        silverfish.setCustomName(displayName);
-                    }else{
-                        cancel();
-                        return;
-                    }
-                    i++;
-                }else{
-                    cancel();
-                }
-            }
-        }.runTaskTimer(ExtraSpecialItemsPlugin.getInstance(), 0L, time);
-    }
+    this.stop(); // TODO dont stop here
+  }
+
+  @Override
+  protected void handleStop() {
+  }
 }
