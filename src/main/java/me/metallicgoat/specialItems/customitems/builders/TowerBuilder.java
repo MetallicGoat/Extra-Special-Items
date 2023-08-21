@@ -3,11 +3,9 @@ package me.metallicgoat.specialItems.customitems.builders;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.game.specialitem.SpecialItemUseSession;
-import de.marcely.bedwars.tools.Helper;
+import de.marcely.bedwars.tools.NMSHelper;
 import de.marcely.bedwars.tools.Pair;
 import de.marcely.bedwars.tools.PersistentBlockData;
-import java.util.ArrayDeque;
-import java.util.Queue;
 import me.metallicgoat.specialItems.ExtraSpecialItemsPlugin;
 import me.metallicgoat.specialItems.config.ConfigValue;
 import org.bukkit.Bukkit;
@@ -16,12 +14,15 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
-import org.bukkit.material.Ladder;
+import org.bukkit.block.data.type.Ladder;
 import org.bukkit.scheduler.BukkitTask;
+
+import java.util.ArrayDeque;
+import java.util.Queue;
 
 public class TowerBuilder {
 
-  private static Material ladderMaterial;
+  private static boolean placeLadderLegacy;
   private static PersistentBlockData blockData;
   private final SpecialItemUseSession session;
   private final BlockFace direction;
@@ -156,7 +157,7 @@ public class TowerBuilder {
   }
 
   public static void init() {
-    ladderMaterial = Helper.get().getMaterialByName("LADDER");
+    placeLadderLegacy = NMSHelper.get().getVersion() < 13;
     blockData = PersistentBlockData.fromMaterial(ConfigValue.tower_block_material);
   }
 
@@ -214,7 +215,7 @@ public class TowerBuilder {
         // Is block inside region
         if (arena.canPlaceBlockAt(block.getLocation())) {
           block.getLocation().getWorld().playSound(block.getLocation(), ConfigValue.tower_place_place_sound, 1, 1);
-          placeBlock(arena, Boolean.TRUE.equals(blockBooleanPair.getValue()), block, color);
+          placeBlock(arena, blockBooleanPair.getValue(), block, color);
         }
       }
 
@@ -222,7 +223,6 @@ public class TowerBuilder {
   }
 
   private void placeBlock(Arena arena, boolean isLadder, Block block, DyeColor color) {
-
     // Re-Dye
     if (ConfigValue.dye_tower_ukraine)
       color = block.getY() - chest.getY() > 3 ? DyeColor.BLUE : DyeColor.YELLOW;
@@ -232,19 +232,24 @@ public class TowerBuilder {
       final PersistentBlockData data = blockData.getDyedData(color);
       data.place(block, true);
     } else {
-      if (ladderMaterial == null)
-        return;
+      block.setType(Material.LADDER);
 
-      block.setType(ladderMaterial);
+      // We do not want to initialize legacy material support (causes lag)
+      if (!placeLadderLegacy) {
+        final Ladder ladder = (Ladder) block.getBlockData();
+        ladder.setFacing(direction);
+        block.setBlockData(ladder);
 
-      if (block.getType() == ladderMaterial) {
+      } else {
         final BlockState state = block.getState();
-        final Ladder lad = new Ladder();
-        lad.setFacingDirection(direction.getOppositeFace());
-        state.setData(lad);
+        final org.bukkit.material.Ladder legacyLadder = new org.bukkit.material.Ladder();
+        legacyLadder.setFacingDirection(direction.getOppositeFace());
+        state.setData(legacyLadder);
         state.update();
+
       }
     }
+
     arena.setBlockPlayerPlaced(block, true);
   }
 

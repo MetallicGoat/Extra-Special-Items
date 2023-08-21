@@ -65,11 +65,10 @@ public class SilverfishHandler extends CustomSpecialItemUseSession {
 
   @Override
   public void run(PlayerUseSpecialItemEvent event) {
-    final Player player = event.getPlayer();
-
     event.setTakingItem(true);
     this.takeItem();
 
+    final Player player = event.getPlayer();
     final Snowball snowball = player.launchProjectile(Snowball.class);
     snowballs.add(snowball);
 
