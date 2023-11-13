@@ -26,7 +26,6 @@ public class SilverfishHandler extends CustomSpecialItemUseSession {
   }
 
   public static void updateDisplayName(Team team, Silverfish silverfish) {
-
     if (ConfigValue.silverfish_name_tag == null || ConfigValue.silverfish_name_tag.isEmpty())
       return;
 
@@ -65,7 +64,6 @@ public class SilverfishHandler extends CustomSpecialItemUseSession {
 
   @Override
   public void run(PlayerUseSpecialItemEvent event) {
-    event.setTakingItem(true);
     this.takeItem();
 
     final Player player = event.getPlayer();

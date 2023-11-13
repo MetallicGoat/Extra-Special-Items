@@ -37,7 +37,6 @@ public class TowerHandler extends CustomSpecialItemUseSession {
     }
 
     // Take item
-    event.setTakingItem(true);
     this.takeItem();
 
     final Block relative = clicked.getRelative(blockFace);

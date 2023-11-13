@@ -28,7 +28,6 @@ public class IceBridgerHandler extends CustomSpecialItemUseSession {
 
   @Override
   public void run(PlayerUseSpecialItemEvent event) {
-    event.setTakingItem(true);
     this.takeItem();
 
     final Player player = event.getPlayer();
