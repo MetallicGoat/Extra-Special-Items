@@ -1,65 +1,34 @@
 package me.metallicgoat.specialItems.customitems.use;
 
+import de.marcely.bedwars.api.BedwarsAPI;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.event.player.PlayerUseSpecialItemEvent;
 import de.marcely.bedwars.api.message.Message;
-import java.util.ArrayList;
-import java.util.HashMap;
 import me.metallicgoat.specialItems.ExtraSpecialItemsPlugin;
 import me.metallicgoat.specialItems.config.ConfigValue;
 import me.metallicgoat.specialItems.customitems.CustomSpecialItemUseSession;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Silverfish;
 import org.bukkit.entity.Snowball;
-import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.*;
+import org.bukkit.scheduler.BukkitTask;
 
-public class SilverfishHandler extends CustomSpecialItemUseSession {
+public class SilverfishHandler extends CustomSpecialItemUseSession implements Listener {
 
-  public static final HashMap<Arena, Silverfish> arenaSilverfishHashMap = new HashMap<>();
-  public static final ArrayList<Snowball> snowballs = new ArrayList<>();
-  public static HashMap<Silverfish, Team> silverfishTeamHashMap = new HashMap<>();
+  private Arena arena;
+  private Team team;
+  private Snowball snowball;
+  private Silverfish silverfish;
+  private BukkitTask task;
 
   public SilverfishHandler(PlayerUseSpecialItemEvent event) {
     super(event);
-  }
-
-  public static void updateDisplayName(Team team, Silverfish silverfish) {
-    if (ConfigValue.silverfish_name_tag == null || ConfigValue.silverfish_name_tag.isEmpty())
-      return;
-
-    final String teamName = team.getDisplayName();
-    final String color = team.getChatColor().toString();
-    final int amountOfTags = ConfigValue.silverfish_name_tag.size();
-    final long time = ConfigValue.silverfish_life_duration / amountOfTags;
-
-    silverfish.setCustomNameVisible(true);
-
-    new BukkitRunnable() {
-      int i = 0;
-
-      @Override
-      public void run() {
-        if (silverfishTeamHashMap.containsKey(silverfish) && !silverfish.isDead()) {
-          if (i < amountOfTags) {
-            final String unformattedDisplayName = ConfigValue.silverfish_name_tag.get(i);
-            final String displayName = Message.build(unformattedDisplayName != null ? unformattedDisplayName : "")
-                .placeholder("team-color", color)
-                .placeholder("team-name", teamName)
-                .done();
-
-            silverfish.setCustomName(displayName);
-          } else {
-            cancel();
-            return;
-          }
-          i++;
-        } else {
-          cancel();
-        }
-      }
-    }.runTaskTimer(ExtraSpecialItemsPlugin.getInstance(), 0L, time);
   }
 
   @Override
@@ -67,15 +36,121 @@ public class SilverfishHandler extends CustomSpecialItemUseSession {
     this.takeItem();
 
     final Player player = event.getPlayer();
-    final Snowball snowball = player.launchProjectile(Snowball.class);
-    snowballs.add(snowball);
 
-    Bukkit.getScheduler().runTaskLater(ExtraSpecialItemsPlugin.getInstance(), () -> snowballs.remove(snowball), 150L);
+    this.arena = event.getArena();
+    this.team = event.getArena().getPlayerTeam(player);
+    this.snowball = player.launchProjectile(Snowball.class);
+    this.task = Bukkit.getScheduler().runTaskLater(ExtraSpecialItemsPlugin.getInstance(), () -> snowball.remove(), 8 * 20L);
 
-    this.stop(); // TODO dont stop here
+    Bukkit.getPluginManager().registerEvents(this, ExtraSpecialItemsPlugin.getInstance());
+  }
+
+  private void startUpdatingDisplayName() {
+    if (ConfigValue.silverfish_name_tag == null || ConfigValue.silverfish_name_tag.isEmpty())
+      return;
+
+    final String teamName = team.getDisplayName();
+    final String color = team.getBungeeChatColor().toString();
+    final int amountOfTags = ConfigValue.silverfish_name_tag.size();
+    final long updateTime = ConfigValue.silverfish_life_duration / amountOfTags;
+
+    this.silverfish.setCustomNameVisible(true);
+
+    task = Bukkit.getScheduler().runTaskTimer(ExtraSpecialItemsPlugin.getInstance(), new Runnable() {
+      int i = 0;
+
+      @Override
+      public void run() {
+        if (!silverfish.isValid() || i >= amountOfTags) {
+          stop();
+          task.cancel();
+          return;
+        }
+
+        final String unformattedDisplayName = ConfigValue.silverfish_name_tag.get(i);
+        final String displayName = Message.build(unformattedDisplayName != null ? unformattedDisplayName : "")
+            .placeholder("team-color", color)
+            .placeholder("team-name", teamName)
+            .placeholder("sqr", "■")
+            .done();
+
+        silverfish.setCustomName(displayName);
+        i++;
+      }
+    }, 0, updateTime);
   }
 
   @Override
   protected void handleStop() {
+    HandlerList.unregisterAll(this);
+
+    if (this.task != null)
+      task.cancel();
+
+    if (this.snowball != null && this.snowball.isValid())
+      this.snowball.remove();
+
+    if (this.silverfish != null && this.silverfish.isValid())
+      this.silverfish.remove();
+
+  }
+
+  @EventHandler
+  public void onProjectileHit(ProjectileHitEvent event) {
+    if (event.getEntity() != this.snowball)
+      return;
+
+    // No point in removing the snowball
+    if (this.task != null)
+      this.task.cancel();
+
+    this.silverfish = (Silverfish) this.snowball.getWorld().spawnEntity(this.snowball.getLocation(), EntityType.SILVERFISH);
+
+    startUpdatingDisplayName();
+  }
+
+  @EventHandler
+  public void onEntityTarget(EntityTargetLivingEntityEvent event) {
+    if (event.getEntity() != this.snowball)
+      return;
+
+    if (!(event.getTarget() instanceof Player)) {
+      event.setCancelled(true);
+      return;
+    }
+
+    final Player player = (Player) event.getTarget();
+
+    // Player is on the same team or not actually playing
+    if (!this.arena.getPlayers().contains(player) || this.arena.getPlayerTeam(player) == this.team)
+      event.setCancelled(true);
+
+  }
+
+  @EventHandler
+  public void onSilverfishDeath(EntityDeathEvent event) {
+    if (event.getEntity() == this.silverfish)
+      stop();
+  }
+
+  @EventHandler
+  public void onSilverfishBurrow(EntityChangeBlockEvent event) {
+    if (event.getEntity() == this.silverfish)
+      event.setCancelled(true);
+  }
+
+  @EventHandler
+  public void onEntityDamageEntity(EntityDamageByEntityEvent event) {
+    if (event.getDamager() == this.silverfish) {
+      event.setDamage(1.5);
+
+    } else if (event.getEntity() == silverfish == event.getDamager() instanceof Player) {
+      final Player player = (Player) event.getDamager();
+      final Arena playerArena = BedwarsAPI.getGameAPI().getArenaByPlayer(player);
+
+      if (playerArena == null || this.arena != playerArena || arena.getPlayerTeam(player) == team)
+        event.setCancelled(true);
+
+    }
   }
 }
