@@ -1,7 +1,6 @@
 package me.metallicgoat.specialItems;
 
 import de.marcely.bedwars.api.BedwarsAddon;
-import me.metallicgoat.specialItems.customitems.Events;
 
 public class ExtraSpecialItemsAddon extends BedwarsAddon {
 
@@ -11,10 +10,6 @@ public class ExtraSpecialItemsAddon extends BedwarsAddon {
     super(plugin);
 
     this.plugin = plugin;
-  }
-
-  public void registerEvents() {
-    plugin.getServer().getPluginManager().registerEvents(new Events(), plugin);
   }
 
   @Override

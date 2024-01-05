@@ -5,8 +5,6 @@ import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.event.player.PlayerUseSpecialItemEvent;
 import de.marcely.bedwars.api.game.specialitem.SpecialItemUseSession;
 import de.marcely.bedwars.tools.PersistentBlockData;
-import java.util.ArrayList;
-import java.util.List;
 import me.metallicgoat.specialItems.ExtraSpecialItemsPlugin;
 import me.metallicgoat.specialItems.config.ConfigValue;
 import me.metallicgoat.specialItems.customitems.CustomSpecialItemUseSession;
@@ -17,12 +15,17 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Egg;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-public class EggBridgerHandler extends CustomSpecialItemUseSession {
+public class EggBridgerHandler extends CustomSpecialItemUseSession implements Listener {
 
   private BukkitTask task;
+  private Egg egg;
 
   public EggBridgerHandler(PlayerUseSpecialItemEvent event) {
     super(event);
@@ -36,74 +39,81 @@ public class EggBridgerHandler extends CustomSpecialItemUseSession {
     final Arena arena = event.getArena();
     final Team team = arena.getPlayerTeam(player);
     final DyeColor color = team != null ? team.getDyeColor() : DyeColor.WHITE;
-    final Egg egg = player.launchProjectile(Egg.class);
+    final PersistentBlockData data = PersistentBlockData.fromMaterial(ConfigValue.egg_bridger_block_material).getDyedData(color);
 
-    task = new BridgeBlockPlacerTask(egg, player.getLocation(), this, arena, color)
-        .runTaskTimer(ExtraSpecialItemsPlugin.getInstance(), 0L, 1L);
+    this.egg = player.launchProjectile(Egg.class);
+    this.task = new BridgeBlockPlacerTask(this.egg, player.getLocation(), this, arena, data).runTaskTimer(ExtraSpecialItemsPlugin.getInstance(), 0L, 1L);
   }
 
   @Override
   protected void handleStop() {
+    HandlerList.unregisterAll(this);
+
+    if (egg != null && egg.isValid())
+      egg.remove();
+
     if (task != null)
       task.cancel();
   }
 
-  static class BridgeBlockPlacerTask extends BukkitRunnable {
+  @EventHandler
+  public void onCreatureSpawn(PlayerEggThrowEvent event) {
+    if (event.getEgg() == egg)
+      event.setHatching(false);
+  }
 
+  private static class BridgeBlockPlacerTask extends BukkitRunnable {
     private final Egg egg;
     private final SpecialItemUseSession session;
     private final Arena arena;
-    private final DyeColor color;
+    private final PersistentBlockData data;
     private final Location playerLocation;
 
-    public BridgeBlockPlacerTask(Egg egg, Location playerLocation, SpecialItemUseSession session, Arena arena, DyeColor color) {
+    public BridgeBlockPlacerTask(Egg egg, Location playerLocation, SpecialItemUseSession session, Arena arena, PersistentBlockData data) {
       this.egg = egg;
       this.session = session;
       this.arena = arena;
-      this.color = color;
+      this.data = data;
       this.playerLocation = playerLocation;
     }
 
+    @Override
     public void run() {
-      final Location eggLocation = egg.getLocation();
+      final Location eggLocation = this.egg.getLocation();
 
-      if (!egg.isDead()
-          && playerLocation.distance(eggLocation) <= ConfigValue.egg_bridger_max_length
-          && playerLocation.getY() - eggLocation.getY() <= ConfigValue.egg_bridger_max_y_variation) {
+      if (!this.egg.isValid()
+          && this.playerLocation.distance(eggLocation) <= ConfigValue.egg_bridger_max_length
+          && this.playerLocation.getY() - eggLocation.getY() <= ConfigValue.egg_bridger_max_y_variation) {
 
+        // Slight delay so the egg does not fall on the new blocks
         Bukkit.getScheduler().runTaskLater(ExtraSpecialItemsPlugin.getInstance(), () -> {
-          if (playerLocation.distanceSquared(eggLocation.clone().add(0, 1, 0)) > 12.25D) {
+          if (!this.session.isActive())
+            return;
 
-            final List<Block> blocks = new ArrayList<>();
+          if (this.playerLocation.distanceSquared(eggLocation.clone().add(0, 1, 0)) > 12.25D) {
+            placeBlock(eggLocation.clone().subtract(0.0D, 2.0D, 0.0D).getBlock());
+            placeBlock(eggLocation.clone().subtract(1.0D, 2.0D, 0.0D).getBlock());
+            placeBlock(eggLocation.clone().subtract(0.0D, 2.0D, 1.0D).getBlock());
 
-            blocks.add(eggLocation.clone().subtract(0.0D, 2.0D, 0.0D).getBlock());
-            blocks.add(eggLocation.clone().subtract(1.0D, 2.0D, 0.0D).getBlock());
-            blocks.add(eggLocation.clone().subtract(0.0D, 2.0D, 1.0D).getBlock());
-
-            for (Block block : blocks)
-              placeBlock(block, color, arena);
-
-            eggLocation.getWorld().playSound(eggLocation, ConfigValue.egg_bridger_place_sound, 1, 1);
+            this.egg.getWorld().playSound(eggLocation, ConfigValue.egg_bridger_place_sound, 1, 1);
           }
         }, 2L);
 
       } else {
-        session.stop();
+        this.session.stop();
         cancel();
       }
     }
 
-    public void placeBlock(Block b, DyeColor color, Arena arena) {
+    private void placeBlock(Block block) {
       // Is block there?
-      if (!b.getType().equals(Material.AIR))
+      if (!block.getType().equals(Material.AIR))
         return;
 
       // Is block inside region
-      if (arena != null && arena.canPlaceBlockAt(b.getLocation())) {
-        final PersistentBlockData data = PersistentBlockData.fromMaterial(ConfigValue.egg_bridger_block_material).getDyedData(color);
-
-        data.place(b, true);
-        arena.setBlockPlayerPlaced(b, true);
+      if (this.arena != null && this.arena.canPlaceBlockAt(block.getLocation())) {
+        this.data.place(block, true);
+        this.arena.setBlockPlayerPlaced(block, true);
       }
     }
   }

@@ -35,7 +35,6 @@ public class ExtraSpecialItemsPlugin extends JavaPlugin {
 
     new Metrics(this, 14359);
 
-    addon.registerEvents();
     Config.load();
 
     final PluginDescriptionFile pdf = this.getDescription();

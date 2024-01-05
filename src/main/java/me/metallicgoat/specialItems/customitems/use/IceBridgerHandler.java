@@ -1,26 +1,20 @@
 package me.metallicgoat.specialItems.customitems.use;
 
-import de.marcely.bedwars.api.BedwarsAPI;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.ArenaStatus;
 import de.marcely.bedwars.api.event.player.PlayerUseSpecialItemEvent;
 import de.marcely.bedwars.tools.Helper;
-import java.util.concurrent.atomic.AtomicInteger;
 import me.metallicgoat.specialItems.ExtraSpecialItemsPlugin;
 import me.metallicgoat.specialItems.config.ConfigValue;
 import me.metallicgoat.specialItems.customitems.CustomSpecialItemUseSession;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
 public class IceBridgerHandler extends CustomSpecialItemUseSession {
 
   private BukkitTask task;
+  public Arena arena;
 
   public IceBridgerHandler(PlayerUseSpecialItemEvent event) {
     super(event);
@@ -30,62 +24,62 @@ public class IceBridgerHandler extends CustomSpecialItemUseSession {
   public void run(PlayerUseSpecialItemEvent event) {
     this.takeItem();
 
-    final Player player = event.getPlayer();
-    final Arena arena = BedwarsAPI.getGameAPI().getArenaByPlayer(event.getPlayer());
+    this.arena = event.getArena();
+    final Location playerLocation = event.getPlayer().getLocation().clone();
 
-    if (arena != null) {
+    playerLocation.setPitch(0);
 
-      final AtomicInteger i = new AtomicInteger(2);
-      final Location l = player.getLocation();
+    task = Bukkit.getScheduler().runTaskTimer(ExtraSpecialItemsPlugin.getInstance(), new Runnable() {
+      int i = 2;
 
-      task = Bukkit.getScheduler().runTaskTimer(ExtraSpecialItemsPlugin.getInstance(), () -> {
-        if (i.get() <= ConfigValue.ice_bridger_max_distance && this.isActive()) {
-
-          final Location lookingStraight = new Location(l.getWorld(), l.getX(), l.getY(), l.getZ(), l.getYaw(), 0);
-          final int yaw = (int) l.getYaw() % 180;
-          final Location blockLoc = lookingStraight.add(lookingStraight.getDirection().multiply(i.get())).add(0, -1, 0);
+      @Override
+      public void run() {
+        if (i <= ConfigValue.ice_bridger_max_distance && isActive()) {
+          final int yaw = (int) playerLocation.getYaw() % 180;
+          final Location blockLoc = playerLocation.add(playerLocation.getDirection().multiply(i)).add(0, -1, 0);
           final Block block = blockLoc.getBlock();
           final World world = block.getWorld();
           final Sound sound = Helper.get().getSoundByName("BLOCK_SNOW_BREAK"); // TODO move to config
 
-          setIce(arena, block);
+          setIce(block);
 
           if (sound != null)
             world.playSound(blockLoc, sound, 1, 1);
 
           if ((yaw < 45 || yaw >= 135) && (yaw < -135 || yaw >= -45)) {
-            setIce(arena, world.getBlockAt(blockLoc.add(1, 0, 0)));
-            setIce(arena, world.getBlockAt(blockLoc.add(-1, 0, 0)));
-            setIce(arena, world.getBlockAt(blockLoc.add(2, 0, 0)));
-            setIce(arena, world.getBlockAt(blockLoc.add(-2, 0, 0)));
-            setIce(arena, world.getBlockAt(blockLoc.add(3, 0, 0)));
-            setIce(arena, world.getBlockAt(blockLoc.add(-3, 0, 0)));
+            setIce(block.getRelative(1, 0, 0));
+            setIce(block.getRelative(-1, 0, 0));
+            setIce(block.getRelative(2, 0, 0));
+            setIce(block.getRelative(-2, 0, 0));
+            setIce(block.getRelative(3, 0, 0));
+            setIce(block.getRelative(-3, 0, 0));
 
           } else {
-            setIce(arena, world.getBlockAt(blockLoc.add(0, 0, 1)));
-            setIce(arena, world.getBlockAt(blockLoc.add(0, 0, -1)));
-            setIce(arena, world.getBlockAt(blockLoc.add(0, 0, 2)));
-            setIce(arena, world.getBlockAt(blockLoc.add(0, 0, -2)));
-            setIce(arena, world.getBlockAt(blockLoc.add(0, 0, 3)));
-            setIce(arena, world.getBlockAt(blockLoc.add(0, 0, -3)));
+            setIce(block.getRelative(0, 0, 1));
+            setIce(block.getRelative(0, 0, -1));
+            setIce(block.getRelative(0, 0, 2));
+            setIce(block.getRelative(0, 0, -2));
+            setIce(block.getRelative(0, 0, 3));
+            setIce(block.getRelative(0, 0, -3));
           }
-          i.getAndIncrement();
+
+          i++;
         } else {
-          this.stop();
+          stop();
           task.cancel();
         }
-      }, 0L, 2L);
-    }
+      }
+    }, 0, 2L);
   }
 
-  private void setIce(Arena arena, Block block) {
-    if (arena.canPlaceBlockAt(block.getLocation()) && block.getType() == Material.AIR) {
+  private void setIce(Block block) {
+    if (this.arena.canPlaceBlockAt(block.getLocation()) && block.getType() == Material.AIR) {
       block.setType(ConfigValue.ice_bridger_material);
 
       Bukkit.getScheduler().runTaskLater(ExtraSpecialItemsPlugin.getInstance(), () -> {
-        if (arena.getStatus() == ArenaStatus.RUNNING) {
+        if (this.arena.getStatus() == ArenaStatus.RUNNING)
           block.setType(Material.AIR);
-        }
+
       }, 70L);
     }
   }
