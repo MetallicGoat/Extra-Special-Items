@@ -144,7 +144,7 @@ public class SilverfishHandler extends CustomSpecialItemUseSession implements Li
     if (event.getDamager() == this.silverfish) {
       event.setDamage(1.5);
 
-    } else if (event.getEntity() == silverfish == event.getDamager() instanceof Player) {
+    } else if (event.getEntity() == silverfish && event.getDamager() instanceof Player) {
       final Player player = (Player) event.getDamager();
       final Arena playerArena = BedwarsAPI.getGameAPI().getArenaByPlayer(player);
 
