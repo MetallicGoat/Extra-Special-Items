@@ -14,7 +14,6 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
-import org.bukkit.block.data.type.Ladder;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayDeque;
@@ -225,7 +224,7 @@ public class TowerBuilder {
   private void placeBlock(Arena arena, boolean isLadder, Block block, DyeColor color) {
     // Re-Dye
     if (ConfigValue.dye_tower_ukraine)
-      color = block.getY() - chest.getY() > 3 ? DyeColor.BLUE : DyeColor.YELLOW;
+      color = block.getY() - this.chest.getY() > 3 ? DyeColor.BLUE : DyeColor.YELLOW;
 
     // Place Block
     if (!isLadder) {
@@ -236,17 +235,14 @@ public class TowerBuilder {
 
       // We do not want to initialize legacy material support (causes lag)
       if (!placeLadderLegacy) {
-        final Ladder ladder = (Ladder) block.getBlockData();
-        ladder.setFacing(direction);
-        block.setBlockData(ladder);
+        PlaceLadderModern.placeLadder(block, this.direction);
 
       } else {
         final BlockState state = block.getState();
         final org.bukkit.material.Ladder legacyLadder = new org.bukkit.material.Ladder();
-        legacyLadder.setFacingDirection(direction.getOppositeFace());
+        legacyLadder.setFacingDirection(this.direction.getOppositeFace());
         state.setData(legacyLadder);
         state.update();
-
       }
     }
 

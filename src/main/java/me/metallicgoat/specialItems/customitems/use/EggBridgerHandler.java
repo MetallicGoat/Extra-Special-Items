@@ -81,7 +81,7 @@ public class EggBridgerHandler extends CustomSpecialItemUseSession implements Li
     public void run() {
       final Location eggLocation = this.egg.getLocation();
 
-      if (!this.egg.isValid()
+      if (this.egg.isValid()
           && this.playerLocation.distance(eggLocation) <= ConfigValue.egg_bridger_max_length
           && this.playerLocation.getY() - eggLocation.getY() <= ConfigValue.egg_bridger_max_y_variation) {
 

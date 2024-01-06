@@ -29,14 +29,14 @@ public class IceBridgerHandler extends CustomSpecialItemUseSession {
 
     playerLocation.setPitch(0);
 
-    task = Bukkit.getScheduler().runTaskTimer(ExtraSpecialItemsPlugin.getInstance(), new Runnable() {
+    this.task = Bukkit.getScheduler().runTaskTimer(ExtraSpecialItemsPlugin.getInstance(), new Runnable() {
       int i = 2;
 
       @Override
       public void run() {
-        if (i <= ConfigValue.ice_bridger_max_distance && isActive()) {
+        if (this.i <= ConfigValue.ice_bridger_max_distance && isActive()) {
           final int yaw = (int) playerLocation.getYaw() % 180;
-          final Location blockLoc = playerLocation.add(playerLocation.getDirection().multiply(i)).add(0, -1, 0);
+          final Location blockLoc = playerLocation.add(playerLocation.getDirection().multiply(this.i)).add(0, -1, 0);
           final Block block = blockLoc.getBlock();
           final World world = block.getWorld();
           final Sound sound = Helper.get().getSoundByName("BLOCK_SNOW_BREAK"); // TODO move to config
@@ -63,7 +63,7 @@ public class IceBridgerHandler extends CustomSpecialItemUseSession {
             setIce(block.getRelative(0, 0, -3));
           }
 
-          i++;
+          this.i++;
         } else {
           stop();
           task.cancel();
