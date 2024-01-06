@@ -26,7 +26,7 @@ public class CommandItemHandler extends CustomSpecialItemUseSession {
 
     final Player player = event.getPlayer();
     final Location loc = player.getLocation();
-    final String commandFormatted = Message.build(command)
+    final String commandFormatted = Message.build(this.command)
         .placeholder("player", player.getName())
         .placeholder("player-display-name", Helper.get().getPlayerDisplayName(player))
         .placeholder("x", (int) loc.getX())
@@ -37,7 +37,7 @@ public class CommandItemHandler extends CustomSpecialItemUseSession {
         .done();
 
     // run command
-    Bukkit.getServer().dispatchCommand(console ? Bukkit.getServer().getConsoleSender() : player, commandFormatted);
+    Bukkit.getServer().dispatchCommand(this.console ? Bukkit.getServer().getConsoleSender() : player, commandFormatted);
 
     this.stop();
   }

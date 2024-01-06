@@ -162,49 +162,49 @@ public class TowerBuilder {
 
   private void addToQueue(int x, int height, int y, boolean ladder) {
     Block block = null;
-    switch (direction) {
+    switch (this.direction) {
       case NORTH:
-        block = chest.getRelative(x, height, y);
+        block = this.chest.getRelative(x, height, y);
         break;
       case SOUTH:
-        block = chest.getRelative(x * -1, height, y * -1);
+        block = this.chest.getRelative(x * -1, height, y * -1);
         break;
       case EAST:
-        block = chest.getRelative(y * -1, height, x);
+        block = this.chest.getRelative(y * -1, height, x);
         break;
       case WEST:
-        block = chest.getRelative(y, height, x * -1);
+        block = this.chest.getRelative(y, height, x * -1);
         break;
     }
 
     if (block == null)
       return;
 
-    towerBlock.add(new Pair<>(block, ladder));
+    this.towerBlock.add(new Pair<>(block, ladder));
   }
 
   public void build() {
-    if (session.getEvent() == null)
+    if (this.session.getEvent() == null)
       return;
 
-    final Arena arena = session.getEvent().getArena();
-    final Team team = arena.getPlayerTeam(session.getEvent().getPlayer());
+    final Arena arena = this.session.getEvent().getArena();
+    final Team team = arena.getPlayerTeam(this.session.getEvent().getPlayer());
     final DyeColor color = team != null ? team.getDyeColor() : DyeColor.WHITE;
 
-    task = Bukkit.getScheduler().runTaskTimer(ExtraSpecialItemsPlugin.getInstance(), () -> {
-      if (!session.isActive()) {
-        task.cancel();
+    this.task = Bukkit.getScheduler().runTaskTimer(ExtraSpecialItemsPlugin.getInstance(), () -> {
+      if (!this.session.isActive()) {
+        this.task.cancel();
         return;
       }
 
       for (int i = 0; i < ConfigValue.tower_block_placed_per_interval; i++) {
-        if (towerBlock.peek() == null) {
-          task.cancel();
-          session.stop();
+        if (this.towerBlock.peek() == null) {
+          this.task.cancel();
+          this.session.stop();
           return;
         }
 
-        final Pair<Block, Boolean> blockBooleanPair = towerBlock.poll();
+        final Pair<Block, Boolean> blockBooleanPair = this.towerBlock.poll();
         final Block block = blockBooleanPair.getKey();
 
         // Is block there?
@@ -250,7 +250,7 @@ public class TowerBuilder {
   }
 
   public void cancel() {
-    if (task != null)
-      task.cancel();
+    if (this.task != null)
+      this.task.cancel();
   }
 }

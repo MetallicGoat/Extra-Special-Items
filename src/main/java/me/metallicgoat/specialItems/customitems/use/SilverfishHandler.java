@@ -40,7 +40,7 @@ public class SilverfishHandler extends CustomSpecialItemUseSession implements Li
     this.arena = event.getArena();
     this.team = event.getArena().getPlayerTeam(player);
     this.snowball = player.launchProjectile(Snowball.class);
-    this.task = Bukkit.getScheduler().runTaskLater(ExtraSpecialItemsPlugin.getInstance(), () -> snowball.remove(), 8 * 20L);
+    this.task = Bukkit.getScheduler().runTaskLater(ExtraSpecialItemsPlugin.getInstance(), () -> this.snowball.remove(), 8 * 20L);
 
     Bukkit.getPluginManager().registerEvents(this, ExtraSpecialItemsPlugin.getInstance());
   }
@@ -85,7 +85,7 @@ public class SilverfishHandler extends CustomSpecialItemUseSession implements Li
     HandlerList.unregisterAll(this);
 
     if (this.task != null)
-      task.cancel();
+      this.task.cancel();
 
     if (this.snowball != null && this.snowball.isValid())
       this.snowball.remove();
@@ -111,7 +111,7 @@ public class SilverfishHandler extends CustomSpecialItemUseSession implements Li
 
   @EventHandler
   public void onEntityTarget(EntityTargetLivingEntityEvent event) {
-    if (event.getEntity() != this.snowball)
+    if (event.getEntity() != this.silverfish)
       return;
 
     if (!(event.getTarget() instanceof Player)) {
@@ -142,13 +142,25 @@ public class SilverfishHandler extends CustomSpecialItemUseSession implements Li
   @EventHandler
   public void onEntityDamageEntity(EntityDamageByEntityEvent event) {
     if (event.getDamager() == this.silverfish) {
+      // Stop silverfish attacking team members
+      if (event.getEntity() instanceof Player) {
+        final Player player = (Player) event.getEntity();
+        final Arena playerArena = BedwarsAPI.getGameAPI().getArenaByPlayer(player);
+
+        if (playerArena == null || this.arena != playerArena || this.arena.getPlayerTeam(player) == this.team) {
+          event.setCancelled(true);
+          return;
+        }
+      }
+
       event.setDamage(1.5);
 
-    } else if (event.getEntity() == silverfish && event.getDamager() instanceof Player) {
+      // Stop player attacking silverfish
+    } else if (event.getEntity() == this.silverfish && event.getDamager() instanceof Player) {
       final Player player = (Player) event.getDamager();
       final Arena playerArena = BedwarsAPI.getGameAPI().getArenaByPlayer(player);
 
-      if (playerArena == null || this.arena != playerArena || arena.getPlayerTeam(player) == team)
+      if (playerArena == null || this.arena != playerArena || this.arena.getPlayerTeam(player) == this.team)
         event.setCancelled(true);
 
     }

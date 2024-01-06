@@ -86,7 +86,7 @@ public class IceBridgerHandler extends CustomSpecialItemUseSession {
 
   @Override
   protected void handleStop() {
-    if (task != null)
-      task.cancel();
+    if (this.task != null)
+      this.task.cancel();
   }
 }

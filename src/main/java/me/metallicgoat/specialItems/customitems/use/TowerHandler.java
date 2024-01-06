@@ -46,21 +46,21 @@ public class TowerHandler extends CustomSpecialItemUseSession {
       rotation += 360.0D;
 
     if (45.0D <= rotation && rotation < 135.0D) {
-      builder = new TowerBuilder(relative, this, BlockFace.SOUTH);
+      this.builder = new TowerBuilder(relative, this, BlockFace.SOUTH);
     } else if (225.0D <= rotation && rotation < 315.0D) {
-      builder = new TowerBuilder(relative, this, BlockFace.NORTH);
+      this.builder = new TowerBuilder(relative, this, BlockFace.NORTH);
     } else if (135.0D <= rotation && rotation < 225.0D) {
-      builder = new TowerBuilder(relative, this, BlockFace.WEST);
+      this.builder = new TowerBuilder(relative, this, BlockFace.WEST);
     } else { // if (0.0D <= rotation && rotation < 45.0D || 315.0D <= rotation && rotation < 360.0D) {
-      builder = new TowerBuilder(relative, this, BlockFace.EAST);
+      this.builder = new TowerBuilder(relative, this, BlockFace.EAST);
     }
 
-    builder.build();
+    this.builder.build();
   }
 
   @Override
   protected void handleStop() {
-    if (builder != null)
-      builder.cancel();
+    if (this.builder != null)
+      this.builder.cancel();
   }
 }
