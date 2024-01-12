@@ -1,4 +1,4 @@
-package me.metallicgoat.specialItems.customitems.use;
+package me.metallicgoat.specialItems.customitems.handlers;
 
 import de.marcely.bedwars.api.event.player.PlayerUseSpecialItemEvent;
 import de.marcely.bedwars.api.message.Message;

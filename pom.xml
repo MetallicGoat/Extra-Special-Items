@@ -26,10 +26,17 @@
             <version>1.13.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>de.marcely.bedwars</groupId>-->
+<!--            <artifactId>API</artifactId>-->
+<!--            <version>5.3.3</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>de.marcely.bedwars</groupId>
             <artifactId>API</artifactId>
             <version>5.3.3</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/libs/public/BedwarsAPI-5.3.3.jar</systemPath>
         </dependency>
     </dependencies>
 

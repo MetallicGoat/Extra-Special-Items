@@ -1,4 +1,4 @@
-package me.metallicgoat.specialItems.customitems.builders;
+package me.metallicgoat.specialItems.utils;
 
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;

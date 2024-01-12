@@ -9,11 +9,11 @@ import java.util.HashMap;
 import java.util.function.Function;
 import me.metallicgoat.specialItems.ExtraSpecialItemsPlugin;
 import me.metallicgoat.specialItems.config.ConfigValue;
-import me.metallicgoat.specialItems.customitems.use.CommandItemHandler;
-import me.metallicgoat.specialItems.customitems.use.EggBridgerHandler;
-import me.metallicgoat.specialItems.customitems.use.IceBridgerHandler;
-import me.metallicgoat.specialItems.customitems.use.SilverfishHandler;
-import me.metallicgoat.specialItems.customitems.use.TowerHandler;
+import me.metallicgoat.specialItems.customitems.handlers.CommandItemHandler;
+import me.metallicgoat.specialItems.customitems.handlers.EggBridgerHandler;
+import me.metallicgoat.specialItems.customitems.handlers.IceBridgerHandler;
+import me.metallicgoat.specialItems.customitems.handlers.SilverfishHandler;
+import me.metallicgoat.specialItems.customitems.handlers.TowerHandler;
 import me.metallicgoat.specialItems.utils.Console;
 import org.bukkit.inventory.ItemStack;
 
