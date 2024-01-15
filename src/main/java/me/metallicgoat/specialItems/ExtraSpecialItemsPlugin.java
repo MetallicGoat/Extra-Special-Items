@@ -11,8 +11,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class ExtraSpecialItemsPlugin extends JavaPlugin {
 
-  public static final int MIN_MBEDWARS_API_VER = 23;
-  public static final String MIN_MBEDWARS_VER_NAME = "5.2.7";
+  public static final int MIN_MBEDWARS_API_VER = 100;
+  public static final String MIN_MBEDWARS_VER_NAME = "5.4";
 
   private static ExtraSpecialItemsAddon addon;
   private static ExtraSpecialItemsPlugin instance;
