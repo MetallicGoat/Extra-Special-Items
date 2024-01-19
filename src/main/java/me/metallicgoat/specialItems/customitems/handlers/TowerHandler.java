@@ -143,10 +143,11 @@ public class TowerHandler extends CustomSpecialItemUseSession {
 
       } else {
         final BlockState state = block.getState();
-        final org.bukkit.material.Ladder legacyLadder = new org.bukkit.material.Ladder();
-        legacyLadder.setFacingDirection(this.direction.getOppositeFace());
-        state.setData(legacyLadder);
-        state.update();
+
+        if (state.getData() instanceof org.bukkit.material.Ladder) {
+          ((org.bukkit.material.Ladder) state.getData()).setFacingDirection(this.direction.getOppositeFace());
+          state.update();
+        }
       }
     }
 
