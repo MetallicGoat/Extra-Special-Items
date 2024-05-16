@@ -7,9 +7,14 @@ import de.marcely.bedwars.tools.Helper;
 import me.metallicgoat.specialItems.ExtraSpecialItemsPlugin;
 import me.metallicgoat.specialItems.config.ConfigValue;
 import me.metallicgoat.specialItems.customitems.CustomSpecialItemUseSession;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.scheduler.BukkitTask;
+import org.bukkit.util.Vector;
+
 
 public class IceBridgerHandler extends CustomSpecialItemUseSession {
 
@@ -25,9 +30,14 @@ public class IceBridgerHandler extends CustomSpecialItemUseSession {
     this.takeItem();
 
     this.arena = event.getArena();
-    final Location playerLocation = event.getPlayer().getLocation().clone();
+    final Location playerLocation = event.getPlayer().getLocation().clone().add(0, -1, 0);
 
+    // The bridge should be flat
     playerLocation.setPitch(0);
+
+    final Vector directionUnitVec = playerLocation.getDirection();
+    final int yaw = (int) playerLocation.getYaw() % 180;
+    final boolean xAxis = (yaw < 45 || yaw >= 135) && (yaw < -135 || yaw >= -45);
 
     this.task = Bukkit.getScheduler().runTaskTimer(ExtraSpecialItemsPlugin.getInstance(), new Runnable() {
       int i = 2;
@@ -35,18 +45,16 @@ public class IceBridgerHandler extends CustomSpecialItemUseSession {
       @Override
       public void run() {
         if (this.i <= ConfigValue.ice_bridger_max_distance && isActive()) {
-          final int yaw = (int) playerLocation.getYaw() % 180;
-          final Location blockLoc = playerLocation.add(playerLocation.getDirection().multiply(this.i)).add(0, -1, 0);
+          final Location blockLoc = playerLocation.add(directionUnitVec);
           final Block block = blockLoc.getBlock();
-          final World world = block.getWorld();
           final Sound sound = Helper.get().getSoundByName("BLOCK_SNOW_BREAK"); // TODO move to config
 
           setIce(block);
 
           if (sound != null)
-            world.playSound(blockLoc, sound, 1, 1);
+            block.getWorld().playSound(blockLoc, sound, 1, 1);
 
-          if ((yaw < 45 || yaw >= 135) && (yaw < -135 || yaw >= -45)) {
+          if (xAxis) {
             setIce(block.getRelative(1, 0, 0));
             setIce(block.getRelative(-1, 0, 0));
             setIce(block.getRelative(2, 0, 0));
