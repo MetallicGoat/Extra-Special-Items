@@ -129,8 +129,10 @@ public class SilverfishHandler extends CustomSpecialItemUseSession implements Li
 
   @EventHandler
   public void onSilverfishDeath(EntityDeathEvent event) {
-    if (event.getEntity() == this.silverfish)
+    if (event.getEntity() == this.silverfish) {
+      event.setDroppedExp(0);
       stop();
+    }
   }
 
   @EventHandler
