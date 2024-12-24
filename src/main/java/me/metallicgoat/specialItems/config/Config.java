@@ -66,6 +66,7 @@ public class Config {
     // SILVERFISH
     ConfigValue.silverfish_icon_name = config.getString("Silverfish.Icon-Name");
     ConfigValue.silverfish_icon_material = parseItemStack(config.getString("Silverfish.Icon-Type"), ConfigValue.silverfish_icon_material);
+    ConfigValue.silverfish_damage = config.getDouble("Silverfish.Damage", ConfigValue.silverfish_damage);
     ConfigValue.silverfish_life_duration = config.getInt("Silverfish.Life-Duration", ConfigValue.silverfish_life_duration);
 
     final List<String> silverfishNameTag = config.getStringList("Silverfish.Name-Tag");
@@ -163,6 +164,7 @@ public class Config {
     config.addComment("Name-Tag Placeholders: {team-name} {team-color}");
     config.set("Silverfish.Icon-Name", ConfigValue.silverfish_icon_name);
     config.set("Silverfish.Icon-Type", Helper.get().composeItemStack(ConfigValue.silverfish_icon_material));
+    config.set("Silverfish.Damage", ConfigValue.silverfish_damage);
     config.set("Silverfish.Life-Duration", ConfigValue.silverfish_life_duration);
     config.set("Silverfish.Name-Tag", ConfigValue.silverfish_name_tag);
 

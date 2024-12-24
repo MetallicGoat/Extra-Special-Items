@@ -155,7 +155,7 @@ public class SilverfishHandler extends CustomSpecialItemUseSession implements Li
         }
       }
 
-      event.setDamage(1.5);
+      event.setDamage(ConfigValue.silverfish_damage);
 
       // Stop player attacking silverfish
     } else if (event.getEntity() == this.silverfish && event.getDamager() instanceof Player) {
