@@ -9,6 +9,7 @@ import me.metallicgoat.specialItems.ExtraSpecialItemsPlugin;
 import me.metallicgoat.specialItems.config.ConfigValue;
 import me.metallicgoat.specialItems.customitems.CustomSpecialItemUseSession;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Silverfish;
@@ -122,7 +123,7 @@ public class SilverfishHandler extends CustomSpecialItemUseSession implements Li
     final Player player = (Player) event.getTarget();
 
     // Player is on the same team or not actually playing
-    if (!this.arena.getPlayers().contains(player) || this.arena.getPlayerTeam(player) == this.team)
+    if (player.getGameMode() == GameMode.SPECTATOR || !this.arena.getPlayers().contains(player) || this.arena.getPlayerTeam(player) == this.team)
       event.setCancelled(true);
 
   }
