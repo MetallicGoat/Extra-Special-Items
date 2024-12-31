@@ -1,8 +1,10 @@
 package me.metallicgoat.specialItems.customitems.handlers;
 
 import de.marcely.bedwars.api.BedwarsAPI;
+import de.marcely.bedwars.api.GameAPI;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.Team;
+import de.marcely.bedwars.api.event.player.PlayerIngameDeathEvent;
 import de.marcely.bedwars.api.event.player.PlayerUseSpecialItemEvent;
 import de.marcely.bedwars.api.message.Message;
 import me.metallicgoat.specialItems.ExtraSpecialItemsPlugin;
@@ -123,9 +125,18 @@ public class SilverfishHandler extends CustomSpecialItemUseSession implements Li
     final Player player = (Player) event.getTarget();
 
     // Player is on the same team or not actually playing
-    if (player.getGameMode() == GameMode.SPECTATOR || !this.arena.getPlayers().contains(player) || this.arena.getPlayerTeam(player) == this.team)
+    // Note: Use GameAPI to get spectators since they are added async as spectators
+    if (GameAPI.get().getSpectatingPlayers().contains(player) || !this.arena.getPlayers().contains(player) || this.arena.getPlayerTeam(player) == this.team)
       event.setCancelled(true);
 
+  }
+
+  @EventHandler
+  public void onPlayerIngameDeathEvent(PlayerIngameDeathEvent event) {
+    // Prevent targeting of spectators
+    if (event.getPlayer() == this.silverfish.getTarget()) {
+      this.silverfish.setTarget(null);
+    }
   }
 
   @EventHandler
