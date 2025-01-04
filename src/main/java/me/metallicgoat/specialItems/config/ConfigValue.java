@@ -49,6 +49,18 @@ public class ConfigValue {
   public static Material ice_bridger_material = Helper.get().getMaterialByName("ICE");
   public static int ice_bridger_max_distance = 37;
 
+  // SlingShot
+  public static String slingshot_icon_name = "SlingShot";
+  public static ItemStack slingshot_icon_material = Helper.get().parseItemStack("MAGMA_CREAM");
+  public static Material slingshot_material = Helper.get().getMaterialByName("MAGMA_CREAM");
+  public static double slingshot_force = 2.0;
+  public static double slingshot_height_boost = 0.5;
+  public static double slingshot_max_y_boost = 1.0;
+  public static int slingshot_cooldown_seconds = 7;
+  public static int slingshot_cooldown_bars = 20;
+  public static String slingshot_cooldown_message = "&7You are in cooldown for &e%seconds% &7seconds";
+  public static Sound slingshot_use_sound = Helper.get().getSoundByName("SLIME_WALK");
+
   // Command Item
   public static boolean command_item_enabled = false;
   public static HashMap<String, Pair<ItemStack, String>> command_item_player_commands = new HashMap<String, Pair<ItemStack, String>>() {{

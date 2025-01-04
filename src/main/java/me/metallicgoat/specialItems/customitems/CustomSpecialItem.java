@@ -13,6 +13,7 @@ import me.metallicgoat.specialItems.customitems.handlers.CommandItemHandler;
 import me.metallicgoat.specialItems.customitems.handlers.EggBridgerHandler;
 import me.metallicgoat.specialItems.customitems.handlers.IceBridgerHandler;
 import me.metallicgoat.specialItems.customitems.handlers.SilverfishHandler;
+import me.metallicgoat.specialItems.customitems.handlers.SlingShotHandler;
 import me.metallicgoat.specialItems.customitems.handlers.TowerHandler;
 import me.metallicgoat.specialItems.utils.Console;
 import org.bukkit.inventory.ItemStack;
@@ -59,6 +60,12 @@ public class CustomSpecialItem {
         "silverfish",
         ConfigValue.silverfish_icon_name,
         ConfigValue.silverfish_icon_material));
+
+    register(new CustomSpecialItem(
+        SlingShotHandler::new,
+        "slingshot",
+        ConfigValue.slingshot_icon_name,
+        ConfigValue.slingshot_icon_material));
 
         /*
         register(new CustomSpecialItem(
