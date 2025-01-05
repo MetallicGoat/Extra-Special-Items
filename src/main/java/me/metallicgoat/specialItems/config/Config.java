@@ -4,9 +4,8 @@ import de.marcely.bedwars.tools.Helper;
 import de.marcely.bedwars.tools.Pair;
 import de.marcely.bedwars.tools.YamlConfigurationDescriptor;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
+
 import me.metallicgoat.specialItems.ExtraSpecialItemsPlugin;
 import me.metallicgoat.specialItems.utils.Console;
 import org.bukkit.Material;
@@ -86,6 +85,18 @@ public class Config {
     ConfigValue.ice_bridger_icon_material = parseItemStack(config.getString("Ice-Bridger.Icon-Type"), ConfigValue.ice_bridger_material);
     ConfigValue.ice_bridger_material = parseMaterial(config.getString("Ice-Bridger.Block-Type"), ConfigValue.ice_bridger_material);
     ConfigValue.ice_bridger_max_distance = config.getInt("Ice-Bridger.Max-Distance", ConfigValue.ice_bridger_max_distance);
+
+    // SLINGSHOT
+    ConfigValue.slingshot_icon_name = config.getString("Slingshot.Icon-Name");
+    ConfigValue.slingshot_icon_material = parseItemStack(config.getString("Slingshot.Icon-Type"), ConfigValue.slingshot_icon_material);
+    ConfigValue.slingshot_material = parseMaterial(config.getString("Slingshot.Icon-Type"), ConfigValue.slingshot_material);
+    ConfigValue.slingshot_force = config.getDouble("Slingshot.Force", ConfigValue.slingshot_force);
+    ConfigValue.slingshot_height_boost = config.getDouble("Slingshot.Height-Boost", ConfigValue.slingshot_height_boost);
+    ConfigValue.slingshot_max_y_boost = config.getDouble("Slingshot.Max-Y-Boost", ConfigValue.slingshot_max_y_boost);
+    ConfigValue.slingshot_cooldown_seconds = config.getInt("Slingshot.Cooldown-Seconds", ConfigValue.slingshot_cooldown_seconds);
+    ConfigValue.slingshot_cooldown_bars = config.getInt("Slingshot.Cooldown-Bars", ConfigValue.slingshot_cooldown_bars);
+    ConfigValue.slingshot_cooldown_message = config.getString("Slingshot.Cooldown-Message", ConfigValue.slingshot_cooldown_message);
+    ConfigValue.slingshot_use_sound = parseConfigSound(config, "Slingshot.Use-Sound", ConfigValue.slingshot_use_sound);
 
     // COMMAND ITEMS
     ConfigValue.command_item_enabled = config.getBoolean("Custom-Items.Enabled");
@@ -186,6 +197,18 @@ public class Config {
     config.set("Ice-Bridger.Block-Type", ConfigValue.ice_bridger_material.name());
     config.set("Ice-Bridger.Max-Distance", ConfigValue.ice_bridger_max_distance);
 
+    config.addEmptyLine();
+
+    config.addComment("Launch yourself with a SlingShot");
+    config.set("Slingshot.Icon-Name", ConfigValue.slingshot_icon_name);
+    config.set("Slingshot.Icon-Type", ConfigValue.slingshot_material.name());
+    config.set("Slingshot.Force", ConfigValue.slingshot_force);
+    config.set("Slingshot.Height-Boost", ConfigValue.slingshot_height_boost);
+    config.set("Slingshot.Max-Y-Boost", ConfigValue.slingshot_max_y_boost);
+    config.set("Slingshot.Cooldown-Seconds", ConfigValue.slingshot_cooldown_seconds);
+    config.set("Slingshot.Cooldown-Bars", ConfigValue.slingshot_cooldown_bars);
+    config.set("Slingshot.Cooldown-Message", ConfigValue.slingshot_cooldown_message);
+    config.set("Slingshot.Use-Sound", ConfigValue.slingshot_use_sound.toString());
     config.addEmptyLine();
 
     config.addComment("Create as many custom Special items at you want");
