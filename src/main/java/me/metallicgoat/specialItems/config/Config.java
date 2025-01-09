@@ -4,6 +4,7 @@ import de.marcely.bedwars.tools.Helper;
 import de.marcely.bedwars.tools.Pair;
 import de.marcely.bedwars.tools.YamlConfigurationDescriptor;
 import java.io.File;
+import java.text.DecimalFormat;
 import java.util.*;
 
 import me.metallicgoat.specialItems.ExtraSpecialItemsPlugin;
@@ -95,7 +96,20 @@ public class Config {
     ConfigValue.slingshot_max_y_boost = config.getDouble("Slingshot.Max-Y-Boost", ConfigValue.slingshot_max_y_boost);
     ConfigValue.slingshot_cooldown_seconds = config.getInt("Slingshot.Cooldown-Seconds", ConfigValue.slingshot_cooldown_seconds);
     ConfigValue.slingshot_cooldown_bars = config.getInt("Slingshot.Cooldown-Bars", ConfigValue.slingshot_cooldown_bars);
+
+    final String cooldownSecondsFormat = config.getString("Slingshot.Cooldown-Seconds-Format");
+    if (cooldownSecondsFormat != null) {
+      try {
+        ConfigValue.slingshot_cooldown_seconds_format = new DecimalFormat(cooldownSecondsFormat);
+      } catch (Exception e) {
+        Console.printConfigWarning("Slingshot.Cooldown-Seconds-Format", "Cannot parse slingshot decimal format " + cooldownSecondsFormat);
+      }
+    } else {
+      Console.printConfigWarning("Slingshot.Cooldown-Seconds-Format", "Missing slingshot decimal format");
+    }
+
     ConfigValue.slingshot_cooldown_message = config.getString("Slingshot.Cooldown-Message", ConfigValue.slingshot_cooldown_message);
+    ConfigValue.slingshot_action_bar = config.getString("Slingshot.Action-Bar", ConfigValue.slingshot_action_bar);
     ConfigValue.slingshot_use_sound = parseConfigSound(config, "Slingshot.Use-Sound", ConfigValue.slingshot_use_sound);
 
     // COMMAND ITEMS
@@ -200,6 +214,7 @@ public class Config {
     config.addEmptyLine();
 
     config.addComment("Launch yourself with a SlingShot");
+    config.addComment("Note: You may want to disable the MBedwars ActionBar feature");
     config.set("Slingshot.Icon-Name", ConfigValue.slingshot_icon_name);
     config.set("Slingshot.Icon-Type", ConfigValue.slingshot_material.name());
     config.set("Slingshot.Force", ConfigValue.slingshot_force);
@@ -207,7 +222,9 @@ public class Config {
     config.set("Slingshot.Max-Y-Boost", ConfigValue.slingshot_max_y_boost);
     config.set("Slingshot.Cooldown-Seconds", ConfigValue.slingshot_cooldown_seconds);
     config.set("Slingshot.Cooldown-Bars", ConfigValue.slingshot_cooldown_bars);
+    config.set("Slingshot.Cooldown-Seconds-Format", ConfigValue.slingshot_cooldown_seconds_format.toPattern());
     config.set("Slingshot.Cooldown-Message", ConfigValue.slingshot_cooldown_message);
+    config.set("Slingshot.Action-Bar", ConfigValue.slingshot_action_bar);
     config.set("Slingshot.Use-Sound", ConfigValue.slingshot_use_sound.toString());
     config.addEmptyLine();
 

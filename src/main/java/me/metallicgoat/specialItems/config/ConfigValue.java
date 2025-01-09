@@ -2,6 +2,7 @@ package me.metallicgoat.specialItems.config;
 
 import de.marcely.bedwars.tools.Helper;
 import de.marcely.bedwars.tools.Pair;
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -58,7 +59,9 @@ public class ConfigValue {
   public static double slingshot_max_y_boost = 1.0;
   public static int slingshot_cooldown_seconds = 7;
   public static int slingshot_cooldown_bars = 20;
-  public static String slingshot_cooldown_message = "&7You are in cooldown for &e%seconds% &7seconds";
+  public static DecimalFormat slingshot_cooldown_seconds_format = new DecimalFormat("0.00s");
+  public static String slingshot_cooldown_message = "&7You are in cooldown for &e{seconds} &7seconds";
+  public static String slingshot_action_bar = "&f{item-name} &r{cooldown-bar} &f{seconds}";
   public static Sound slingshot_use_sound = Helper.get().getSoundByName("SLIME_WALK");
 
   // Command Item

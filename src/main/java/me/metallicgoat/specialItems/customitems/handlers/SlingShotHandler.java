@@ -2,127 +2,121 @@ package me.metallicgoat.specialItems.customitems.handlers;
 
 import de.marcely.bedwars.api.event.player.PlayerUseSpecialItemEvent;
 import de.marcely.bedwars.api.message.Message;
-import de.marcely.bedwars.tools.Helper;
 import de.marcely.bedwars.tools.NMSHelper;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import me.metallicgoat.specialItems.config.ConfigValue;
 import me.metallicgoat.specialItems.customitems.CustomSpecialItemUseSession;
 import me.metallicgoat.specialItems.ExtraSpecialItemsPlugin;
-import org.bukkit.Sound;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 
 public class SlingShotHandler extends CustomSpecialItemUseSession {
 
-  private static final Map<UUID, Long> cooldowns = new HashMap<>();
-  private static final Map<UUID, BukkitTask> cooldownTasks = new HashMap<>();
+  private static final Map<UUID, Long> cooldowns = new ConcurrentHashMap<>();
+  private static final Map<UUID, BukkitTask> cooldownTasks = new ConcurrentHashMap<>();
+
+  private final UUID playerId;
 
   public SlingShotHandler(PlayerUseSpecialItemEvent event) {
     super(event);
+
+    this.playerId = event.getPlayer().getUniqueId();
   }
 
   @Override
   public void run(PlayerUseSpecialItemEvent event) {
-    Player player = event.getPlayer();
-    UUID playerId = player.getUniqueId();
+    final Player player = event.getPlayer();
+    final double remainingSeconds = getCooldownTimeLeft(this.playerId);
 
     // Check if player is in cooldown
-    if (isInCooldown(playerId)) {
-      long remainingSeconds = getCooldownTimeLeft(playerId);
-      player.sendMessage(Message.build(ConfigValue.slingshot_cooldown_message.replace("%seconds%", String.valueOf(remainingSeconds))).done());
+    if (remainingSeconds > 0) {
+      Message.build(ConfigValue.slingshot_cooldown_message)
+          .placeholder("seconds", (int) remainingSeconds)
+          .send(player);
+
       return;
     }
 
     this.takeItem();
 
     // Apply launch velocity
-    Vector direction = player.getLocation().getDirection();
+    final Vector direction = player.getLocation().getDirection();
     direction.multiply(ConfigValue.slingshot_force);
 
     // Limitar o boost vertical
-    double yBoost = direction.getY() + ConfigValue.slingshot_height_boost;
+    final double yBoost = direction.getY() + ConfigValue.slingshot_height_boost;
     direction.setY(Math.min(yBoost, ConfigValue.slingshot_max_y_boost));
 
     player.setVelocity(direction);
 
     // Set cooldown
-    setCooldown(playerId);
+    cooldowns.put(this.playerId, System.currentTimeMillis() + (ConfigValue.slingshot_cooldown_seconds * 1000L));
 
     // Show cooldown in action bar
     startCooldownTask(player);
 
     // Play sound effect
-    Sound sound = ConfigValue.slingshot_use_sound;
-    if (sound != null)
-      player.playSound(player.getLocation(), sound, 1.0f, 1.0f);
+    if (ConfigValue.slingshot_use_sound != null)
+      player.playSound(player.getLocation(), ConfigValue.slingshot_use_sound, 1.0f, 1.0f);
+
   }
 
-  private boolean isInCooldown(UUID playerId) {
-    if (!cooldowns.containsKey(playerId))
-      return false;
-
-    long cooldownEnd = cooldowns.get(playerId);
-    if (System.currentTimeMillis() >= cooldownEnd) {
-      cooldowns.remove(playerId);
-      return false;
-    }
-
-    return true;
-  }
-
-  private long getCooldownTimeLeft(UUID playerId) {
+  private double getCooldownTimeLeft(UUID playerId) {
     if (!cooldowns.containsKey(playerId))
       return 0;
 
-    long cooldownEnd = cooldowns.get(playerId);
-    return (cooldownEnd - System.currentTimeMillis()) / 1000;
+    final long cooldownEnd = cooldowns.get(playerId);
+
+    if (cooldownEnd <= 0) {
+      cooldowns.remove(playerId);
+      return 0;
+    }
+
+    return (cooldownEnd - System.currentTimeMillis()) / 1000D;
   }
 
-  private void setCooldown(UUID playerId) {
-    cooldowns.put(playerId, System.currentTimeMillis() + (ConfigValue.slingshot_cooldown_seconds * 1000L));
-  }
 
   private String formatCooldownBar(double secondsLeft) {
-    int filledBars = (int) Math.ceil((secondsLeft / ConfigValue.slingshot_cooldown_seconds) * ConfigValue.slingshot_cooldown_bars);
-    StringBuilder bar = new StringBuilder();
+    final int filledBars = (int) Math.ceil((secondsLeft / ConfigValue.slingshot_cooldown_seconds) * ConfigValue.slingshot_cooldown_bars);
+    final StringBuilder bar = new StringBuilder();
 
     // Add filled bars in green
-    bar.append("§a");
-    for (int i = 0; i < filledBars; i++) {
+    bar.append(ChatColor.GREEN);
+
+    for (int i = 0; i < filledBars; i++)
       bar.append("┇");
-    }
 
     // Add empty bars in red
     if (filledBars < ConfigValue.slingshot_cooldown_bars) {
-      bar.append("§c");
-      for (int i = filledBars; i < ConfigValue.slingshot_cooldown_bars; i++) {
+      bar.append(ChatColor.RED);
+
+      for (int i = filledBars; i < ConfigValue.slingshot_cooldown_bars; i++)
         bar.append("┇");
-      }
+
     }
 
     return bar.toString();
   }
 
   private void startCooldownTask(Player player) {
-    UUID playerId = player.getUniqueId();
+    BukkitTask task = cooldownTasks.get(playerId);
 
     // Cancel existing task if any
-    BukkitTask existingTask = cooldownTasks.get(playerId);
-    if (existingTask != null) {
-      existingTask.cancel();
-    }
+    if (task != null)
+      task.cancel();
 
-    BukkitTask task = new BukkitRunnable() {
-      double secondsLeft = ConfigValue.slingshot_cooldown_seconds;
-
+    task = new BukkitRunnable() {
       @Override
       public void run() {
-        if (secondsLeft <= 0 || !isInCooldown(playerId)) {
+        final double secondsLeft = getCooldownTimeLeft(playerId);
+
+        if (secondsLeft <= 0) {
           NMSHelper.get().showActionbar(player, "");
           cooldowns.remove(playerId);
           cooldownTasks.remove(playerId);
@@ -130,20 +124,30 @@ public class SlingShotHandler extends CustomSpecialItemUseSession {
           return;
         }
 
-        String cooldownBar = formatCooldownBar(secondsLeft);
-        NMSHelper.get().showActionbar(player, Message.build("&f" + ConfigValue.slingshot_icon_name + " &r" + cooldownBar + " &f" + String.format("%.1f", secondsLeft).replace('.', ',') + "s").done());
-        secondsLeft -= 0.1;
+        final String cooldownBar = formatCooldownBar(secondsLeft);
+        final String seconds = ConfigValue.slingshot_cooldown_seconds_format.format(secondsLeft);
+
+        NMSHelper.get().showActionbar(player,
+            Message.build(ConfigValue.slingshot_icon_name)
+                .placeholder("cooldown-bar", cooldownBar)
+                .placeholder("seconds", seconds)
+                .placeholder("item-name", ConfigValue.slingshot_icon_name)
+                .done()
+        );
       }
     }.runTaskTimer(ExtraSpecialItemsPlugin.getInstance(), 0L, 2L);
 
-    cooldownTasks.put(playerId, task);
+    cooldownTasks.put(this.playerId, task);
   }
 
   @Override
   protected void handleStop() {
-    // Cancel all cooldown tasks
-    cooldownTasks.values().forEach(BukkitTask::cancel);
-    cooldowns.clear();
-    cooldownTasks.clear();
+    final BukkitTask task = cooldownTasks.get(this.playerId);
+
+    if (task != null)
+      task.cancel();
+
+    cooldownTasks.remove(this.playerId);
+    cooldowns.remove(this.playerId);
   }
 }
