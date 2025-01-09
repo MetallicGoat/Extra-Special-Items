@@ -128,7 +128,7 @@ public class SlingShotHandler extends CustomSpecialItemUseSession {
         final String seconds = ConfigValue.slingshot_cooldown_seconds_format.format(secondsLeft);
 
         NMSHelper.get().showActionbar(player,
-            Message.build(ConfigValue.slingshot_icon_name)
+            Message.build(ConfigValue.slingshot_action_bar)
                 .placeholder("cooldown-bar", cooldownBar)
                 .placeholder("seconds", seconds)
                 .placeholder("item-name", ConfigValue.slingshot_icon_name)
