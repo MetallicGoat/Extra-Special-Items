@@ -26,7 +26,7 @@ public class ConfigValue {
   // Sliverfish
   public static String silverfish_icon_name = "Silverfish";
   public static ItemStack silverfish_icon_material = Helper.get().parseItemStack("SNOWBALL");
-  public static double silverfish_damage = 400;
+  public static double silverfish_damage = 1.5;
   public static int silverfish_life_duration = 400;
   public static List<String> silverfish_name_tag = Arrays.asList(
       "{team-color}&l{team-name} {team-color}[■ ■ ■ ■ ■]",
