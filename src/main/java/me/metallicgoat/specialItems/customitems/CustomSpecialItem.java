@@ -43,6 +43,7 @@ public class CustomSpecialItem {
         "egg-bridger",
         ConfigValue.egg_bridger_icon_name,
         ConfigValue.egg_bridger_icon_material));
+
     register(new CustomSpecialItem(
         IceBridgerHandler::new,
         "ice-bridger",
