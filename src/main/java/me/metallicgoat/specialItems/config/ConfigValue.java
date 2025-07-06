@@ -43,6 +43,7 @@ public class ConfigValue {
   public static int egg_bridger_max_length = 30;
   public static int egg_bridger_max_y_variation = 18;
   public static Sound egg_bridger_place_sound = Helper.get().getSoundByName("ENTITY_CHICKEN_EGG");
+  public static double egg_bridger_clutch_fall_damage_cap = 4;
 
   // Ice Bridger
   public static String ice_bridger_icon_name = "IceBridger";

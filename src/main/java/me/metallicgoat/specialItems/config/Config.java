@@ -80,6 +80,7 @@ public class Config {
     ConfigValue.egg_bridger_max_length = config.getInt("Egg-Bridger.Max-Length", ConfigValue.egg_bridger_max_length);
     ConfigValue.egg_bridger_max_y_variation = config.getInt("Egg-Bridger.Max-Y-Variation", ConfigValue.egg_bridger_max_y_variation);
     ConfigValue.egg_bridger_place_sound = parseConfigSound(config, "Egg-Bridger.Sound", ConfigValue.egg_bridger_place_sound);
+    ConfigValue.egg_bridger_clutch_fall_damage_cap = config.getDouble("Egg-Bridger.Clutch-Fall-Damage-Cap", ConfigValue.egg_bridger_clutch_fall_damage_cap);
 
     // ICE BRIDGER
     ConfigValue.ice_bridger_icon_name = config.getString("Ice-Bridger.Icon-Name", ConfigValue.ice_bridger_icon_name);
@@ -198,6 +199,7 @@ public class Config {
     config.set("Egg-Bridger.Max-Length", ConfigValue.egg_bridger_max_length);
     config.set("Egg-Bridger.Max-Y-Variation", ConfigValue.egg_bridger_max_y_variation);
     config.set("Egg-Bridger.Sound", ConfigValue.egg_bridger_place_sound.toString());
+    config.set("Egg-Bridger.Clutch-Fall-Damage-Cap", ConfigValue.egg_bridger_clutch_fall_damage_cap);
 
     config.addEmptyLine();
 

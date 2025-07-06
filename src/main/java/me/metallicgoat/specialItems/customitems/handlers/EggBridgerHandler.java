@@ -86,7 +86,7 @@ public class EggBridgerHandler extends CustomSpecialItemUseSession implements Li
       return;
 
     if (nerfFallDamage.contains(event.getEntity().getUniqueId())) {
-      event.setDamage(Math.min(event.getDamage(), 4));
+      event.setDamage(Math.min(event.getDamage(), ConfigValue.egg_bridger_clutch_fall_damage_cap));
     }
   }
 
