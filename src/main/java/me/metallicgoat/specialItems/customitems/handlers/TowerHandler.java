@@ -54,7 +54,7 @@ public class TowerHandler extends CustomSpecialItemUseSession {
     if (clicked == null ||
         blockFace == null ||
         blockFace == BlockFace.DOWN ||
-        clicked.getRelative(blockFace).getType() != Material.AIR ||
+        !isPlaceable(clicked.getRelative(blockFace)) ||
         !arena.canPlaceBlockAt(clicked.getRelative(blockFace))) {
 
       event.setTakingItem(false);
@@ -104,7 +104,7 @@ public class TowerHandler extends CustomSpecialItemUseSession {
           final Block block = blockBooleanPair.getKey();
 
           // Is block there?
-          if (block == null || !block.getType().equals(Material.AIR))
+          if (block == null || !isPlaceable(block))
             continue;
 
           // Is block inside region
@@ -298,5 +298,11 @@ public class TowerHandler extends CustomSpecialItemUseSession {
     if (block != null)
       this.towerBlock.add(new Pair<>(block, ladder));
 
+  }
+
+  private static boolean isPlaceable(Block block) {
+    final Material type = block.getType();
+
+    return !type.isSolid();
   }
 }
