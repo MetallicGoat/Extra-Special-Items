@@ -4,12 +4,12 @@ import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.ArenaStatus;
 import de.marcely.bedwars.api.event.player.PlayerUseSpecialItemEvent;
 import de.marcely.bedwars.tools.Helper;
+import de.marcely.bedwars.tools.PersistentBlockData;
 import me.metallicgoat.specialItems.ExtraSpecialItemsPlugin;
 import me.metallicgoat.specialItems.config.ConfigValue;
 import me.metallicgoat.specialItems.customitems.CustomSpecialItemUseSession;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.scheduler.BukkitTask;
@@ -81,15 +81,17 @@ public class IceBridgerHandler extends CustomSpecialItemUseSession {
   }
 
   private void setIce(Block block) {
-    if (this.arena.canPlaceBlockAt(block.getLocation()) && block.getType() == Material.AIR) {
-      block.setType(ConfigValue.ice_bridger_material);
+    if (!isPlaceable(block))
+      return;
 
-      Bukkit.getScheduler().runTaskLater(ExtraSpecialItemsPlugin.getInstance(), () -> {
-        if (this.arena.getStatus() == ArenaStatus.RUNNING)
-          block.setType(Material.AIR);
+    final PersistentBlockData priorData = PersistentBlockData.fromBlock(block);
 
-      }, 70L);
-    }
+    block.setType(ConfigValue.ice_bridger_material, false);
+
+    Bukkit.getScheduler().runTaskLater(ExtraSpecialItemsPlugin.getInstance(), () -> {
+      if (this.arena.getStatus() == ArenaStatus.RUNNING)
+        priorData.place(block, false);
+    }, 70L);
   }
 
   @Override

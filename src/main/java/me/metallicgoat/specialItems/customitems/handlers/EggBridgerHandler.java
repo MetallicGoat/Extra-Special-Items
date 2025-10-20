@@ -4,15 +4,16 @@ import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.arena.ArenaStatus;
 import de.marcely.bedwars.api.arena.Team;
 import de.marcely.bedwars.api.event.player.PlayerUseSpecialItemEvent;
-import de.marcely.bedwars.api.game.specialitem.SpecialItemUseSession;
 import de.marcely.bedwars.tools.PersistentBlockData;
+import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.CopyOnWriteArrayList;
 import me.metallicgoat.specialItems.ExtraSpecialItemsPlugin;
 import me.metallicgoat.specialItems.config.ConfigValue;
 import me.metallicgoat.specialItems.customitems.CustomSpecialItemUseSession;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Egg;
 import org.bukkit.entity.EntityType;
@@ -24,10 +25,6 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
-
-import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 public class EggBridgerHandler extends CustomSpecialItemUseSession implements Listener {
 
@@ -93,12 +90,12 @@ public class EggBridgerHandler extends CustomSpecialItemUseSession implements Li
   private static class BridgeBlockPlacerTask extends BukkitRunnable {
     private final Egg egg;
     private final Player player;
-    private final SpecialItemUseSession session;
+    private final CustomSpecialItemUseSession session;
     private final Arena arena;
     private final PersistentBlockData data;
     private final Location throwLocation;
 
-    public BridgeBlockPlacerTask(Egg egg, Player player, Location throwLocation, SpecialItemUseSession session, Arena arena, PersistentBlockData data) {
+    public BridgeBlockPlacerTask(Egg egg, Player player, Location throwLocation, CustomSpecialItemUseSession session, Arena arena, PersistentBlockData data) {
       this.egg = egg;
       this.player = player;
       this.session = session;
@@ -145,15 +142,11 @@ public class EggBridgerHandler extends CustomSpecialItemUseSession implements Li
     }
 
     private void placeBlock(Block block) {
-      // Is block there?
-      if (!block.getType().equals(Material.AIR))
+      if (!this.session.isPlaceable(block))
         return;
 
-      // Is block inside region
-      if (this.arena != null && this.arena.canPlaceBlockAt(block.getLocation())) {
-        this.data.place(block, true);
-        this.arena.setBlockPlayerPlaced(block, true);
-      }
+      this.data.place(block, true);
+      this.arena.setBlockPlayerPlaced(block, true);
     }
   }
 }
