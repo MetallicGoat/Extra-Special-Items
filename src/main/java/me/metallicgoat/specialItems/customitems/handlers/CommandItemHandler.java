@@ -3,6 +3,7 @@ package me.metallicgoat.specialItems.customitems.handlers;
 import de.marcely.bedwars.api.event.player.PlayerUseSpecialItemEvent;
 import de.marcely.bedwars.api.message.Message;
 import de.marcely.bedwars.tools.Helper;
+import me.metallicgoat.specialItems.api.event.PlayerUseSpecialItemCommandEvent;
 import me.metallicgoat.specialItems.customitems.CustomSpecialItemUseSession;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -26,7 +27,11 @@ public class CommandItemHandler extends CustomSpecialItemUseSession {
 
     final Player player = event.getPlayer();
     final Location loc = player.getLocation();
-    final String commandFormatted = Message.build(this.command)
+
+    final PlayerUseSpecialItemCommandEvent apiEvent = new PlayerUseSpecialItemCommandEvent(event, this.command, this.console);
+    Bukkit.getPluginManager().callEvent(apiEvent);
+
+    final String commandFormatted = Message.build(apiEvent.getCommand())
         .placeholder("player", player.getName())
         .placeholder("player-display-name", Helper.get().getPlayerDisplayName(player))
         .placeholder("x", (int) loc.getX())
@@ -37,7 +42,7 @@ public class CommandItemHandler extends CustomSpecialItemUseSession {
         .done();
 
     // run command
-    Bukkit.getServer().dispatchCommand(this.console ? Bukkit.getServer().getConsoleSender() : player, commandFormatted);
+    Bukkit.getServer().dispatchCommand(apiEvent.isAsConsole() ? Bukkit.getServer().getConsoleSender() : player, commandFormatted);
 
     this.stop();
   }

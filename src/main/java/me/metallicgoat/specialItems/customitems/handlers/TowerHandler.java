@@ -107,11 +107,9 @@ public class TowerHandler extends CustomSpecialItemUseSession {
           if (block == null || !isPlaceable(block))
             continue;
 
-          // Is block inside region
-          if (arena.canPlaceBlockAt(block.getLocation())) {
-            block.getWorld().playSound(block.getLocation(), ConfigValue.tower_place_place_sound, 1, 1);
-            placeBlock(arena, blockBooleanPair.getValue(), block, color);
-          }
+          // Place it
+          block.getWorld().playSound(block.getLocation(), ConfigValue.tower_place_place_sound, 1, 1);
+          placeBlock(arena, blockBooleanPair.getValue(), block, color);
         }
 
       }, 0L, ConfigValue.tower_block_place_interval);
@@ -298,11 +296,5 @@ public class TowerHandler extends CustomSpecialItemUseSession {
     if (block != null)
       this.towerBlock.add(new Pair<>(block, ladder));
 
-  }
-
-  private static boolean isPlaceable(Block block) {
-    final Material type = block.getType();
-
-    return !type.isSolid();
   }
 }
