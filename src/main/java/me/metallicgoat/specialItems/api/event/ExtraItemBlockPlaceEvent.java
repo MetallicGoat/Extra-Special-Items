@@ -3,6 +3,8 @@ package me.metallicgoat.specialItems.api.event;
 import de.marcely.bedwars.api.arena.Arena;
 import de.marcely.bedwars.api.event.arena.ArenaEvent;
 import de.marcely.bedwars.api.game.specialitem.SpecialItem;
+import lombok.Getter;
+import lombok.Setter;
 import me.metallicgoat.specialItems.api.ExtraSpecialItemType;
 import org.bukkit.block.Block;
 import org.bukkit.event.Cancellable;
@@ -20,6 +22,7 @@ public class ExtraItemBlockPlaceEvent extends Event implements ArenaEvent, Cance
   private final Block block;
   private final SpecialItem item;
 
+  @Getter @Setter
   private boolean cancelled = false;
 
   public ExtraItemBlockPlaceEvent(Arena arena, Block block, SpecialItem item) {
@@ -63,16 +66,6 @@ public class ExtraItemBlockPlaceEvent extends Event implements ArenaEvent, Cance
    */
   public ExtraSpecialItemType getItemType() {
     return ExtraSpecialItemType.from(this.item);
-  }
-
-  @Override
-  public boolean isCancelled() {
-    return this.cancelled;
-  }
-
-  @Override
-  public void setCancelled(boolean cancel) {
-    this.cancelled = cancel;
   }
 
   @Override
