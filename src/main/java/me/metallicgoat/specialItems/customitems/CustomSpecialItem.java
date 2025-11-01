@@ -145,6 +145,9 @@ public class CustomSpecialItem {
 
   private static void testAPI() {
     for (ExtraSpecialItemType type : ExtraSpecialItemType.values()) {
+      if (type.hasMultipleItems())
+        continue;
+
       if (type.getItem() == null)
         throw new IllegalStateException("Missing specialItem for " + type.name());
     }
