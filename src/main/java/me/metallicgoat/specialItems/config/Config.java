@@ -248,6 +248,7 @@ public class Config {
     config.addEmptyLine();
 
     config.addComment("Endless Firework Boost while gliding with Elytra");
+    config.addComment("Only available for 1.12 and newer");
     config.addComment("Strength of the boost ranging between 1 and 128");
     config.set("Endless-Boost.Icon-Name", ConfigValue.endless_boost_icon_name);
     config.set("Endless-Boost.Icon-Type", Helper.get().composeItemStack(ConfigValue.endless_boost_icon_material));
