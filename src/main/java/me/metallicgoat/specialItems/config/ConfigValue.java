@@ -3,6 +3,7 @@ package me.metallicgoat.specialItems.config;
 import de.marcely.bedwars.tools.Helper;
 import de.marcely.bedwars.tools.Pair;
 import java.text.DecimalFormat;
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -64,6 +65,11 @@ public class ConfigValue {
   public static String slingshot_cooldown_message = "&7You are in cooldown for &e{seconds} &7seconds";
   public static String slingshot_action_bar = "&f{item-name} &r{cooldown-bar} &f{seconds}";
   public static Sound slingshot_use_sound = Helper.get().getSoundByName("SLIME_WALK");
+
+  // Endless Boost
+  public static String endless_boost_icon_name = "EndlessBoost";
+  public static ItemStack endless_boost_icon_material = Helper.get().parseItemStack("FIREWORK_ROCKET");
+  public static Duration endless_boost_cooldown_duration = Duration.ofSeconds(2);
 
   // Command Item
   public static boolean command_item_enabled = false;

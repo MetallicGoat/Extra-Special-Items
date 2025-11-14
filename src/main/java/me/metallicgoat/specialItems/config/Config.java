@@ -8,6 +8,7 @@ import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.text.DecimalFormat;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +20,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.FireworkMeta;
 
 public class Config {
 
@@ -111,6 +113,24 @@ public class Config {
     ConfigValue.slingshot_action_bar = config.getString("Slingshot.Action-Bar", ConfigValue.slingshot_action_bar);
     ConfigValue.slingshot_use_sound = parseConfigSound(config, "Slingshot.Use-Sound", ConfigValue.slingshot_use_sound);
 
+    // ENDLESS BOOST
+    ConfigValue.endless_boost_icon_name = config.getString("Endless-Boost.Icon-Name", ConfigValue.endless_boost_icon_name);
+    ConfigValue.endless_boost_icon_material = parseItemStack(config.getString("Endless-Boost.Icon-Type"), ConfigValue.endless_boost_icon_material);
+
+    if (!ConfigValue.endless_boost_icon_material.getType().name().contains("ROCKET")) {
+      Console.printConfigWarning("Endless-Boost.Icon-Type", "Endless Boost icon type must be a firework rocket. Reverting to default.");
+      ConfigValue.endless_boost_icon_material = Helper.get().parseItemStack("FIREWORK_ROCKET");
+    }
+
+    {
+      final FireworkMeta im = (FireworkMeta) ConfigValue.endless_boost_icon_material.getItemMeta();
+
+      im.setPower(Math.max(1, Math.min(128, config.getInt("Endless-Boost.Power", 3))));
+    }
+
+    ConfigValue.endless_boost_cooldown_duration = Duration.ofMillis(Math.max(0,
+        (long) (config.getDouble("Endless-Boost.Cooldown-Seconds", 2.0) * 1000L)));
+
     // COMMAND ITEMS
     ConfigValue.command_item_enabled = config.getBoolean("Custom-Items.Enabled");
     {
@@ -137,7 +157,7 @@ public class Config {
 
     // auto update file if newer version
     {
-      final String currentVersion = config.getString("file-version");
+      final String currentVersion = config.getString("file-version", "");
 
       if (!currentVersion.equals(plugin.getDescription().getVersion()))
         save(plugin);
@@ -224,6 +244,23 @@ public class Config {
     config.set("Slingshot.Cooldown-Message", ConfigValue.slingshot_cooldown_message);
     config.set("Slingshot.Action-Bar", ConfigValue.slingshot_action_bar);
     config.set("Slingshot.Use-Sound", ConfigValue.slingshot_use_sound.toString());
+
+    config.addEmptyLine();
+
+    config.addComment("Endless Firework Boost while gliding with Elytra");
+    config.addComment("Only available for 1.12 and newer");
+    config.addComment("Strength of the boost ranging between 1 and 128");
+    config.set("Endless-Boost.Icon-Name", ConfigValue.endless_boost_icon_name);
+    config.set("Endless-Boost.Icon-Type", Helper.get().composeItemStack(ConfigValue.endless_boost_icon_material));
+    {
+      final FireworkMeta im = (FireworkMeta) ConfigValue.endless_boost_icon_material.getItemMeta();
+
+      config.set("Endless-Boost.Power", Math.max(1, im.getPower()));
+    }
+
+    config.set("Endless-Boost.Cooldown-Seconds",
+        ConfigValue.endless_boost_cooldown_duration.toMillis() / 1000D);
+
     config.addEmptyLine();
 
     config.addComment("Create as many custom Special items at you want");

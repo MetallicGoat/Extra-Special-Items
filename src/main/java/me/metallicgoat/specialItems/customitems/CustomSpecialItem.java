@@ -4,6 +4,7 @@ import de.marcely.bedwars.api.GameAPI;
 import de.marcely.bedwars.api.event.player.PlayerUseSpecialItemEvent;
 import de.marcely.bedwars.api.game.specialitem.SpecialItem;
 import de.marcely.bedwars.api.game.specialitem.SpecialItemUseHandler;
+import de.marcely.bedwars.tools.NMSHelper;
 import de.marcely.bedwars.tools.Pair;
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -13,6 +14,7 @@ import me.metallicgoat.specialItems.api.ExtraSpecialItemType;
 import me.metallicgoat.specialItems.config.ConfigValue;
 import me.metallicgoat.specialItems.customitems.handlers.CommandItemHandler;
 import me.metallicgoat.specialItems.customitems.handlers.EggBridgerHandler;
+import me.metallicgoat.specialItems.customitems.handlers.EndlessBoostHandler;
 import me.metallicgoat.specialItems.customitems.handlers.IceBridgerHandler;
 import me.metallicgoat.specialItems.customitems.handlers.SilverfishHandler;
 import me.metallicgoat.specialItems.customitems.handlers.SlingShotHandler;
@@ -85,6 +87,15 @@ public class CustomSpecialItem {
                 "Flood Filler",
                 new ItemStack(Material.FLINT)));
          */
+
+    if (NMSHelper.get().getVersion() >= 12) {
+      register(new CustomSpecialItem(
+          EndlessBoostHandler::new,
+          ExtraSpecialItemType.ENDLESS_BOOST,
+          "endless-boost",
+          ConfigValue.endless_boost_icon_name,
+          ConfigValue.endless_boost_icon_material));
+    }
 
     if (ConfigValue.command_item_enabled) {
       loadCommandItems(ConfigValue.command_item_player_commands, false);
