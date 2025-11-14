@@ -41,7 +41,12 @@ public enum ExtraSpecialItemType {
   /**
    * Builds a tower around the player.
    */
-  TOWER;
+  TOWER,
+
+  /**
+   * A firework that can be used to boost players endlessly for elytras.
+   */
+  ENDLESS_BOOST;
 
   private SpecialItem specialItem;
 
