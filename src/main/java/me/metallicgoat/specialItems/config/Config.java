@@ -197,7 +197,7 @@ public class Config {
     config.set("PopUpTower.Block-Type", ConfigValue.tower_block_material.name());
     config.set("PopUpTower.Block-Place-Interval", ConfigValue.tower_block_place_interval);
     config.set("PopUpTower.Blocks-Placed-Per-Interval", ConfigValue.tower_block_placed_per_interval);
-    config.set("PopUpTower.Sound", ConfigValue.tower_place_place_sound.toString());
+    config.set("PopUpTower.Sound", ConfigValue.tower_place_place_sound.name());
 
     config.addEmptyLine();
 
@@ -218,7 +218,7 @@ public class Config {
     config.set("Egg-Bridger.Block-Type", ConfigValue.egg_bridger_block_material.name());
     config.set("Egg-Bridger.Max-Length", ConfigValue.egg_bridger_max_length);
     config.set("Egg-Bridger.Max-Y-Variation", ConfigValue.egg_bridger_max_y_variation);
-    config.set("Egg-Bridger.Sound", ConfigValue.egg_bridger_place_sound.toString());
+    config.set("Egg-Bridger.Sound", ConfigValue.egg_bridger_place_sound.name());
     config.set("Egg-Bridger.Clutch-Fall-Damage-Cap", ConfigValue.egg_bridger_clutch_fall_damage_cap);
 
     config.addEmptyLine();
@@ -243,7 +243,7 @@ public class Config {
     config.set("Slingshot.Cooldown-Seconds-Format", ConfigValue.slingshot_cooldown_seconds_format.toPattern());
     config.set("Slingshot.Cooldown-Message", ConfigValue.slingshot_cooldown_message);
     config.set("Slingshot.Action-Bar", ConfigValue.slingshot_action_bar);
-    config.set("Slingshot.Use-Sound", ConfigValue.slingshot_use_sound.toString());
+    config.set("Slingshot.Use-Sound", ConfigValue.slingshot_use_sound.name());
 
     config.addEmptyLine();
 
