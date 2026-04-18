@@ -7,7 +7,7 @@ import de.marcely.bedwars.api.game.specialitem.SpecialItemUseHandler;
 import de.marcely.bedwars.tools.NMSHelper;
 import de.marcely.bedwars.tools.Pair;
 import java.lang.reflect.Field;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 import me.metallicgoat.specialItems.ExtraSpecialItemsPlugin;
 import me.metallicgoat.specialItems.api.ExtraSpecialItemType;
@@ -105,7 +105,7 @@ public class CustomSpecialItem {
     testAPI();
   }
 
-  private static void loadCommandItems(HashMap<String, Pair<ItemStack, String>> map, boolean console) {
+  private static void loadCommandItems(Map<String, Pair<ItemStack, String>> map, boolean console) {
     if (map != null && !map.isEmpty()) {
       map.forEach((id, materialStringPair) -> {
         final ItemStack material = materialStringPair.getKey();

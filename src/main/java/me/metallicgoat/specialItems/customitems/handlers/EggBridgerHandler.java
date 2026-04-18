@@ -30,6 +30,11 @@ public class EggBridgerHandler extends CustomSpecialItemUseSession implements Li
   }
 
   @Override
+  public boolean isStoppedWithPlayerQuit() {
+    return false;
+  }
+
+  @Override
   public void run(PlayerUseSpecialItemEvent event) {
     this.takeItem();
 
@@ -127,7 +132,7 @@ public class EggBridgerHandler extends CustomSpecialItemUseSession implements Li
             placeBlock(eggLocation.clone().subtract(0.0D, 1.0D, 1.0D).getBlock());
             placeBlock(eggLocation.clone().subtract(1.0D, 1.0D, 1.0D).getBlock());
 
-            this.egg.getWorld().playSound(eggLocation, ConfigValue.egg_bridger_place_sound, 1, 1);
+            ConfigValue.egg_bridger_place_sound.play(eggLocation);
           }
         }, 2L);
 
