@@ -2,6 +2,7 @@ package me.metallicgoat.specialItems.config;
 
 import de.marcely.bedwars.tools.Helper;
 import de.marcely.bedwars.tools.Pair;
+import de.marcely.bedwars.tools.VarSound;
 import de.marcely.bedwars.tools.YamlConfigurationDescriptor;
 import java.io.File;
 import java.io.Reader;
@@ -197,7 +198,7 @@ public class Config {
     config.set("PopUpTower.Block-Type", ConfigValue.tower_block_material.name());
     config.set("PopUpTower.Block-Place-Interval", ConfigValue.tower_block_place_interval);
     config.set("PopUpTower.Blocks-Placed-Per-Interval", ConfigValue.tower_block_placed_per_interval);
-    config.set("PopUpTower.Sound", ConfigValue.tower_place_place_sound.name());
+    config.set("PopUpTower.Sound", ConfigValue.tower_place_place_sound.serializeAsConfig());
 
     config.addEmptyLine();
 
@@ -218,7 +219,7 @@ public class Config {
     config.set("Egg-Bridger.Block-Type", ConfigValue.egg_bridger_block_material.name());
     config.set("Egg-Bridger.Max-Length", ConfigValue.egg_bridger_max_length);
     config.set("Egg-Bridger.Max-Y-Variation", ConfigValue.egg_bridger_max_y_variation);
-    config.set("Egg-Bridger.Sound", ConfigValue.egg_bridger_place_sound.name());
+    config.set("Egg-Bridger.Sound", ConfigValue.egg_bridger_place_sound.serializeAsConfig());
     config.set("Egg-Bridger.Clutch-Fall-Damage-Cap", ConfigValue.egg_bridger_clutch_fall_damage_cap);
 
     config.addEmptyLine();
@@ -243,7 +244,7 @@ public class Config {
     config.set("Slingshot.Cooldown-Seconds-Format", ConfigValue.slingshot_cooldown_seconds_format.toPattern());
     config.set("Slingshot.Cooldown-Message", ConfigValue.slingshot_cooldown_message);
     config.set("Slingshot.Action-Bar", ConfigValue.slingshot_action_bar);
-    config.set("Slingshot.Use-Sound", ConfigValue.slingshot_use_sound.name());
+    config.set("Slingshot.Use-Sound", ConfigValue.slingshot_use_sound.serializeAsConfig());
 
     config.addEmptyLine();
 
@@ -348,16 +349,32 @@ public class Config {
     return mat != null ? mat : def;
   }
 
-  private static Sound parseConfigSound(FileConfiguration config, String configPath, Sound def) {
-    final String configSound = config.getString(configPath);
+  private static VarSound parseConfigSound(FileConfiguration config, String configPath, VarSound def) {
+    // 1. attempt: VarSound
+    {
+      final ConfigurationSection section = config.getConfigurationSection(configPath);
 
-    if (configSound != null) {
-      final Sound sound = Helper.get().getSoundByName(configSound);
+      if (section != null) {
+        try {
+          return VarSound.parse(section);
+        } catch (IllegalArgumentException e) {
+          Console.printConfigWarning(configPath, "Cannot parse sound " + configPath + ": " + e.getMessage());
+        }
+      }
+    }
 
-      if (sound != null)
-        return sound;
-      else
-        Console.printConfigWarning(configPath, "Cannot parse sound " + configSound);
+    // 2. attempt: Sound name (how it was done in older versions)
+    {
+      final String configSound = config.getString(configPath);
+
+      if (configSound != null) {
+        final Sound sound = Helper.get().getSoundByName(configSound);
+
+        if (sound != null)
+          return VarSound.from(sound);
+        else
+          Console.printConfigWarning(configPath, "Cannot parse sound " + configSound);
+      }
     }
 
     return def;

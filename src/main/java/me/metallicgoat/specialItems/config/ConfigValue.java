@@ -2,13 +2,14 @@ package me.metallicgoat.specialItems.config;
 
 import de.marcely.bedwars.tools.Helper;
 import de.marcely.bedwars.tools.Pair;
+import de.marcely.bedwars.tools.VarSound;
 import java.text.DecimalFormat;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.inventory.ItemStack;
 
 public class ConfigValue {
@@ -22,7 +23,7 @@ public class ConfigValue {
   public static Material tower_block_material = Helper.get().getMaterialByName("WHITE_WOOL");
   public static int tower_block_place_interval = 1;
   public static int tower_block_placed_per_interval = 2;
-  public static Sound tower_place_place_sound = Helper.get().getSoundByName("ENTITY_CHICKEN_EGG");
+  public static VarSound tower_place_place_sound = VarSound.from(Helper.get().getSoundByName("ENTITY_CHICKEN_EGG"));
 
   // Sliverfish
   public static String silverfish_icon_name = "Silverfish";
@@ -43,7 +44,7 @@ public class ConfigValue {
   public static Material egg_bridger_block_material = Helper.get().getMaterialByName("WHITE_WOOL");
   public static int egg_bridger_max_length = 30;
   public static int egg_bridger_max_y_variation = 18;
-  public static Sound egg_bridger_place_sound = Helper.get().getSoundByName("ENTITY_CHICKEN_EGG");
+  public static VarSound egg_bridger_place_sound = VarSound.from(Helper.get().getSoundByName("ENTITY_CHICKEN_EGG"));
   public static double egg_bridger_clutch_fall_damage_cap = 4;
 
   // Ice Bridger
@@ -64,7 +65,7 @@ public class ConfigValue {
   public static DecimalFormat slingshot_cooldown_seconds_format = new DecimalFormat("0.00s");
   public static String slingshot_cooldown_message = "&7You are in cooldown for &e{seconds} &7seconds";
   public static String slingshot_action_bar = "&f{item-name} &r{cooldown-bar} &f{seconds}";
-  public static Sound slingshot_use_sound = Helper.get().getSoundByName("SLIME_WALK");
+  public static VarSound slingshot_use_sound = VarSound.from(Helper.get().getSoundByName("SLIME_WALK"));
 
   // Endless Boost
   public static String endless_boost_icon_name = "EndlessBoost";
@@ -73,10 +74,10 @@ public class ConfigValue {
 
   // Command Item
   public static boolean command_item_enabled = false;
-  public static HashMap<String, Pair<ItemStack, String>> command_item_player_commands = new HashMap<String, Pair<ItemStack, String>>() {{
+  public static Map<String, Pair<ItemStack, String>> command_item_player_commands = new HashMap<String, Pair<ItemStack, String>>() {{
     put("player-example", new Pair<>(new ItemStack(Material.STONE), "say a fancy player command"));
   }};
-  public static HashMap<String, Pair<ItemStack, String>> command_item_console_commands = new HashMap<String, Pair<ItemStack, String>>() {{
+  public static Map<String, Pair<ItemStack, String>> command_item_console_commands = new HashMap<String, Pair<ItemStack, String>>() {{
     put("console-example", new Pair<>(new ItemStack(Material.STONE), "say a fancy console command"));
   }};
 

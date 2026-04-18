@@ -43,6 +43,11 @@ public class TowerHandler extends CustomSpecialItemUseSession {
   }
 
   @Override
+  public boolean isStoppedWithPlayerQuit() {
+    return false;
+  }
+
+  @Override
   public void run(PlayerUseSpecialItemEvent event) {
     final Player player = event.getPlayer();
     final Arena arena = event.getArena();
@@ -108,7 +113,7 @@ public class TowerHandler extends CustomSpecialItemUseSession {
             continue;
 
           // Place it
-          block.getWorld().playSound(block.getLocation(), ConfigValue.tower_place_place_sound, 1, 1);
+          ConfigValue.tower_place_place_sound.play(block.getLocation());
           placeBlock(arena, blockBooleanPair.getValue(), block, color);
         }
 

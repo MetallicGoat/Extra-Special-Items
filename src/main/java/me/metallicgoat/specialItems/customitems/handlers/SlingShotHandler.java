@@ -63,7 +63,7 @@ public class SlingShotHandler extends CustomSpecialItemUseSession {
 
     // Play sound effect
     if (ConfigValue.slingshot_use_sound != null)
-      player.playSound(player.getLocation(), ConfigValue.slingshot_use_sound, 1.0f, 1.0f);
+      ConfigValue.slingshot_use_sound.play(player);
 
   }
 

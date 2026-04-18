@@ -34,6 +34,11 @@ public class SilverfishHandler extends CustomSpecialItemUseSession implements Li
   }
 
   @Override
+  public boolean isStoppedWithPlayerQuit() {
+    return false;
+  }
+
+  @Override
   public void run(PlayerUseSpecialItemEvent event) {
     this.takeItem();
 

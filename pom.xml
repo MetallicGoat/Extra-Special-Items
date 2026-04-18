@@ -29,13 +29,13 @@
     <dependency>
       <groupId>de.marcely.bedwars</groupId>
       <artifactId>API</artifactId>
-      <version>5.5.6</version>
+      <version>5.5.7</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
-      <version>1.18.42</version>
+      <version>1.18.44</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>

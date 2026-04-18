@@ -26,6 +26,11 @@ public class IceBridgerHandler extends CustomSpecialItemUseSession {
   }
 
   @Override
+  public boolean isStoppedWithPlayerQuit() {
+    return false;
+  }
+
+  @Override
   public void run(PlayerUseSpecialItemEvent event) {
     this.takeItem();
 
