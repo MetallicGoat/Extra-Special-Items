@@ -138,13 +138,13 @@ public class TowerHandler extends CustomSpecialItemUseSession {
       final PersistentBlockData data = blockData.getDyedData(color);
       data.place(block, true);
     } else {
-      block.setType(Material.LADDER);
-
       // We do not want to initialize legacy material support (causes lag)
       if (!placeLadderLegacy) {
         PlaceLadderModern.placeLadder(block, this.direction);
 
       } else {
+        block.setType(Material.LADDER);
+
         final BlockState state = block.getState();
 
         if (state.getData() instanceof org.bukkit.material.Ladder) {

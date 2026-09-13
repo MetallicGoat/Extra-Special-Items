@@ -1,5 +1,6 @@
 package me.metallicgoat.specialItems.utils;
 
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.type.Ladder;
@@ -9,9 +10,9 @@ public class PlaceLadderModern {
   // Do this in a separate class, so we do not trigger ClassNotFound on old versions
 
   public static void placeLadder(Block block, BlockFace direction) {
-    final Ladder ladder = (Ladder) block.getBlockData();
+    final Ladder ladder = (Ladder) Material.LADDER.createBlockData();
 
     ladder.setFacing(direction);
-    block.setBlockData(ladder);
+    block.setBlockData(ladder, false);
   }
 }
